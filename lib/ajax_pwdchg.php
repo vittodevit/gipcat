@@ -4,7 +4,7 @@ require_once '../init.php';
 require_once 'miscfun.php';
 
 session_start();
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["permissionType"] < 3) {
     http_response_code(401);
     die('AJAX: You are not authenticated! Please provide a session cookie.');
 }

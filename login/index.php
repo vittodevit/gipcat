@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_result($legalName, $legalSurname, $passwordHash, $permissionType);
                     if ($stmt->fetch()) {
                         if (password_verify($password, $passwordHash)) {
-                            // only helpdesk and superadmins
-                            if ($permissionType > 2) {
+                            // no customers allowed
+                            if ($permissionType > 1) {
                                 session_start();
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["userName"] = $username;

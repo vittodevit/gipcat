@@ -10,7 +10,7 @@ function openPage($pageid, $title, $level, $customcss = "")
         $installationName = "Gestionale";
     }
     session_start();
-    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["permissionType"] < 3) {
         header("Location: " . npRelativeToRoot($level) . "login/");
         exit;
     }
