@@ -2,10 +2,19 @@ var version_ann;
 var version_pcm;
 var version;
 
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
-})
+});
+
+document.getElementById("calendar_date").addEventListener('input', (event) => {
+    if(document.getElementById("calendar_date").value == new Date().toISOString().substring(0, 10)){
+        // remove query string
+        location.href = "./";
+    }else{
+        location.href = "./?date=" + document.getElementById("calendar_date").value;
+    }
+});
 
 var doNotCallModal = document.getElementById('doNotCallModal');
 if (doNotCallModal != null) {

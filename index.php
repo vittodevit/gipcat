@@ -108,24 +108,17 @@ printInterventionsModals();
             </th>
             <th class="col col-md-6">
                 <div class="row">
-                    <div class="col">
+                    <div class="col col-md-9">
                         <h5 class="h5t">Calendario del giorno</h5>
                     </div>
-                    <div class="col">
-                        <form action="" method="GET" class="form-inline">
-                            <div class="input-group">
-                                <!-- <span class="input-group-text" id="basic-addon1">SELEZIONA GIORNATA:</span> -->
-                                <input type="date" class="form-control" name="date" placeholder="ID Cliente" <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
-                                    echo 'value="' . $_GET["date"] . '"';
-                                } else {
-                                    echo 'value="' . date("Y-m-d") . '"';
-                                } ?> aria-label="Ricerca">
-                                <button class="btn btn-outline-dark" type="submit">
-                                    <span data-feather="calendar"></span>
-                                    Conferma
-                                </button>
-                            </div>
-                        </form>
+                    <div class="col col-md-3">
+                        <input type="date" class="form-control" id="calendar_date" 
+                            <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                                echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
+                            } else {
+                                echo 'value="' . date("Y-m-d") . '"';
+                            } ?> 
+                        aria-label="Ricerca">
                     </div>
                 </div>
             </th>
