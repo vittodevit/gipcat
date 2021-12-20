@@ -100,15 +100,15 @@ function openPage($pageid, $title, $level, $customcss = "")
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a <?php checkAriaCurr(3, $pageid) ?> href="<?php relativeToRoot($level); ?>technicians/">
-                                    <span data-feather="tool"></span>
-                                    Anagrafiche Tecnici
+                                <a <?php checkAriaCurr(4, $pageid) ?> href="<?php relativeToRoot($level); ?>calendar/">
+                                    <span data-feather="calendar"></span>
+                                    Gestore Interventi
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a <?php checkAriaCurr(4, $pageid) ?> href="<?php relativeToRoot($level); ?>calendar/">
-                                    <span data-feather="calendar"></span>
-                                    Calendario Interventi
+                                <a <?php checkAriaCurr(3, $pageid) ?> href="<?php relativeToRoot($level); ?>technicians/">
+                                    <span data-feather="tool"></span>
+                                    Anagrafiche Tecnici
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -167,6 +167,7 @@ function closePage($level, $js_d, $customjs = "")
     </html>
     <?php
     $con->close();
+    die();
 }
 
 function loginPage($username_err, $password_err)

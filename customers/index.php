@@ -13,7 +13,7 @@ openPage($pageid, $friendlyname, $level);
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class='h2'>Anagrafiche clienti</h1>
+    <h1 class='h2'>Anagrafiche Clienti</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#createCustomerModal">
             <span data-feather="folder-plus"></span>
@@ -338,15 +338,15 @@ openPage($pageid, $friendlyname, $level);
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="../installations/?idCustomer=<?php echo $row['idCustomer']; ?>">
-                                    <span data-feather="file-text"></span>
-                                    Visualizza Scheda
+                                    <span data-feather="box"></span>
+                                    Visualizza Installazioni
                                 </a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCustomerModal" data-bs-ecmCid="<?php echo $row['idCustomer']; ?>"">
                                     <span data-feather="edit"></span>
-                                    Modifica
+                                    Visualizza o Modifica
                                 </a></li>
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal" data-bs-dcmCid="<?php echo $row['idCustomer']; ?>"">
                                 <span data-feather="delete"></span>
