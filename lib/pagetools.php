@@ -100,7 +100,7 @@ function openPage($pageid, $title, $level, $customcss = "")
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a <?php checkAriaCurr(4, $pageid) ?> href="<?php relativeToRoot($level); ?>calendar/">
+                                <a <?php checkAriaCurr(4, $pageid) ?> href="<?php relativeToRoot($level); ?>interventions/">
                                     <span data-feather="calendar"></span>
                                     Gestore Interventi
                                 </a>
@@ -109,12 +109,6 @@ function openPage($pageid, $title, $level, $customcss = "")
                                 <a <?php checkAriaCurr(3, $pageid) ?> href="<?php relativeToRoot($level); ?>technicians/">
                                     <span data-feather="tool"></span>
                                     Anagrafiche Tecnici
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a <?php checkAriaCurr(5, $pageid) ?> href="<?php relativeToRoot($level); ?>heaterdb/">
-                                    <span data-feather="list"></span>
-                                    Lista Caldaie
                                 </a>
                             </li>
                         </ul>

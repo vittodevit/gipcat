@@ -256,7 +256,8 @@ openPage($pageid, $friendlyname, $level);
 <div>
     <form action="" method="get">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" name="query" placeholder="Ricerca" aria-label="Ricerca" aria-describedby="button-addon2">
+            <input type="text" class="form-control" name="query" value="<?php echo htmlspecialchars($_GET['query']); ?>"
+            placeholder="Ricerca" aria-label="Ricerca" aria-describedby="button-addon2">
             <button class="btn btn-outline-dark" type="submit" id="button-addon2">
                 <span data-feather="search"></span>
                 Cerca
@@ -272,7 +273,7 @@ openPage($pageid, $friendlyname, $level);
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th class="col-md-1">ID</th>
+            <th class="col-md-1">ID Cliente</th>
             <th class="col-md-3">Nome</th>
             <th class="col-md-3">Indirizzo</th>
             <th class="col-md-2">Città</th>
@@ -332,11 +333,11 @@ openPage($pageid, $friendlyname, $level);
                 <td> <?php echo $row['registeredOfficeCity']; ?> </td>
                 <td>
                     <div class="dropdown">
-                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="actionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                             <span data-feather="menu"></span>
                             Operazioni
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul class="dropdown-menu" aria-labelledby="actionsMenu">
                             <li><a class="dropdown-item" href="../installations/?idCustomer=<?php echo $row['idCustomer']; ?>">
                                     <span data-feather="box"></span>
                                     Visualizza Installazioni
@@ -357,11 +358,11 @@ openPage($pageid, $friendlyname, $level);
                 </td>
                 <td>
                     <div class="dropdown">
-                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                             <span data-feather="menu"></span>
                             Utente Collegato
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul class="dropdown-menu" aria-labelledby="userMenu">
                             <?php
                             $id = $row['idCustomer'];
                             $checkUser = $con->query("SELECT userName FROM users WHERE idCustomer = '$id'");

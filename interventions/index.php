@@ -1,7 +1,7 @@
 <?php
 /// PAGE INFO ///
-$pageid = 5;
-$friendlyname = "Lista Caldaie";
+$pageid = 4;
+$friendlyname = "Gestione Interventi";
 $level = 1;
 $jsdeps = array('bootstrap-bundle', 'feathericons');
 /// PAGE INFO ///
