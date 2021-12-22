@@ -3,7 +3,7 @@
 $pageid = 2;
 $friendlyname = "Gestore Installazioni";
 $level = 1;
-$jsdeps = array('bootstrap-bundle', 'feathericons');
+$jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery');
 /// PAGE INFO ///
 
 require_once '../init.php';
@@ -13,6 +13,104 @@ openPage($pageid, $friendlyname, $level);
 $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]));
 ?>
 
+<!-- DELETE INSTALLATION MODAL -->
+<div class="modal fade" id="deleteInstallationModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminazione installazione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare l'installazione numero <strong id="dim.title">0</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-danger" onclick="deleteInstallationAJAX(document.getElementById('dim.title').textContent)">
+                    <span data-feather="trash"></span>
+                    Elimina
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE INSTALLATION MODAL -->
+<div class="modal fade" id="createInstallationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuova installazione per il cliente n&ordm; <u><span id="cim.title"></span></u></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB1">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <label for="installationAddress">Indirizzo</label>
+                                <input type="text" class="form-control" id="installationAddress" required>
+                            </div>
+                            <div class="col">
+                                <label for="installationCity">Città</label>
+                                <input type="text" class="form-control" id="installationCity" required>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="heater" class="form-label">Caldaia</label>
+                            <input type="text" class="form-control" id="heater">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="installationType" class="form-label">Tipo installazione</label>
+                                <input type="text" class="form-control" id="installationType">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" value="" id="toCall">
+                                        <span style="margin-left: 10px;">Da chiamare?</span>
+                                    </div>
+                                    <input type="number" class="form-control" id="monthlyCallInterval">
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="manteinanceContractName" class="form-label">Contratto di manutenzione</label>
+                                <input type="text" class="form-control" id="manteinanceContractName">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="contractExpiryDate" class="form-label">Data di scadenza</label>
+                                <input type="date" class="form-control" id="contractExpiryDate">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="footNote" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="createInstallationAJAX()">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class='h2'>Gestore Installazioni</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -21,7 +119,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                 <div class="col">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">ID CLIENTE:</span>
-                        <input type="text" class="form-control" name="idCustomer" placeholder="ID Cliente" 
+                        <input type="number" class="form-control" name="idCustomer" placeholder="ID Cliente" 
                         <?php if (isset($_GET["idCustomer"]) && !empty($_GET["idCustomer"])) {
                             echo 'value="' . $_GET["idCustomer"] . '"';
                         } ?> aria-label="Ricerca" aria-describedby="button-addon2">
@@ -32,7 +130,8 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                     </div>
                 </div>
                 <div class="col col-md-auto">
-                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#newInstallationModal">
+                    <button type="button" class="btn btn-outline-dark" 
+                    data-bs-toggle="modal" data-bs-target="#createInstallationModal" data-bs-cimIid="<?php echo $idCustomerGET ?>">
                         <span data-feather="box"></span>
                         Aggiungi Installazione
                     </button>
@@ -132,11 +231,11 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInstallationModal" data-bs-eimIid="<?php echo $row['idInstallation']; ?>"">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInstallationModal" data-bs-eimIid="<?php echo $row['idInstallation']; ?>">
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica
                                 </a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInstallationModal" data-bs-dimIid="<?php echo $row['idInstallation']; ?>"">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInstallationModal" data-bs-dimIid="<?php echo $row['idInstallation']; ?>">
                                 <span data-feather="delete"></span>
                                     Elimina
                                 </a></li>
@@ -149,4 +248,4 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
 </table>
 
 <?php
-closePage($level, $jsdeps);
+closePage($level, $jsdeps, "installation.index.js");

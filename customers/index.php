@@ -22,7 +22,7 @@ openPage($pageid, $friendlyname, $level);
     </div>
 </div>
 
-<!-- MODAL PER LA GESTIONE DELL'ELIMINAZIONE CLIENTI -->
+<!-- DELETE CUSTOMER MODAL -->
 <div class="modal fade" id="deleteCustomerModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
