@@ -62,7 +62,11 @@ function deleteInstallationAJAX(idInstallation) {
         url: './ajax_delete.php',
         data: { "idInstallation": idInstallation },
         success: function (data) {
-            location.reload();
+            if(data != "false"){
+                location.reload();
+            }else{
+                alert("Impossibile eliminare il record");
+            }
         },
         fail: function (data) {
             alert("Impossibile eliminare il record");
@@ -70,36 +74,36 @@ function deleteInstallationAJAX(idInstallation) {
     });
 }
 
-/*
-function createCustomerAJAX() {
+function createInstallationAJAX() {
     $.ajax({
         type: "POST",
         url: './ajax_create.php',
         data: {
-            "businessName": document.getElementById("businessName").value,
-            "registeredOfficeAddress": document.getElementById("registeredOfficeAddress").value,
-            "registeredOfficeCity": document.getElementById("registeredOfficeCity").value,
-            "headquartersAddress": document.getElementById("headquartersAddress").value,
-            "headquartersCity": document.getElementById("headquartersCity").value,
-            "homePhoneNumber": document.getElementById("homePhoneNumber").value,
-            "officePhoneNumber": document.getElementById("officePhoneNumber").value,
-            "privateMobilePhoneNumber": document.getElementById("privateMobilePhoneNumber").value,
-            "companyMobilePhoneNumber": document.getElementById("companyMobilePhoneNumber").value,
-            "privateEMail": document.getElementById("privateEMail").value,
-            "companyEMail": document.getElementById("companyEMail").value,
-            "fiscalCode": document.getElementById("fiscalCode").value,
-            "vatNumber": document.getElementById("vatNumber").value,
-            "footNote": document.getElementById("footNote").value,
+            "idCustomer": document.getElementById("cim.title").innerText,
+            "installationAddress": document.getElementById("installationAddress").value,
+            "installationCity": document.getElementById("installationCity").value,
+            "heater": document.getElementById("heater").value,
+            "installationType": document.getElementById("installationType").value,
+            "manteinanceContractName": document.getElementById("manteinanceContractName").value,
+            "toCall": document.getElementById("toCall").checked ? 1 : 0,
+            "monthlyCallInterval": document.getElementById("monthlyCallInterval").value,
+            "contractExpiryDate": document.getElementById("contractExpiryDate").value,
+            "footNote": document.getElementById("footNote").value
         },
         success: function (data) {
-            location.reload();
+            if(data != "false"){
+                location.reload();
+            }else{
+                alert("Impossibile creare l'installazione.");
+            }
         },
         fail: function (data) {
-            alert("Impossibile creare il cliente.");
+            alert("Impossibile creare l'installazione.");
         }
     });
 }
 
+/*
 function editCustomerAjax(customerId, version) {
     $.ajax({
         type: "POST",

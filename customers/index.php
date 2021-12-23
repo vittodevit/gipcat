@@ -164,16 +164,16 @@ openPage($pageid, $friendlyname, $level);
                     <form>
                         <div class="mb-3">
                             <label for="businessName" class="form-label">Ragione sociale</label>
-                            <input type="text" class="form-control" id="ecm.businessName" required>
+                            <input type="text" class="form-control" id="ecm.businessName">
                         </div>
                         <div class="row">
                             <div class="col">
                                 <label for="registeredOfficeAddress">Indirizzo</label>
-                                <input type="text" class="form-control" id="ecm.registeredOfficeAddress" required>
+                                <input type="text" class="form-control" id="ecm.registeredOfficeAddress">
                             </div>
                             <div class="col">
                                 <label for="registeredOfficeCity">Città</label>
-                                <input type="text" class="form-control" id="ecm.registeredOfficeCity" required>
+                                <input type="text" class="form-control" id="ecm.registeredOfficeCity">
                             </div>
                         </div>
                         <br>

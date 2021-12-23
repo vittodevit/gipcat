@@ -73,7 +73,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                                 <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" value="" id="toCall">
+                                        <input class="form-check-input mt-0" type="checkbox" required id="toCall">
                                         <span style="margin-left: 10px;">Da chiamare?</span>
                                     </div>
                                     <input type="number" class="form-control" id="monthlyCallInterval">
@@ -118,7 +118,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
             <div class="row g-3">
                 <div class="col">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">ID CLIENTE:</span>
+                        <span class="input-group-text" id="basic-addon1">NUMERO CLIENTE:</span>
                         <input type="number" class="form-control" name="idCustomer" placeholder="ID Cliente" 
                         <?php if (isset($_GET["idCustomer"]) && !empty($_GET["idCustomer"])) {
                             echo 'value="' . $_GET["idCustomer"] . '"';
@@ -174,7 +174,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th class="col-md-1">ID Installazione</th>
+            <th class="col-md-1">N&ordm; Installazione</th>
             <th class="col-md-2">Indirizzo Installazione</th>
             <th class="col-md-2">Città Installazione</th>
             <th class="col-md-2">Tipo Installazione</th>

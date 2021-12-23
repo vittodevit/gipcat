@@ -54,10 +54,14 @@ function deleteCustomerAJAX(customerId) {
         url: './ajax_delete.php',
         data: { "customerId": customerId },
         success: function (data) {
-            location.reload();
+            if(data != "false"){
+                location.reload();
+            }else{
+                alert("Impossibile eliminare il cliente.");
+            }
         },
         fail: function (data) {
-            alert("Impossibile eliminare il record");
+            alert("Impossibile eliminare il cliente.");
         }
     });
 }
@@ -83,7 +87,11 @@ function createCustomerAJAX() {
             "footNote": document.getElementById("footNote").value,
         },
         success: function (data) {
-            location.reload();
+            if(data != "false"){
+                location.reload();
+            }else{
+                alert("Impossibile creare il cliente.");
+            }
         },
         fail: function (data) {
             alert("Impossibile creare il cliente.");
