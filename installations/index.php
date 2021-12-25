@@ -111,6 +111,88 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
     </div>
 </div>
 
+<!-- EDIT INSTALLATION MODAL -->
+<div class="modal fade" id="editInstallationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica dell'installazione n&ordm; <u><span id="eim.title"></span></u> 
+                del cliente n&ordm; <u><span id="eim.idCustomer"></span></u></h5>
+                <div class="spinner-modal-container" id="eim.spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB2">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <label for="installationAddress">Indirizzo</label>
+                                <input type="text" class="form-control" id="eim.installationAddress" required>
+                            </div>
+                            <div class="col">
+                                <label for="installationCity">Città</label>
+                                <input type="text" class="form-control" id="eim.installationCity" required>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="heater" class="form-label">Caldaia</label>
+                            <input type="text" class="form-control" id="eim.heater">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="installationType" class="form-label">Tipo installazione</label>
+                                <input type="text" class="form-control" id="eim.installationType">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" required id="eim.toCall">
+                                        <span style="margin-left: 10px;">Da chiamare?</span>
+                                    </div>
+                                    <input type="number" class="form-control" id="eim.monthlyCallInterval">
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="manteinanceContractName" class="form-label">Contratto di manutenzione</label>
+                                <input type="text" class="form-control" id="eim.manteinanceContractName">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="contractExpiryDate" class="form-label">Data di scadenza</label>
+                                <input type="date" class="form-control" id="eim.contractExpiryDate">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="eim.footNote" rows="3"></textarea>
+                        </div>
+                        <p>Creazione: <strong id="eim.createdAt">...</strong>  -  
+                        Ultima modifica: <strong id="eim.updatedAt">...</strong> da <strong id="eim.lastEditedBy">...</strong>  -  
+                        Versione: <strong id="eim.version">...</strong></p>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="editInstallationAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class='h2'>Gestore Installazioni</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
