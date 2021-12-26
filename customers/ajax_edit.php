@@ -10,11 +10,13 @@ function clean($v)
 
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    die('false');
+    http_response_code(401);
+    die('AJAX: You are not authenticated! Please provide a session cookie.');
 }
 
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
-    die('false');
+    http_response_code(405);
+    die('AJAX: This method is not allowed!');
 }
 
 $id = $con->real_escape_string($_POST['customerId']);
@@ -22,13 +24,16 @@ $id = $con->real_escape_string($_POST['customerId']);
 $res = $con->query("SELECT `version` FROM `customers` WHERE `idCustomer` = '$id'");
 
 if ($con->affected_rows != 1) {
-    die('false');
+    http_response_code(404);
+    die('AJAX: Customer not found!');
 }
 
 $arr = $res->fetch_assoc();
 
 if ($_POST['version'] != $arr['version']) {
-    die('false');
+    http_response_code(400);
+    die('AJAX: The version number for the entry provided by the client does not match
+    with the one stored on the server. Try refreshing your page.');
 }
 
 $fieldnames = array("businessName", "registeredOfficeAddress", "registeredOfficeCity", "headquartersAddress", "headquartersCity", 
@@ -44,7 +49,8 @@ foreach ($fieldnames as $fn){
 }
 
 if(empty($fields)){
-    die('false');
+    http_response_code(400);
+    die('AJAX: No fields to update were found.');
 }
 
 $newversion = clean($_POST["version"]) + 1;
@@ -53,7 +59,8 @@ $username = $_SESSION["userName"];
 $con->query("UPDATE `customers` SET $fields `lastEditedBy` = '$username', `version` = '$newversion', `updatedAt` = now() WHERE `idCustomer` = '$id';");
 
 if ($con->affected_rows > 0) {
-    die('true');
+    die('AJAX: OK!');
 } else {
-    die('false');
+    http_response_code(500);
+    die('AJAX: Internal server error, update failed.');
 }

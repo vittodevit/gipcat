@@ -4,11 +4,13 @@ require_once '../init.php';
 
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    die('false');
+    http_response_code(401);
+    die('AJAX: You are not authenticated! Please provide a session cookie.');
 }
 
-if($_SERVER['REQUEST_METHOD'] != "POST"){
-    die('false');
+if ($_SERVER['REQUEST_METHOD'] != "POST") {
+    http_response_code(405);
+    die('AJAX: This method is not allowed!');
 }
 
 $stmt = $con->prepare("
@@ -55,7 +57,8 @@ if (
     !isset($_POST["installationCity"]) || empty($_POST["installationCity"]) ||
     !isset($_POST["toCall"]) || empty($_POST["toCall"])
 ) {
-    die("false");
+    http_response_code(400);
+    die('AJAX: Required fields are missing!');
 }
 
 // ASSIGN VALUES
@@ -94,7 +97,8 @@ $lastEditedBy = $_SESSION["userName"];
 $stmt->execute();
 
 if ($stmt->errno) {
-    die("false");
+    http_response_code(500);
+    die('AJAX: Required fields are missing!');
 }
 
-die("true");
+die("AJAX: OK!");

@@ -4,11 +4,13 @@ require_once '../init.php';
 
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    die('false');
+    http_response_code(401);
+    die('AJAX: You are not authenticated! Please provide a session cookie.');
 }
 
 if($_SERVER['REQUEST_METHOD'] != "GET"){
-    die('false');
+    http_response_code(405);
+    die('AJAX: This method is not allowed!');
 }
 
 $id = $con->real_escape_string($_GET['customerId']);
@@ -16,7 +18,8 @@ $id = $con->real_escape_string($_GET['customerId']);
 $res = $con->query("SELECT * FROM `customers` WHERE `idCustomer` = '$id'");
 
 if($con->affected_rows != 1){
-    die('false');
+    http_response_code(404);
+    die('AJAX: Customer not found.');
 }
 
 $arr = $res->fetch_assoc();
