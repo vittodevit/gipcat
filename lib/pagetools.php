@@ -52,6 +52,7 @@ function openPage($pageid, $title, $level, $customcss = "")
 
         <script>
             var relativeToRoot = "<?php echo relativeToRoot($level); ?>";
+            var sessionUserName = "<?php echo $_SESSION['userName']; ?>";
         </script>
     </head>
 
@@ -148,32 +149,24 @@ function openPage($pageid, $title, $level, $customcss = "")
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div id="spcm.formDiag">
-                                    <div class="mb-3">
-                                        <label for="spcm.oldPassword" class="form-label">Vecchia password:</label>
-                                        <input type="password" class="form-control" id="spcm.oldPassword">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="spcm.newPassword" class="form-label">Nuova password:</label>
-                                        <input type="password" class="form-control" id="spcm.newPassword" placeholder="Minimo 8 caratteri">
-                                        <div class="mt-2">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated" id="spcm.passMeter"
-                                                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                                </div>
+                                <div class="mb-3" id="spcm.oldPasswordContainer">
+                                    <label for="spcm.oldPassword" class="form-label">Vecchia password:</label>
+                                    <input type="password" class="form-control" id="spcm.oldPassword">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="spcm.newPassword" class="form-label">Nuova password:</label>
+                                    <input type="password" class="form-control" id="spcm.newPassword" placeholder="Minimo 8 caratteri">
+                                    <div class="mt-2">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="spcm.passMeter"
+                                                    role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="spcm.confirmPassword" class="form-label">Conferma nuova password:</label>
-                                        <input type="password" class="form-control" id="spcm.confirmPassword">
-                                    </div>
                                 </div>
-                                <div id="spcm.successDiag">
-                                    
-                                </div>
-                                <div id="spcm.failDiag">
-                                    
+                                <div class="mb-3">
+                                    <label for="spcm.confirmPassword" class="form-label">Conferma nuova password:</label>
+                                    <input type="password" class="form-control" id="spcm.confirmPassword">
                                 </div>
                             </div>
                             <div class="modal-footer">

@@ -36,22 +36,37 @@ function changePasswordSelfAJAX(){
     var newPasswordTb = document.getElementById("spcm.newPassword");
     var confirmPasswordTb = document.getElementById("spcm.confirmPassword");
 
-    if(newPasswordTb.value.length < 2){
-        alert("La vecchia password è obbligatoria per il cambiamento.");
+    if(oldPasswordTb.value.length < 2){
+        toastr.error("La vecchia password è obbligatoria per il cambiamento.");
         return;
     }
 
     if(newPasswordTb.value.length < 8){
-        alert("Password troppo corta. Il minimo è di 8 caratteri.");
+        toastr.error("Password troppo corta. Il minimo è di 8 caratteri.");
         return;
     }
 
     if(newPasswordTb.value != confirmPasswordTb.value){
-        alert("Le due password non corrispondono!");
+        toastr.error("Le due password non corrispondono!");
         return;
     }
 
     // ajax update
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'ajax_create.php', // TODO: this is broken
+        data: {
+            "userName": sessionUserName,
+            "oldPassword": document.getElementById("spcm.oldPassword").value,
+            "newPassword": document.getElementById("spcm.newPassword").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
 }
 
 function successReload(){
@@ -62,10 +77,9 @@ function successReload(){
 
 if(location.href.includes("s=1")){
     toastr.success("Operazione completata con successo!");
-    // WIP: removing the s=1 param as soon the page reloads
-    /*window.history.replaceState(
+    window.history.replaceState(
         { additionalInformation: 'ok' }, 
         document.title, 
-        nextURL
-    );*/
+        "."
+    );
 }

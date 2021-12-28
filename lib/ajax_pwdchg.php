@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 function chgpwd($username, $password)
 {
     global $con;
-    // pass change code
+    // temp test code for change
+    http_response_code(418);
+    die('AJAX: temp test');
 }
 
 function selfcheck($username, $password)
@@ -86,6 +88,9 @@ if (strcmp($_SESSION["userName"], $_POST["userName"]) == 0) {
     // check "self" password
     if (selfcheck($_SESSION["userName"], $_POST["oldPassword"])) {
         chgpwd($_SESSION["userName"], $_POST["newPassword"]);
+    } else {
+        http_response_code(403);
+        die('AJAX: You are not authorized to edit this user.');
     }
 } else {
     // check if the target user is in the required pex level for the requesting user
