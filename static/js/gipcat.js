@@ -53,3 +53,19 @@ function changePasswordSelfAJAX(){
 
     // ajax update
 }
+
+function successReload(){
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('s', '1');
+    window.location.search = urlParams;
+}
+
+if(location.href.includes("s=1")){
+    toastr.success("Operazione completata con successo!");
+    // WIP: removing the s=1 param as soon the page reloads
+    /*window.history.replaceState(
+        { additionalInformation: 'ok' }, 
+        document.title, 
+        nextURL
+    );*/
+}

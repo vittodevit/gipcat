@@ -18,32 +18,28 @@ editCustomerModal.addEventListener('show.bs.modal', function (event) {
         url: './ajax_get.php',
         data: { "customerId": customerId },
         success: function (dataget) {
-            if(dataget != "false"){
-                document.getElementById("ecm.businessName").placeholder = !!dataget['businessName'] ? dataget['businessName'] : "";
-                document.getElementById("ecm.registeredOfficeAddress").placeholder = !!dataget['registeredOfficeAddress'] ? dataget['registeredOfficeAddress'] : "";
-                document.getElementById("ecm.registeredOfficeCity").placeholder = !!dataget['registeredOfficeCity'] ? dataget['registeredOfficeCity'] : "";
-                document.getElementById("ecm.headquartersAddress").placeholder = !!dataget['headquartersAddress'] ? dataget['headquartersAddress'] : "";
-                document.getElementById("ecm.headquartersCity").placeholder = !!dataget['headquartersCity'] ? dataget['headquartersCity'] : "";
-                document.getElementById("ecm.homePhoneNumber").placeholder = !!dataget['homePhoneNumber'] ? dataget['homePhoneNumber'] : "";
-                document.getElementById("ecm.officePhoneNumber").placeholder = !!dataget['officePhoneNumber'] ? dataget['officePhoneNumber'] : "";
-                document.getElementById("ecm.privateMobilePhoneNumber").placeholder = !!dataget['privateMobilePhoneNumber'] ? dataget['privateMobilePhoneNumber'] : "";
-                document.getElementById("ecm.companyMobilePhoneNumber").placeholder = !!dataget['companyMobilePhoneNumber'] ? dataget['companyMobilePhoneNumber'] : "";
-                document.getElementById("ecm.privateEMail").placeholder = !!dataget['privateEMail'] ? dataget['privateEMail'] : "";
-                document.getElementById("ecm.companyEMail").placeholder = !!dataget['companyEMail'] ? dataget['companyEMail'] : "";
-                document.getElementById("ecm.fiscalCode").placeholder = !!dataget['fiscalCode'] ? dataget['fiscalCode'] : "";
-                document.getElementById("ecm.vatNumber").placeholder = !!dataget['vatNumber'] ? dataget['vatNumber'] : "";
-                document.getElementById("ecm.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
-                document.getElementById("ecm.createdAt").innerHTML = dataget['createdAt'];
-                document.getElementById("ecm.updatedAt").innerHTML = dataget['updatedAt'];
-                document.getElementById("ecm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
-                document.getElementById("ecm.version").innerHTML = dataget['version'];
-                document.getElementById("ecm.spinner").classList.add("visually-hidden");
-            }else{
-                alert("Impossibile caricare i dati. Al salvataggio, sarà comunque effettuato un tentativo di modifica.");
-            }
+            document.getElementById("ecm.businessName").placeholder = !!dataget['businessName'] ? dataget['businessName'] : "";
+            document.getElementById("ecm.registeredOfficeAddress").placeholder = !!dataget['registeredOfficeAddress'] ? dataget['registeredOfficeAddress'] : "";
+            document.getElementById("ecm.registeredOfficeCity").placeholder = !!dataget['registeredOfficeCity'] ? dataget['registeredOfficeCity'] : "";
+            document.getElementById("ecm.headquartersAddress").placeholder = !!dataget['headquartersAddress'] ? dataget['headquartersAddress'] : "";
+            document.getElementById("ecm.headquartersCity").placeholder = !!dataget['headquartersCity'] ? dataget['headquartersCity'] : "";
+            document.getElementById("ecm.homePhoneNumber").placeholder = !!dataget['homePhoneNumber'] ? dataget['homePhoneNumber'] : "";
+            document.getElementById("ecm.officePhoneNumber").placeholder = !!dataget['officePhoneNumber'] ? dataget['officePhoneNumber'] : "";
+            document.getElementById("ecm.privateMobilePhoneNumber").placeholder = !!dataget['privateMobilePhoneNumber'] ? dataget['privateMobilePhoneNumber'] : "";
+            document.getElementById("ecm.companyMobilePhoneNumber").placeholder = !!dataget['companyMobilePhoneNumber'] ? dataget['companyMobilePhoneNumber'] : "";
+            document.getElementById("ecm.privateEMail").placeholder = !!dataget['privateEMail'] ? dataget['privateEMail'] : "";
+            document.getElementById("ecm.companyEMail").placeholder = !!dataget['companyEMail'] ? dataget['companyEMail'] : "";
+            document.getElementById("ecm.fiscalCode").placeholder = !!dataget['fiscalCode'] ? dataget['fiscalCode'] : "";
+            document.getElementById("ecm.vatNumber").placeholder = !!dataget['vatNumber'] ? dataget['vatNumber'] : "";
+            document.getElementById("ecm.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+            document.getElementById("ecm.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("ecm.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("ecm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("ecm.version").innerHTML = dataget['version'];
+            document.getElementById("ecm.spinner").classList.add("visually-hidden");
         },
-        fail: function (data) {
-            alert("Impossibile caricare i dati. Al salvataggio, sarà comunque effettuato un tentativo di modifica.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 })
@@ -54,14 +50,10 @@ function deleteCustomerAJAX(customerId) {
         url: './ajax_delete.php',
         data: { "customerId": customerId },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile eliminare il cliente.");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile eliminare il cliente.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }
@@ -87,14 +79,10 @@ function createCustomerAJAX() {
             "footNote": document.getElementById("footNote").value,
         },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile creare il cliente.");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile creare il cliente.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }
@@ -122,14 +110,10 @@ function editCustomerAjax(customerId, version) {
             "footNote": document.getElementById("ecm.footNote").value,
         },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile modificare il cliente.");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile modificare il cliente.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }

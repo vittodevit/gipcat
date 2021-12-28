@@ -3,7 +3,7 @@
 $pageid = 2;
 $friendlyname = "Gestore Installazioni";
 $level = 1;
-$jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery');
+$jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery', 'toastr');
 /// PAGE INFO ///
 
 require_once '../init.php';

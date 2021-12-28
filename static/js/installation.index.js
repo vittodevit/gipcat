@@ -26,7 +26,6 @@ editInstallationModal.addEventListener('show.bs.modal', function (event) {
         url: './ajax_get.php',
         data: { "idInstallation": idInstallation },
         success: function (dataget) {
-            if(dataget != "false"){
                 document.getElementById("eim.idCustomer").innerHTML = dataget['idCustomer'];
                 document.getElementById("eim.installationAddress").placeholder = !!dataget['installationAddress'] ? dataget['installationAddress'] : "";
                 document.getElementById("eim.installationCity").placeholder = !!dataget['installationCity'] ? dataget['installationCity'] : "";
@@ -44,12 +43,9 @@ editInstallationModal.addEventListener('show.bs.modal', function (event) {
                 document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
                 document.getElementById("eim.version").innerHTML = dataget['version'];
                 document.getElementById("eim.spinner").classList.add("visually-hidden");
-            }else{
-                alert("Impossibile caricare i dati. Al salvataggio, sarà comunque effettuato un tentativo di modifica.");
-            }
         },
-        fail: function (data) {
-            alert("Impossibile caricare i dati. Al salvataggio, sarà comunque effettuato un tentativo di modifica.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 })
@@ -60,14 +56,10 @@ function deleteInstallationAJAX(idInstallation) {
         url: './ajax_delete.php',
         data: { "idInstallation": idInstallation },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile eliminare il record");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile eliminare il record");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }
@@ -89,14 +81,10 @@ function createInstallationAJAX() {
             "footNote": document.getElementById("footNote").value
         },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile creare l'installazione.");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile creare l'installazione.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }
@@ -119,14 +107,10 @@ function editInstallationAjax(idInstallation, version) {
             "footNote": document.getElementById("eim.footNote").value
         },
         success: function (data) {
-            if(data != "false"){
-                location.reload();
-            }else{
-                alert("Impossibile modificare l'installazione.");
-            }
+            successReload();
         },
-        fail: function (data) {
-            alert("Impossibile modificare l'installazione.");
+        error: function (data) {
+            toastr.error(data.responseText);
         }
     });
 }
