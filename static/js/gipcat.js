@@ -63,6 +63,14 @@ userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
     });
 });
 
+var userDeleteModal = document.getElementById('userDeleteModal');
+userDeleteModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var username = button.getAttribute('data-bs-username');
+    var modalContent = document.getElementById('dum.title');
+    modalContent.textContent = username;
+});
+
 function userChangePasswordAJAX(isSelf){
     var oldPasswordTb = document.getElementById("upcm.oldPassword");
     var newPasswordTb = document.getElementById("upcm.newPassword");
@@ -94,6 +102,22 @@ function userChangePasswordAJAX(isSelf){
             "oldPassword": document.getElementById("upcm.oldPassword").value,
             "newPassword": document.getElementById("upcm.newPassword").value,
             "version": document.getElementById("upcm.version").innerText,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+function deleteUserAJAX(){
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/ajax_deluser.php',
+        data: {
+            "userName": document.getElementById('dum.title').innerText
         },
         success: function (data) {
             successReload();

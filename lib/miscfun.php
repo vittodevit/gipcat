@@ -25,3 +25,32 @@ function checkAriaCurr($id, $pageid)
         echo '"';
     }
 }
+
+function pexcheck($username)
+{
+    global $con;
+    // permission check code
+    // authenticate old username and password combo
+    $sql = "SELECT permissionType FROM users WHERE userName = ?";
+
+    if ($stmt = new mysqli_stmt($con, $sql)) {
+        $stmt->bind_param("s", $param_username);
+
+        $param_username = $username;
+
+        if ($stmt->execute()) {
+            $stmt->store_result();
+
+            if ($stmt->num_rows() == 1) {
+                $stmt->bind_result($permissionType);
+                if ($stmt->fetch()) {
+                    return $permissionType;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+}

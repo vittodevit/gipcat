@@ -193,6 +193,31 @@ function openPage($pageid, $title, $level, $customcss = "")
                         </div>
                     </div>
                 </div>
+
+                <!-- DELETE USER MODAL -->
+                <div class="modal fade" id="userDeleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Eliminazione utente piattaforma</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Sei sicuro di voler completamente eliminare l'utente <strong id="dum.title"></strong> dal gestionale?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <span data-feather="x-octagon"></span>
+                                    Annulla
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="deleteUserAJAX()">
+                                    <span data-feather="trash"></span>
+                                    Elimina
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <?php
                 }
