@@ -3,7 +3,7 @@
 $pageid = 0;
 $friendlyname = "Home";
 $level = 0;
-$jsdeps = array('bootstrap-bundle', 'feathericons');
+$jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery', 'toastr');
 /// PAGE INFO ///
 
 require_once './init.php';

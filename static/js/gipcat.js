@@ -54,7 +54,7 @@ function changePasswordSelfAJAX(){
     // ajax update
     $.ajax({
         type: "POST",
-        url: relativeToRoot + 'ajax_create.php', // TODO: this is broken
+        url: relativeToRoot + 'lib/ajax_pwdchg.php',
         data: {
             "userName": sessionUserName,
             "oldPassword": document.getElementById("spcm.oldPassword").value,

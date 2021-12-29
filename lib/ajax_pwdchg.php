@@ -17,8 +17,15 @@ function chgpwd($username, $password)
 {
     global $con;
     // temp test code for change
-    http_response_code(418);
-    die('AJAX: temp test');
+    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+    $user = $con->real_escape_string($username);
+    $con->query("UPDATE `users` SET `passwordHash` = '$passwordHash' WHERE `userName` = '$user'");
+    if ($con->affected_rows == 1) {
+        die('AJAX: OK!');
+    } else {
+        http_response_code(404);
+        die('AJAX: User not found, update failed.');
+    }
 }
 
 function selfcheck($username, $password)
@@ -101,7 +108,7 @@ if (strcmp($_SESSION["userName"], $_POST["userName"]) == 0) {
         // requesting user is NOT a superadmin, checking if target is customer or technician
         if (pexcheck($_POST["userName"]) == 1 || pexcheck($_POST["userName"]) == 2) {
             // request is authenticated
-            chgpwd($_SESSION["userName"], $_POST["newPassword"]);
+            chgpwd($_POST["userName"], $_POST["newPassword"]);
         } else {
             http_response_code(403);
             die('AJAX: You are not authorized to edit this user.');
