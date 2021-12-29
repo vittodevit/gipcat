@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username_err = "Inserisci un username.";
     } else {
         $username = trim($_POST["username"]);
-        $escaped_username = $con->real_escape_string($link, $username);
+        $escaped_username = $con->real_escape_string($username);
     }
 
     if (empty(trim($_POST["password"]))) {
