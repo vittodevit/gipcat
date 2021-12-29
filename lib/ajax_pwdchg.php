@@ -15,19 +15,50 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 
 if (
     !isset($_POST["userName"]) || empty($_POST["userName"]) ||
-    !isset($_POST["password"]) || empty($_POST["password"])
+    !isset($_POST["newPassword"]) || empty($_POST["newPassword"])
 ) {
     http_response_code(400);
     die('AJAX: Required fields are missing!');
 }
 
+$un = $con->real_escape_string($_POST['userName']);
+
+$res = $con->query("SELECT `version` FROM `users` WHERE `userName` = '$un'");
+
+if ($con->affected_rows != 1) {
+    http_response_code(404);
+    die('AJAX: User not found!');
+}
+
+$arr = $res->fetch_assoc();
+$version = $arr['version'];
+
+if ($_POST['version'] != $version) {
+    http_response_code(400);
+    die('AJAX: The version number for the entry provided by the client does not match
+    with the one stored on the server. Try refreshing your page.');
+}
+
 function chgpwd($username, $password)
 {
     global $con;
+    global $version;
     // temp test code for change
+    $leb = $_SESSION['userName'];
+    $ver = $version + 1;
     $passwordHash = password_hash($password, PASSWORD_BCRYPT);
     $user = $con->real_escape_string($username);
-    $con->query("UPDATE `users` SET `passwordHash` = '$passwordHash' WHERE `userName` = '$user'");
+    $query =    "UPDATE `users` SET 
+                `passwordHash` = '$passwordHash',
+                `lastEditedBy` = '$leb',
+                `version` = '$ver',
+                `updatedAt` = now()
+                WHERE `userName` = '$user'";
+    $con->query($query);
+    if ($con->errno) {
+        http_response_code(500);
+        die('AJAX: MYSQL ERROR MY-'.$con->errno.' -> '.$con->error);
+    }
     if ($con->affected_rows == 1) {
         die('AJAX: OK!');
     } else {

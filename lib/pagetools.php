@@ -1,5 +1,12 @@
 <?php
 include 'miscfun.php';
+function printExtraUserManagementModals(){
+?>
+    
+    
+<?php
+}
+
 function openPage($pageid, $title, $level, $customcss = "")
 {
     global $config;
@@ -122,7 +129,8 @@ function openPage($pageid, $title, $level, $customcss = "")
                         </h6>
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a <?php checkAriaCurr(6, $pageid) ?> href="#" data-bs-toggle="modal" data-bs-target="#selfPassChangeModal">
+                                <a <?php checkAriaCurr(6, $pageid) ?> href="#" data-bs-toggle="modal" data-bs-target="#userPassChangeModal" 
+                                data-bs-username="<?php echo $_SESSION["userName"] ?>">
                                     <span data-feather="key"></span>
                                     Cambio Propria Password
                                 </a>
@@ -141,24 +149,29 @@ function openPage($pageid, $title, $level, $customcss = "")
                     </div>
                 </nav>
                 <!-- PASSWORD CHANGE MODAL CODE -->
-                <div class="modal fade" id="selfPassChangeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                <div class="modal fade" id="userPassChangeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Cambiamento propria password</h5>
+                                <h5 class="modal-title">Cambiamento password per l'utente <u><span id="upcm.title"></span></u></h5>
+                                <div class="spinner-modal-container" id="upcm.spinner">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="mb-3" id="spcm.oldPasswordContainer">
+                                <div class="mb-3 visually-hidden" id="upcm.oldPasswordContainer">
                                     <label for="spcm.oldPassword" class="form-label">Vecchia password:</label>
-                                    <input type="password" class="form-control" id="spcm.oldPassword">
+                                    <input type="password" class="form-control" id="upcm.oldPassword">
                                 </div>
                                 <div class="mb-3">
                                     <label for="spcm.newPassword" class="form-label">Nuova password:</label>
-                                    <input type="password" class="form-control" id="spcm.newPassword" placeholder="Minimo 8 caratteri">
+                                    <input type="password" class="form-control" id="upcm.newPassword" placeholder="Minimo 8 caratteri">
                                     <div class="mt-2">
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="spcm.passMeter"
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="upcm.passMeter"
                                                     role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                                             </div>
                                         </div>
@@ -166,15 +179,19 @@ function openPage($pageid, $title, $level, $customcss = "")
                                 </div>
                                 <div class="mb-3">
                                     <label for="spcm.confirmPassword" class="form-label">Conferma nuova password:</label>
-                                    <input type="password" class="form-control" id="spcm.confirmPassword">
+                                    <input type="password" class="form-control" id="upcm.confirmPassword">
                                 </div>
+                                <input type="hidden" id="upcm.isSelf" value="false">
+                                <p>Creazione: <strong id="upcm.createdAt">...</strong>  -  
+                            Ultima modifica: <strong id="upcm.updatedAt">...</strong> Ultima modifica da: <strong id="upcm.lastEditedBy">...</strong>  -  
+                            Versione: <strong id="upcm.version">...</strong></p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     <span data-feather="x-octagon"></span>
                                     Annulla
                                 </button>
-                                <button id="spcm.saveButton" type="button" class="btn btn-success" onclick="changePasswordSelfAJAX()">
+                                <button type="button" class="btn btn-success" onclick="userChangePasswordAJAX(document.getElementById('upcm.isSelf').value)">
                                     <span data-feather="save"></span>
                                     Salva
                                 </button>

@@ -27,18 +27,52 @@ function updatePasswordMeter(target, length){
 }
 
 // add event listener for passwordMeter update
-document.getElementById("spcm.newPassword").addEventListener('input', (event) => {
-    updatePasswordMeter("spcm.passMeter" ,event.target.value.length);
+document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
+    updatePasswordMeter("upcm.passMeter" ,event.target.value.length);
 });
 
-function changePasswordSelfAJAX(){
-    var oldPasswordTb = document.getElementById("spcm.oldPassword");
-    var newPasswordTb = document.getElementById("spcm.newPassword");
-    var confirmPasswordTb = document.getElementById("spcm.confirmPassword");
+// password change data loading
+var userPasswordChangeModal = document.getElementById('userPassChangeModal');
+userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById("upcm.spinner").classList.remove("visually-hidden");
+    var button = event.relatedTarget;
+    var username = button.getAttribute('data-bs-username');
+    var modalContent = document.getElementById('upcm.title');
+    modalContent.textContent = username;
+    if(sessionUserName == username){
+        document.getElementById('upcm.isSelf').value = 'true';
+        document.getElementById('upcm.oldPasswordContainer').classList.remove("visually-hidden");
+    }else{
+        document.getElementById('upcm.isSelf').value = 'false';
+        document.getElementById('upcm.oldPasswordContainer').classList.add("visually-hidden");
+    }
+    $.ajax({
+        type: "GET",
+        url: relativeToRoot + 'lib/ajax_readusermeta.php',
+        data: { "userName": username },
+        success: function (dataget) {
+            document.getElementById("upcm.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("upcm.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("upcm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("upcm.version").innerHTML = dataget['version'];
+            document.getElementById("upcm.spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+});
 
-    if(oldPasswordTb.value.length < 2){
-        toastr.error("La vecchia password è obbligatoria per il cambiamento.");
-        return;
+function userChangePasswordAJAX(isSelf){
+    var oldPasswordTb = document.getElementById("upcm.oldPassword");
+    var newPasswordTb = document.getElementById("upcm.newPassword");
+    var confirmPasswordTb = document.getElementById("upcm.confirmPassword");
+
+    if(isSelf == "true"){
+        if(oldPasswordTb.value.length < 2){
+            toastr.error("La vecchia password è obbligatoria per il cambiamento.");
+            return;
+        }
     }
 
     if(newPasswordTb.value.length < 8){
@@ -56,9 +90,10 @@ function changePasswordSelfAJAX(){
         type: "POST",
         url: relativeToRoot + 'lib/ajax_pwdchg.php',
         data: {
-            "userName": sessionUserName,
-            "oldPassword": document.getElementById("spcm.oldPassword").value,
-            "newPassword": document.getElementById("spcm.newPassword").value,
+            "userName": document.getElementById('upcm.title').innerText,
+            "oldPassword": document.getElementById("upcm.oldPassword").value,
+            "newPassword": document.getElementById("upcm.newPassword").value,
+            "version": document.getElementById("upcm.version").innerText,
         },
         success: function (data) {
             successReload();
