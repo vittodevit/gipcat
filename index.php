@@ -37,5 +37,7 @@ openPage($pageid, $friendlyname, $level);
     </div>
 </div>
 
+<img class="mt-10" src="./static/img/workinprogress.png" alt="workinprogress">
+
 <?php
 closePage($level, $jsdeps);
