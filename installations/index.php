@@ -236,21 +236,36 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
 <?php closePage($level, $jsdeps); } ?>
 
 <div>
-    <form action="" method="get">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" name="query" value="<?php echo htmlspecialchars($_GET['query']); ?>"
-            placeholder="Ricerca" aria-label="Ricerca" aria-describedby="button-addon2">
-            <input type="hidden" name="idCustomer" value="<?php echo $idCustomerGET; ?>">
-            <button class="btn btn-outline-dark" type="submit" id="button-addon2">
-                <span data-feather="search"></span>
-                Cerca
-            </button>
-            <a class="btn btn-outline-dark" href="./?idCustomer=<?php echo $idCustomerGET; ?>">
-                <span data-feather="refresh-ccw"></span>
-                Ricarica
-            </a>
+    <div class="row mb-3">
+        <div class="col col-md-9">
+            <form action="" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="query" value="<?php echo htmlspecialchars($_GET['query']); ?>"
+                    placeholder="Ricerca" aria-label="Ricerca" aria-describedby="button-addon2">
+                    <input type="hidden" name="idCustomer" value="<?php echo $idCustomerGET; ?>">
+                    <button class="btn btn-outline-dark" type="submit" id="button-addon2">
+                        <span data-feather="search"></span>
+                        Cerca
+                    </button>
+                    <a class="btn btn-outline-dark" href="./?idCustomer=<?php echo $idCustomerGET; ?>">
+                        <span data-feather="refresh-ccw"></span>
+                        Ricarica
+                    </a>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="col col-md-3">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">CLIENTE SELEZ.</span>
+                <input type="text" class="form-control" disabled
+                <?php 
+                $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idCustomerGET");
+                $fet = $res->fetch_array(MYSQLI_NUM);
+                echo 'value="' . $fet[0] . '"';
+                ?>>
+            </div>
+        </div>
+    </div>
 </div>
 
 <table class="table table-striped table-bordered">
