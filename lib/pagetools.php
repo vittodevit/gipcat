@@ -231,7 +231,6 @@ function closePage($level, $js_d, $customjs = "")
 function loginPage($username_err, $password_err)
 {
     ?>
-
     <!DOCTYPE html>
     <html lang="it">
 
@@ -239,6 +238,8 @@ function loginPage($username_err, $password_err)
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>GIPCAT</title>
+
+        <?php require 'css.deps.php' ?>
 
         <link rel="apple-touch-icon" sizes="57x57" href="../static/img/branding/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="../static/img/branding/apple-icon-60x60.png">
@@ -261,25 +262,56 @@ function loginPage($username_err, $password_err)
         <link href="../static/css/login.css" rel="stylesheet">
     </head>
 
-    <body>
-
-        <div class="login-page">
-            <div class="form">
+    <body class="text-center">
+    
+        <main class="form-signin">
+            <form action="" method="POST">
                 <img src="../static/img/branding/apple-icon-180x180.png" alt="gipcatlogo" width="180" height="180">
-                <br>
-                <br>
-                <form class="login-form" action="" method="post">
-                    <input type="text" placeholder="Username" name="username" />
-                    <span class="help-block"><?php echo $username_err; ?></span>
-                    <input type="password" placeholder="Password" name="password" />
-                    <span class="help-block"><?php echo $password_err; ?></span>
-                    <button type="submit">login</button>
-                </form>
-            </div>
-        </div>
 
+                <h1 class="h3 mb-3 fw-normal">Effettua l'accesso</h1>
+
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="name@example.com">
+                    <label for="username">Username</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <label for="password">Password</label>
+                </div>
+
+                <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me" disabled> Ricordami
+                </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Accedi</button>
+                <p class="mt-5 mb-3 text-muted">
+                    &copy; 2021 Vittorio Lo Mele / Cusenza Service <br>
+                    Software protetto da licenza 
+                    <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLV3</a>
+                    Codice sorgente su 
+                    <a href="https://github.com/vittodevit/gipcat-fe-php">GitHub</a>
+                </p>
+            </form>
+        </main>
+        <?php
+        require 'js.deps.php';
+        echo $jsdeps["bootstrap-bundle"];
+        echo $jsdeps["jquery"];
+        echo $jsdeps["feathericons"];
+        echo $jsdeps["toastr"];
+        ?>
+        <script>
+            <?php 
+            if(!empty($username_err)){
+                echo "toastr.error(\"$username_err\");";
+            }
+            if(!empty($password_err)){
+                echo "toastr.error(\"$password_err\");";
+            }
+            ?>
+        </script>
     </body>
-
     </html>
 <?php
 }
