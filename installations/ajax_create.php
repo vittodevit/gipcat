@@ -98,7 +98,7 @@ $stmt->execute();
 
 if ($stmt->errno) {
     http_response_code(500);
-    die('AJAX: Required fields are missing!');
+    die('AJAX: MYSQL ERROR MY-'.$stmt->errno);
 }
 
 die("AJAX: OK!");

@@ -13,6 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
     die('AJAX: This method is not allowed!');
 }
 
+if (
+    !isset($_POST["userName"]) || empty($_POST["userName"]) ||
+    !isset($_POST["password"]) || empty($_POST["password"])
+) {
+    http_response_code(400);
+    die('AJAX: Required fields are missing!');
+}
+
 function chgpwd($username, $password)
 {
     global $con;

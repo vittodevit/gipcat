@@ -22,7 +22,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Sei sicuro di voler eliminare l'installazione numero <strong id="dim.title">0</strong>?
+                Sei sicuro di voler eliminare l'installazione n&ordm; <strong id="dim.title"></strong>?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -237,7 +237,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
 
 <div>
     <div class="row mb-3">
-        <div class="col col-md-9">
+        <div class="col">
             <form action="" method="get">
                 <div class="input-group">
                     <input type="text" class="form-control" name="query" value="<?php echo htmlspecialchars($_GET['query']); ?>"
@@ -254,15 +254,16 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                 </div>
             </form>
         </div>
-        <div class="col col-md-3">
+        <div class="col col-md-auto">
             <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">CLIENTE SELEZ.</span>
-                <input type="text" class="form-control" disabled
+                <span class="input-group-text">CLIENTE SELEZIONATO:</span>
+                <span class="input-group-text"><b>
                 <?php 
                 $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idCustomerGET");
                 $fet = $res->fetch_array(MYSQLI_NUM);
-                echo 'value="' . $fet[0] . '"';
-                ?>>
+                echo $fet[0];
+                ?></b>
+                </span>
             </div>
         </div>
     </div>

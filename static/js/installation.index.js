@@ -1,26 +1,26 @@
-var deleteInstallationModal = document.getElementById('deleteInstallationModal')
+var deleteInstallationModal = document.getElementById('deleteInstallationModal');
 deleteInstallationModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget
-    var idInstallation = button.getAttribute('data-bs-dimIid')
-    var modalContent = document.getElementById('dim.title')
-    modalContent.textContent = idInstallation
-})
+    var button = event.relatedTarget;
+    var idInstallation = button.getAttribute('data-bs-dimIid');
+    var modalContent = document.getElementById('dim.title');
+    modalContent.textContent = idInstallation;
+});
 
-var createInstallationModal = document.getElementById('createInstallationModal')
+var createInstallationModal = document.getElementById('createInstallationModal');
 createInstallationModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget
-    var idCustomer = button.getAttribute('data-bs-cimIid')
-    var modalContent = document.getElementById('cim.title')
-    modalContent.textContent = idCustomer
-})
+    var button = event.relatedTarget;
+    var idCustomer = button.getAttribute('data-bs-cimIid');
+    var modalContent = document.getElementById('cim.title');
+    modalContent.textContent = idCustomer;
+});
 
-var editInstallationModal = document.getElementById('editInstallationModal')
+var editInstallationModal = document.getElementById('editInstallationModal');
 editInstallationModal.addEventListener('show.bs.modal', function (event) {
     document.getElementById("eim.spinner").classList.remove("visually-hidden");
-    var button = event.relatedTarget
-    var idInstallation = button.getAttribute('data-bs-eimIid')
-    var modalContent = document.getElementById('eim.title')
-    modalContent.textContent = idInstallation
+    var button = event.relatedTarget;
+    var idInstallation = button.getAttribute('data-bs-eimIid');
+    var modalContent = document.getElementById('eim.title');
+    modalContent.textContent = idInstallation;
     $.ajax({
         type: "GET",
         url: './ajax_get.php',

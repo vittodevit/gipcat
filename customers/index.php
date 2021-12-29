@@ -31,7 +31,7 @@ openPage($pageid, $friendlyname, $level);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Sei sicuro di voler eliminare la scheda cliente numero <strong id="deleteCustomerModalBody">0</strong>?
+                Sei sicuro di voler eliminare la scheda cliente n&ordm; <strong id="deleteCustomerModalBody"></strong>?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -151,7 +151,7 @@ openPage($pageid, $friendlyname, $level);
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modifica della scheda cliente <span id="ecm.title"></span></h5>
+                <h5 class="modal-title">Modifica della scheda cliente n&ordm; <u><span id="ecm.title"></span></u></h5>
                 <div class="spinner-modal-container" id="ecm.spinner">
                     <div class="spinner-border" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -247,6 +247,64 @@ openPage($pageid, $friendlyname, $level);
                 <button type="button" class="btn btn-success" onclick="editCustomerAjax(document.getElementById('ecm.title').innerText, document.getElementById('ecm.version').innerText)">
                     <span data-feather="save"></span>
                     Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE USER FOR CUSTOMER MODAL -->
+<div class="modal fade" id="userCreateCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuovo utente associato al cliente n&ordm; <u><span id="uccm.customerId"></span></u></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Nome utente</label>
+                            <input type="text" class="form-control" id="uccm.userName" required>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="legalName">Nome</label>
+                                <input type="text" class="form-control" id="uccm.legalName">
+                            </div>
+                            <div class="col">
+                                <label for="legalSurname">Cognome</label>
+                                <input type="text" class="form-control" id="uccm.legalSurname">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Nuova password:</label>
+                            <input type="password" class="form-control" id="uccm.newPassword" placeholder="Minimo 8 caratteri">
+                            <div class="mt-2">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" id="uccm.passMeter"
+                                            role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Conferma nuova password:</label>
+                            <input type="password" class="form-control" id="uccm.confirmPassword">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="userCreateCustomerAJAX(document.getElementById('uccm.customerId').innerText)">
+                    <span data-feather="folder-plus"></span>
+                    Crea
                 </button>
             </div>
         </div>
@@ -378,11 +436,11 @@ openPage($pageid, $friendlyname, $level);
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./edituser/?username=<?php echo $ckUsRw[0]; ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userPassChangeModal" data-bs-username="<?php echo $ckUsRw[0]; ?>">
                                         <span data-feather="user-check"></span>
                                         Cambia Password
                                     </a></li>
-                                <li><a class="dropdown-item" href="./deleteuser.php/?username=<?php echo $ckUsRw[0]; ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userDeleteModal" data-bs-username="<?php echo $ckUsRw[0]; ?>">
                                         <span data-feather="delete"></span>
                                         Elimina
                                 </a></li>
@@ -398,7 +456,7 @@ openPage($pageid, $friendlyname, $level);
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./createuser/?idCustomer=<?php echo $id ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userCreateCustomerModal" data-bs-cid="<?php echo $id ?>">
                                         <span data-feather="user-plus"></span>
                                         Crea Utente
                                     </a></li>

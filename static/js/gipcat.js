@@ -1,6 +1,6 @@
 feather.replace({ 'aria-hidden': 'true' })
 
-function updatePasswordMeter(length){
+function updatePasswordMeter(target, length){
     // calc values
     var pvalue = length < 16 ? length * 6 : 100;
     var pcolor = "";
@@ -14,7 +14,7 @@ function updatePasswordMeter(length){
         }
     }
     // apply on dom
-    var passwordMeter = document.getElementById("spcm.passMeter");
+    var passwordMeter = document.getElementById(target);
     // removing all bg classes
     passwordMeter.classList.remove("bg-success");
     passwordMeter.classList.remove("bg-warning");
@@ -28,7 +28,7 @@ function updatePasswordMeter(length){
 
 // add event listener for passwordMeter update
 document.getElementById("spcm.newPassword").addEventListener('input', (event) => {
-    updatePasswordMeter(event.target.value.length);
+    updatePasswordMeter("spcm.passMeter" ,event.target.value.length);
 });
 
 function changePasswordSelfAJAX(){

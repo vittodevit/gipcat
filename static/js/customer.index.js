@@ -1,18 +1,24 @@
-var deleteCustomerModal = document.getElementById('deleteCustomerModal')
-deleteCustomerModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget
-    var customerId = button.getAttribute('data-bs-dcmCid')
-    var modalContent = document.getElementById('deleteCustomerModalBody')
-    modalContent.textContent = customerId
-})
+// PASSWORD METER CODE //
+document.getElementById("uccm.newPassword").addEventListener('input', (event) => {
+    updatePasswordMeter("uccm.passMeter" ,event.target.value.length);
+});
 
-var editCustomerModal = document.getElementById('editCustomerModal')
+// MODAL DATA LOADING //
+var deleteCustomerModal = document.getElementById('deleteCustomerModal');
+deleteCustomerModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var customerId = button.getAttribute('data-bs-dcmCid');
+    var modalContent = document.getElementById('deleteCustomerModalBody');
+    modalContent.textContent = customerId;
+});
+
+var editCustomerModal = document.getElementById('editCustomerModal');
 editCustomerModal.addEventListener('show.bs.modal', function (event) {
     document.getElementById("ecm.spinner").classList.remove("visually-hidden");
-    var button = event.relatedTarget
-    var customerId = button.getAttribute('data-bs-ecmCid')
-    var modalContent = document.getElementById('ecm.title')
-    modalContent.textContent = customerId
+    var button = event.relatedTarget;
+    var customerId = button.getAttribute('data-bs-ecmCid');
+    var modalContent = document.getElementById('ecm.title');
+    modalContent.textContent = customerId;
     $.ajax({
         type: "GET",
         url: './ajax_get.php',
@@ -42,7 +48,18 @@ editCustomerModal.addEventListener('show.bs.modal', function (event) {
             toastr.error(data.responseText);
         }
     });
-})
+});
+
+var userCreateCustomerModal = document.getElementById('userCreateCustomerModal');
+userCreateCustomerModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var customerId = button.getAttribute('data-bs-cid');
+    var modalContent = document.getElementById('uccm.customerId');
+    modalContent.textContent = customerId;
+    document.getElementById("uccm.userName").value = "cliente" + customerId;
+});
+
+// AJAX //
 
 function deleteCustomerAJAX(customerId) {
     $.ajax({
@@ -108,6 +125,41 @@ function editCustomerAjax(customerId, version) {
             "fiscalCode": document.getElementById("ecm.fiscalCode").value,
             "vatNumber": document.getElementById("ecm.vatNumber").value,
             "footNote": document.getElementById("ecm.footNote").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+function userCreateCustomerAJAX(idCustomer){
+    var newPassword = document.getElementById("uccm.newPassword");
+    var confirmPassword = document.getElementById("uccm.confirmPassword");
+
+    if(newPassword.value.length < 8){
+        toastr.error("Password troppo corta. Il minimo è di 8 caratteri.");
+        return;
+    }
+
+    if(newPassword.value != confirmPassword.value){
+        toastr.error("Le due password non corrispondono!");
+        return;
+    }
+
+    // ajax update
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/ajax_mkuser.php',
+        data: {
+            "userName": document.getElementById("uccm.userName").value,
+            "legalName": document.getElementById("uccm.legalName").value,
+            "legalSurname": document.getElementById("uccm.legalSurname").value,
+            "password": document.getElementById("uccm.newPassword").value,
+            "permissionType": '1',
+            "idCustomer": idCustomer
         },
         success: function (data) {
             successReload();
