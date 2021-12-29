@@ -95,9 +95,7 @@ $passwordHash = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
 $permissionType = $_POST["permissionType"];
 
-$idCustomer = (
-    isset($_POST["idCustomer"]) && !empty($_POST["idCustomer"]) ? htmlspecialchars($_POST["idCustomer"]) : null
-);
+$idCustomer = $_POST["permissionType"] != 1 ? null : $_POST["idCustomer"];
 
 $lastEditedBy = $_SESSION["userName"];
 

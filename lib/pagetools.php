@@ -117,12 +117,6 @@ function openPage($pageid, $title, $level, $customcss = "")
                                     Gestore Interventi
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a <?php checkAriaCurr(3, $pageid) ?> href="<?php relativeToRoot($level); ?>technicians/">
-                                    <span data-feather="tool"></span>
-                                    Anagrafiche Tecnici
-                                </a>
-                            </li>
                         </ul>
                         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                             <span>Utenti</span>
@@ -139,7 +133,7 @@ function openPage($pageid, $title, $level, $customcss = "")
                         <?php if ($_SESSION["permissionType"] == 4) { ?>
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a <?php checkAriaCurr(7, $pageid) ?> href="<?php relativeToRoot($level); ?>users">
+                                    <a <?php checkAriaCurr(7, $pageid) ?> href="<?php relativeToRoot($level); ?>users/">
                                         <span data-feather="user-check"></span>
                                         Gestione Utenze
                                     </a>
@@ -272,25 +266,25 @@ function loginPage($username_err, $password_err)
 
                 <div class="form-floating">
                     <input type="text" class="form-control" id="username" name="username" placeholder="name@example.com">
-                    <label for="username">Username</label>
+                    <label for="username">
+                        <span data-feather="user"></span>
+                        Username
+                    </label>
                 </div>
                 <div class="form-floating">
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                    <label for="password">Password</label>
+                    <label for="password">
+                        <span data-feather="key"></span>
+                        Password
+                    </label>
                 </div>
-
-                <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me" disabled> Ricordami
-                </label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Accedi</button>
-                <p class="mt-5 mb-3 text-muted">
+                <button class="w-100 btn btn-lg btn-outline-dark" type="submit">Accedi</button>
+                <p class="mt-5 mb-3 text-muted ">
                     &copy; 2021 Vittorio Lo Mele / Cusenza Service <br>
                     Software protetto da licenza 
-                    <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLV3</a>
+                    <a class="link-dark" href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLV3</a>
                     Codice sorgente su 
-                    <a href="https://github.com/vittodevit/gipcat-fe-php">GitHub</a>
+                    <a class="link-dark" href="https://github.com/vittodevit/gipcat-fe-php">GitHub</a>
                 </p>
             </form>
         </main>
@@ -302,6 +296,7 @@ function loginPage($username_err, $password_err)
         echo $jsdeps["toastr"];
         ?>
         <script>
+            feather.replace({ 'aria-hidden': 'true' })
             <?php 
             if(!empty($username_err)){
                 echo "toastr.error(\"$username_err\");";
