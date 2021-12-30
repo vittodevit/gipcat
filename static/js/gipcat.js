@@ -128,17 +128,19 @@ function deleteUserAJAX(){
     });
 }
 
-function successReload(){
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('s', '1');
-    window.location.search = urlParams;
+// set persistent success message
+function successReload(message){
+    var msg;
+    if(message == undefined){
+        msg = "Operazione completata con successo."
+    }
+    localStorage.setItem("toastr.showSuccessToast", "true");
+    localStorage.setItem("toastr.message", msg);
+    location.reload();
 }
 
-if(location.href.includes("s=1")){
-    toastr.success("Operazione completata con successo!");
-    window.history.replaceState(
-        { additionalInformation: 'ok' }, 
-        document.title, 
-        "."
-    );
+// display persistent success message
+if(localStorage.getItem("toastr.showSuccessToast") == "true"){
+    localStorage.setItem("toastr.showSuccessToast", "false");
+    toastr.success(localStorage.getItem("toastr.message"));
 }
