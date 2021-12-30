@@ -218,6 +218,104 @@ function openPage($pageid, $title, $level, $customcss = "")
                         </div>
                     </div>
                 </div>
+            
+                <!-- EDIT CUSTOMER MODAL -->
+                <div class="modal fade" id="viewCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Scheda cliente n&ordm; <u><span id="vcm.title"></span></u></h5>
+                                <div class="spinner-modal-container" id="vcm.spinner">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="vcm">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="businessName" class="form-label">Ragione sociale</label>
+                                            <input type="text" class="form-control" id="vcm.businessName" disabled>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="registeredOfficeAddress">Indirizzo</label>
+                                                <input type="text" class="form-control" id="vcm.registeredOfficeAddress" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="registeredOfficeCity">Città</label>
+                                                <input type="text" class="form-control" id="vcm.registeredOfficeCity" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="headquartersAddress">Indirizzo di fatturazione</label>
+                                                <input type="text" class="form-control" id="vcm.headquartersAddress" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="headquartersCity">Città (fatturazione)</label>
+                                                <input type="text" class="form-control" id="vcm.headquartersCity" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="homePhoneNumber">Telefono Fisso (Personale)</label>
+                                                <input type="text" class="form-control" id="vcm.homePhoneNumber" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="officePhoneNumber">Telefono Fisso (Aziendale)</label>
+                                                <input type="text" class="form-control" id="vcm.officePhoneNumber" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="privateMobilePhoneNumber">Cellulare (Personale)</label>
+                                                <input type="text" class="form-control" id="vcm.privateMobilePhoneNumber" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="companyMobilePhoneNumber">Cellulare (Aziendale)</label>
+                                                <input type="text" class="form-control" id="vcm.companyMobilePhoneNumber" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="privateEMail">E-Mail (Personale)</label>
+                                                <input type="email" class="form-control" id="vcm.privateEMail" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="companyEMail">E-Mail (Aziendale)</label>
+                                                <input type="email" class="form-control" id="vcm.companyEMail" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="mb-3">
+                                            <label for="fiscalCode" class="form-label">Codice Fiscale</label>
+                                            <input type="text" class="form-control" id="vcm.fiscalCode" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="vatNumber" class="form-label">Partita IVA</label>
+                                            <input type="text" class="form-control" id="vcm.vatNumber" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="footNote" class="form-label">Annotazioni</label>
+                                            <textarea class="form-control" id="vcm.footNote" rows="3" disabled></textarea>
+                                        </div>
+                                        <p>Creazione: <strong id="vcm.createdAt">...</strong>  -  
+                                        Ultima modifica: <strong id="vcm.updatedAt">...</strong> da <strong id="vcm.lastEditedBy">...</strong>  -  
+                                        Versione: <strong id="vcm.version">...</strong></p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <?php
                 }

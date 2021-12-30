@@ -63,13 +63,19 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                         </div>
                         <br>
                         <div class="mb-3">
-                            <label for="heater" class="form-label">Caldaia</label>
+                            <label for="heater" class="form-label">Marca e modello apparecchio</label>
                             <input type="text" class="form-control" id="heater">
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-8">
                                 <label for="installationType" class="form-label">Tipo installazione</label>
-                                <input type="text" class="form-control" id="installationType">
+                                <select class="form-select" id="installationType">
+                                    <option value="Caldaia" selected>Caldaia</option>
+                                    <option value="Pompa di calore">Pompa di calore</option>
+                                    <option value="Pompa di calore">Ibrido</option>
+                                    <option value="Climatizzatore">Climatizzatore</option>
+                                    <option value="Altro">Altro (Vedi Note)</option>
+                                </select>
                             </div>
                             <div class="col col-md-4">
                                 <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
@@ -142,13 +148,19 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                         </div>
                         <br>
                         <div class="mb-3">
-                            <label for="heater" class="form-label">Caldaia</label>
+                            <label for="heater" class="form-label">Marca e modello apparecchio</label>
                             <input type="text" class="form-control" id="eim.heater">
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-8">
                                 <label for="installationType" class="form-label">Tipo installazione</label>
-                                <input type="text" class="form-control" id="eim.installationType">
+                                <select class="form-select" id="eim.installationType">
+                                    <option value="Caldaia" selected>Caldaia</option>
+                                    <option value="Pompa di calore">Pompa di calore</option>
+                                    <option value="Pompa di calore">Ibrido</option>
+                                    <option value="Climatizzatore">Climatizzatore</option>
+                                    <option value="Altro">Altro (Vedi Note)</option>
+                                </select>
                             </div>
                             <div class="col col-md-4">
                                 <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
@@ -216,9 +228,9 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                 <?php if ((isset($_GET["idCustomer"]) && !empty($_GET["idCustomer"])) && $_customerExists != null) { ?>
                 <div class="col col-md-auto">
                     <button type="button" class="btn btn-outline-dark" 
-                    data-bs-toggle="modal" data-bs-target="#createInstallationModal" data-bs-cimIid="<?php echo $idCustomerGET ?>">
-                        <span data-feather="box"></span>
-                        Aggiungi Installazione
+                    data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $idCustomerGET; ?>">
+                        <span data-feather="users"></span>
+                        Visualizza scheda cliente
                     </button>
                 </div>
                 <?php } ?>
@@ -253,7 +265,7 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
 <?php closePage($level, $jsdeps); } ?>
 
 <div>
-    <div class="row mb-3">
+    <div class="row mb-3 g-3">
         <div class="col">
             <form action="" method="get">
                 <div class="input-group">
@@ -272,14 +284,11 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
             </form>
         </div>
         <div class="col col-md-auto">
-            <div class="input-group">
-                <span class="input-group-text">CLIENTE SELEZIONATO:</span>
-                <span class="input-group-text"><b>
-                <?php 
-                echo $_customerExists[0];
-                ?></b>
-                </span>
-            </div>
+            <button type="button" class="btn btn-outline-dark" 
+                data-bs-toggle="modal" data-bs-target="#createInstallationModal" data-bs-cimIid="<?php echo $idCustomerGET ?>">
+                    <span data-feather="box"></span>
+                    Aggiungi Installazione
+            </button>
         </div>
     </div>
 </div>
@@ -291,7 +300,7 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
             <th class="col-md-2">Indirizzo Installazione</th>
             <th class="col-md-2">Città Installazione</th>
             <th class="col-md-2">Tipo Installazione</th>
-            <th class="col-md-2">Caldaia</th>
+            <th class="col-md-2">Marca e mod. apparecchio</th>
             <th class="col-md-1">Operazioni</th>
         </tr>
     </thead>

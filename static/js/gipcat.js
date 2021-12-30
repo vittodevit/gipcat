@@ -63,6 +63,48 @@ userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
     });
 });
 
+var viewCustomerModal = document.getElementById('viewCustomerModal');
+viewCustomerModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById("vcm.spinner").classList.remove("visually-hidden");
+    var button = event.relatedTarget;
+    var customerId = button.getAttribute('data-bs-vcmCid');
+    var modalContent = document.getElementById('vcm.title');
+    modalContent.textContent = customerId;
+    var a;
+    if(relativeToRoot != ""){
+        a = relativeToRoot + "customers/"
+    }
+    $.ajax({
+        type: "GET",
+        url: a + 'ajax_get.php',
+        data: { "customerId": customerId },
+        success: function (dataget) {
+            document.getElementById("vcm.businessName").value = !!dataget['businessName'] ? dataget['businessName'] : "";
+            document.getElementById("vcm.registeredOfficeAddress").value = !!dataget['registeredOfficeAddress'] ? dataget['registeredOfficeAddress'] : "";
+            document.getElementById("vcm.registeredOfficeCity").value = !!dataget['registeredOfficeCity'] ? dataget['registeredOfficeCity'] : "";
+            document.getElementById("vcm.headquartersAddress").value = !!dataget['headquartersAddress'] ? dataget['headquartersAddress'] : "";
+            document.getElementById("vcm.headquartersCity").value = !!dataget['headquartersCity'] ? dataget['headquartersCity'] : "";
+            document.getElementById("vcm.homePhoneNumber").value = !!dataget['homePhoneNumber'] ? dataget['homePhoneNumber'] : "";
+            document.getElementById("vcm.officePhoneNumber").value = !!dataget['officePhoneNumber'] ? dataget['officePhoneNumber'] : "";
+            document.getElementById("vcm.privateMobilePhoneNumber").value = !!dataget['privateMobilePhoneNumber'] ? dataget['privateMobilePhoneNumber'] : "";
+            document.getElementById("vcm.companyMobilePhoneNumber").value = !!dataget['companyMobilePhoneNumber'] ? dataget['companyMobilePhoneNumber'] : "";
+            document.getElementById("vcm.privateEMail").value = !!dataget['privateEMail'] ? dataget['privateEMail'] : "";
+            document.getElementById("vcm.companyEMail").value = !!dataget['companyEMail'] ? dataget['companyEMail'] : "";
+            document.getElementById("vcm.fiscalCode").value = !!dataget['fiscalCode'] ? dataget['fiscalCode'] : "";
+            document.getElementById("vcm.vatNumber").value = !!dataget['vatNumber'] ? dataget['vatNumber'] : "";
+            document.getElementById("vcm.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+            document.getElementById("vcm.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("vcm.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("vcm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("vcm.version").innerHTML = dataget['version'];
+            document.getElementById("vcm.spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+});
+
 var userDeleteModal = document.getElementById('userDeleteModal');
 userDeleteModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
