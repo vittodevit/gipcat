@@ -21,9 +21,14 @@ if (
     die('AJAX: Required fields are missing!');
 }
 
-if(pexcheck($_POST["userName"]) >= $_SESSION["permissionType"]){
+if($_POST["permissionType"] > 2 && $_SESSION["permissionType"] == "3"){
     http_response_code(400);
     die('AJAX: You cannot delete a user with this permission type.');
+}
+
+if($_POST["userName"] == $_SESSION["userName"]){
+    http_response_code(400);
+    die('AJAX: You cannot delete your own account.');
 }
 
 $username = $con->real_escape_string($_POST["userName"]);

@@ -75,7 +75,7 @@ if($_POST["permissionType"] == 1 && empty($_POST["idCustomer"])){
     die('AJAX: A customer permission level has been set, but no customer id has been bound!');
 }
 
-if($_POST["permissionType"] > 2 && $_SESSION["permissionType"] < 2){
+if($_POST["permissionType"] > 2 && $_SESSION["permissionType"] == "3"){
     http_response_code(400);
     die('AJAX: You cannot create a user with this permission type.');
 }

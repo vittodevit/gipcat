@@ -55,7 +55,7 @@ if (
     !isset($_POST["idCustomer"]) || empty($_POST["idCustomer"]) ||
     !isset($_POST["installationAddress"]) || empty($_POST["installationAddress"]) ||
     !isset($_POST["installationCity"]) || empty($_POST["installationCity"]) ||
-    !isset($_POST["toCall"]) || empty($_POST["toCall"])
+    !isset($_POST["toCall"])
 ) {
     http_response_code(400);
     die('AJAX: Required fields are missing!');
