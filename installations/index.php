@@ -11,6 +11,8 @@ require_once '../lib/pagetools.php';
 
 openPage($pageid, $friendlyname, $level);
 $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]));
+$_R_customerExists = $con->query("SELECT `businessName` FROM `customers` WHERE `idCustomer` = '$idCustomerGET'");
+$_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
 ?>
 
 <!-- DELETE INSTALLATION MODAL -->
@@ -211,6 +213,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                         </button>
                     </div>
                 </div>
+                <?php if ((isset($_GET["idCustomer"]) && !empty($_GET["idCustomer"])) && $_customerExists != null) { ?>
                 <div class="col col-md-auto">
                     <button type="button" class="btn btn-outline-dark" 
                     data-bs-toggle="modal" data-bs-target="#createInstallationModal" data-bs-cimIid="<?php echo $idCustomerGET ?>">
@@ -218,6 +221,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                         Aggiungi Installazione
                     </button>
                 </div>
+                <?php } ?>
             </div>
         </form>
     </div>
@@ -229,6 +233,19 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
     <h3>
         <strong>
             NESSUN CLIENTE SELEZIONATO
+        </strong>
+    </h3>
+</center>
+<br>
+<?php closePage($level, $jsdeps); } ?>
+
+<?php if ($_customerExists == null) { ?>
+<br>
+<center>
+    <h3>
+        <strong>
+            IL CLIENTE SELEZIONATO <br>
+            NON ESISTE
         </strong>
     </h3>
 </center>
@@ -259,9 +276,7 @@ $idCustomerGET = $con->real_escape_string(htmlspecialchars($_GET["idCustomer"]))
                 <span class="input-group-text">CLIENTE SELEZIONATO:</span>
                 <span class="input-group-text"><b>
                 <?php 
-                $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idCustomerGET");
-                $fet = $res->fetch_array(MYSQLI_NUM);
-                echo $fet[0];
+                echo $_customerExists[0];
                 ?></b>
                 </span>
             </div>

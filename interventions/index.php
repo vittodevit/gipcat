@@ -3,7 +3,7 @@
 $pageid = 4;
 $friendlyname = "Gestione Interventi";
 $level = 1;
-$jsdeps = array('bootstrap-bundle', 'feathericons');
+$jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery', 'toastr');
 /// PAGE INFO ///
 
 require_once '../init.php';
@@ -30,6 +30,7 @@ openPage($pageid, $friendlyname, $level);
                         </button>
                     </div>
                 </div>
+                <?php if (isset($_GET["idInstallation"]) && !empty($_GET["idInstallation"])) { ?>
                 <div class="col col-md-auto">
                     <button type="button" class="btn btn-outline-dark" 
                     data-bs-toggle="modal" data-bs-target="#createInterventionModal" data-bs-cimIid="<?php echo $idInstallationGET ?>">
@@ -37,6 +38,7 @@ openPage($pageid, $friendlyname, $level);
                         Aggiungi Intervento
                     </button>
                 </div>
+                <?php } ?>
             </div>
         </form>
     </div>
