@@ -233,6 +233,12 @@ openPage($pageid, $friendlyname, $level);
                             <label for="footNote" class="form-label">Annotazioni</label>
                             <textarea class="form-control" id="ecm.footNote" rows="3"></textarea>
                         </div>
+                        <div class="mb-3">
+                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('customer'+document.getElementById('ecm.title').innerText)">
+                                <span data-feather="database"></span>
+                                Visualizza allegati in AMS
+                            </a>
+                        </div>
                         <p>Creazione: <strong id="ecm.createdAt">...</strong>  -  
                         Ultima modifica: <strong id="ecm.updatedAt">...</strong> da <strong id="ecm.lastEditedBy">...</strong>  -  
                         Versione: <strong id="ecm.version">...</strong></p>
@@ -403,11 +409,15 @@ openPage($pageid, $friendlyname, $level);
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCustomerModal" data-bs-ecmCid="<?php echo $row['idCustomer']; ?>"">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCustomerModal" data-bs-ecmCid="<?php echo $row['idCustomer']; ?>">
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica
                                 </a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal" data-bs-dcmCid="<?php echo $row['idCustomer']; ?>"">
+                            <li><a class="dropdown-item" onclick="amsLaunch('customer<?php echo $row['idCustomer']; ?>')">
+                                    <span data-feather="database"></span>
+                                    Visualizza in AMS
+                                </a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal" data-bs-dcmCid="<?php echo $row['idCustomer']; ?>">
                                 <span data-feather="delete"></span>
                                     Elimina
                                 </a></li>

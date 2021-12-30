@@ -1,5 +1,23 @@
 feather.replace({ 'aria-hidden': 'true' })
 
+// Attachment Management System //
+var windowHasFocus;
+
+$(window).focus(function() {
+  windowHasFocus = true;
+}).blur(function() {
+  windowHasFocus = false;
+});
+
+function amsLaunch(amsid) {
+  window.location = "gipcat-ams://" + amsid;
+  setTimeout(function(){
+    if (windowHasFocus) {
+        toastr.error("La macchina non è configurata per l'uso di AMS.");
+    }
+  }, 100);
+}
+
 function updatePasswordMeter(target, length){
     // calc values
     var pvalue = length < 16 ? length * 6 : 100;

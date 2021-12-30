@@ -306,6 +306,12 @@ function openPage($pageid, $title, $level, $customcss = "")
                                             <label for="footNote" class="form-label">Annotazioni</label>
                                             <textarea class="form-control" id="vcm.footNote" rows="3" disabled></textarea>
                                         </div>
+                                        <div class="mb-3">
+                                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('customer'+document.getElementById('vcm.title').innerText)">
+                                                <span data-feather="database"></span>
+                                                Visualizza allegati in AMS
+                                            </a>
+                                        </div>
                                         <p>Creazione: <strong id="vcm.createdAt">...</strong>  -  
                                         Ultima modifica: <strong id="vcm.updatedAt">...</strong> da <strong id="vcm.lastEditedBy">...</strong>  -  
                                         Versione: <strong id="vcm.version">...</strong></p>
