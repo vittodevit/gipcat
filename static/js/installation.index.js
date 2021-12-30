@@ -30,7 +30,7 @@ editInstallationModal.addEventListener('show.bs.modal', function (event) {
                 document.getElementById("eim.installationAddress").placeholder = !!dataget['installationAddress'] ? dataget['installationAddress'] : "";
                 document.getElementById("eim.installationCity").placeholder = !!dataget['installationCity'] ? dataget['installationCity'] : "";
                 document.getElementById("eim.heater").placeholder = !!dataget['heater'] ? dataget['heater'] : "";
-                document.getElementById("eim.installationType").placeholder = !!dataget['installationType'] ? dataget['installationType'] : "";
+                document.getElementById("eim.installationType").value = !!dataget['installationType'] ? dataget['installationType'] : "";
                 document.getElementById("eim.manteinanceContractName").placeholder = !!dataget['manteinanceContractName'] ? dataget['manteinanceContractName'] : "";
                 // mapping db's 0 and 1 to true and false
                 document.getElementById("eim.toCall").checked = !!dataget['toCall'] && dataget['toCall'] == 1 ? true : false;

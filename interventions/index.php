@@ -37,11 +37,21 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                 </div>
                 <?php if (isset($_GET["idInstallation"]) && !empty($_GET["idInstallation"])) { ?>
                 <div class="col col-md-auto">
-                    <button type="button" class="btn btn-outline-dark" 
-                    data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $_installationExists[0]; ?>">
-                        <span data-feather="users"></span>
-                        Visualizza scheda cliente
-                    </button>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <?php 
+                            $idcg = $_installationExists[0];
+                            $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idcg");
+                            $fet = $res->fetch_array(MYSQLI_NUM);
+                            echo $fet[0];
+                            ?>
+                        </span>
+                        <button type="button" class="btn btn-outline-dark" 
+                        data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $_installationExists[0]; ?>">
+                            <span data-feather="users"></span>
+                            Visualizza scheda cliente
+                        </button>
+                    </div>
                 </div>
                 <div class="col col-md-auto">
                     <button type="button" class="btn btn-outline-dark" onclick="location.href = '../installations/?idCustomer=<?php echo $_installationExists[0] ?>'">
@@ -110,16 +120,6 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
 </div>
 <div class="row mb-3">
     <div class="col col-md-2">
-        <label for="preview.customer" class="form-label">Cliente collegato:</label>
-        <input type="text" class="form-control" id="preview.customer" disabled 
-        value="<?php 
-        $idcg = $_installationExists[0];
-        $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idcg");
-        $fet = $res->fetch_array(MYSQLI_NUM);
-        echo $fet[0];
-        ?>">
-    </div>
-    <div class="col col-md-2">
         <label for="preview.installationAddress" class="form-label">Indirizzo installazione:</label>
         <input type="text" class="form-control" id="preview.installationAddress" disabled 
         value="<?php echo $_installationExists['installationAddress'] ?>">
@@ -128,6 +128,11 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
         <label for="preview.installationCity" class="form-label">Città installazione:</label>
         <input type="text" class="form-control" id="preview.installationCity" disabled 
         value="<?php echo $_installationExists['installationCity'] ?>">
+    </div>
+    <div class="col col-md-2">
+        <label for="preview.installationType" class="form-label">Tipo installazione:</label>
+        <input type="text" class="form-control" id="preview.installationType" disabled 
+        value="<?php echo $_installationExists['installationType'] ?>">
     </div>
     <div class="col col-md-2">
         <label for="preview.heater" class="form-label">Marca e mod. apparecchio:</label>
