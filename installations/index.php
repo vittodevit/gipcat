@@ -72,7 +72,7 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                                 <select class="form-select" id="installationType">
                                     <option value="Caldaia" selected>Caldaia</option>
                                     <option value="Pompa di calore">Pompa di calore</option>
-                                    <option value="Pompa di calore">Ibrido</option>
+                                    <option value="Ibrido">Ibrido</option>
                                     <option value="Climatizzatore">Climatizzatore</option>
                                     <option value="Altro">Altro (Vedi Note)</option>
                                 </select>
@@ -157,7 +157,7 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                                 <select class="form-select" id="eim.installationType">
                                     <option value="Caldaia" selected>Caldaia</option>
                                     <option value="Pompa di calore">Pompa di calore</option>
-                                    <option value="Pompa di calore">Ibrido</option>
+                                    <option value="Ibrido">Ibrido</option>
                                     <option value="Climatizzatore">Climatizzatore</option>
                                     <option value="Altro">Altro (Vedi Note)</option>
                                 </select>
