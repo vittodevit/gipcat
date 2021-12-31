@@ -402,8 +402,86 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
     </div>
 </div>
 
-<h4>tabella che devo ancora fare</h4>
-<img class="mt-10" src="../static/img/workinprogress.png" alt="workinprogress">
+<!-- <h4>tabella che devo ancora fare</h4>
+<img class="mt-10" src="../static/img/workinprogress.png" alt="workinprogress"> -->
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th class="col-md-1">N&ordm; Intervento Uni.</th>
+            <th class="col-md-2">Tipo Intervento</th>
+            <th class="col-md-2">Stato Intervento</th>
+            <th class="col-md-2">Assegnato a</th>
+            <th class="col-md-2">Data ed Ora Intervento</th>
+            <th class="col-md-1">Operazioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+
+        if (isset($_GET['query']) && $_GET['query'] != "") {
+            $additionalQuery = "";
+
+            $additionalQuery = "AND LOWER(
+                                    CONCAT(
+                                        IFNULL(idIntervention, ''),
+                                        '',
+                                        IFNULL(interventionType, ''),
+                                        '',
+                                        IFNULL(interventionState, ''),
+                                        '',
+                                        IFNULL(assignedTo, ''),
+                                        '',
+                                        IFNULL(interventionDate, '')
+                                    )
+                                ) LIKE LOWER(\"%";
+            $additionalQuery .= $con->real_escape_string($_GET["query"]);
+            $additionalQuery .= "%\")";
+        }
+        
+        $result = $con->query("SELECT idIntervention, interventionType, interventionState, assignedTo, interventionDate 
+                                FROM interventions 
+                                WHERE idInstallation = $idInstallationGET
+                                $additionalQuery");
+        while ($row = $result->fetch_array()) {
+        ?>
+            <tr>
+                <td> <?php echo $row['idIntervention']; ?> </td>
+                <td> <?php echo $row['interventionType']; ?> </td>
+                <td> <?php echo $row['interventionState']; ?> </td>
+                <?php
+                $_un = $row['assignedTo'];
+                $_restec = $con->query("SELECT `legalName`, `legalSurname` FROM `users` WHERE `userName` = '$_un';");
+                $_tec = $_restec->fetch_array(MYSQLI_NUM);
+                ?>
+                <td> <?php echo "[".$_un."] ".$_tec[0]." ".$_tec[1] ?> </td>
+                <td> <?php echo $row['interventionDate']; ?> </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span data-feather="menu"></span>
+                            Operazioni
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInsterventionModal" data-bs-eimIid="<?php echo $row['idIntervention']; ?>">
+                                    <span data-feather="edit"></span>
+                                    Visualizza o Modifica
+                                </a></li>
+                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $row['idIntervention']; ?>')">
+                                    <span data-feather="database"></span>
+                                    Visualizza in AMS
+                                </a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $row['idIntervention']; ?>">
+                                <span data-feather="delete"></span>
+                                    Elimina
+                                </a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
 
 <?php
 closePage($level, $jsdeps);
