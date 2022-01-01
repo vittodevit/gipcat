@@ -83,7 +83,7 @@ $shipmentDate = (
 );
 
 $protocolNumber = (
-    isset($_POST["protocolNumber"]) && !empty($_POST["protocolNumber"]) ? htmlspecialchars($_POST["protocolNumber"]) : null
+    isset($_POST["protocolNumber"]) ? htmlspecialchars($_POST["protocolNumber"]) : null
 );
 
 $billingDate = (
@@ -91,7 +91,7 @@ $billingDate = (
 );
 
 $billingNumber = (
-    isset($_POST["billingNumber"]) && !empty($_POST["billingNumber"]) ? htmlspecialchars($_POST["billingNumber"]) : null
+    isset($_POST["billingNumber"]) ? htmlspecialchars($_POST["billingNumber"]) : null
 );
 
 $paymentDate = (

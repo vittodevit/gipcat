@@ -95,22 +95,28 @@ function createInterventionAJAX() {
     });
 }
 
-/* function editInstallationAjax(idInstallation, version) {
+function editInterventionAjax(idIntervention, version) {
     $.ajax({
         type: "POST",
         url: './ajax_edit.php',
         data: {
-            "idInstallation": idInstallation,
+            "idIntervention": idIntervention,
             "version": version,
-            "installationAddress": document.getElementById("eim.installationAddress").value,
-            "installationCity": document.getElementById("eim.installationCity").value,
-            "heater": document.getElementById("eim.heater").value,
-            "installationType": document.getElementById("eim.installationType").value,
-            "manteinanceContractName": document.getElementById("eim.manteinanceContractName").value,
-            "toCall": document.getElementById("eim.toCall").checked ? 1 : 0,
-            "monthlyCallInterval": document.getElementById("eim.monthlyCallInterval").value,
-            "contractExpiryDate": document.getElementById("eim.contractExpiryDate").value,
-            "footNote": document.getElementById("eim.footNote").value
+            "interventionType": document.getElementById("eim.interventionType").value,
+            "interventionState": document.getElementById("eim.interventionState").value,
+            "assignedTo": document.getElementById("eim.assignedTo").value,
+            "protocolNumber": document.getElementById("eim.protocolNumber").value,
+            "billingNumber": document.getElementById("eim.billingNumber").value,
+            // mapping db's 0 and 1 to true and false
+            "countInCallCycle": document.getElementById("eim.countInCallCycle").checked ? 1 : 0,
+            // DATES //
+            "interventionDate": document.getElementById("eim.interventionDate").value,
+            // substring to get only date not time
+            "shipmentDate": document.getElementById("eim.shipmentDate").value,
+            "billingDate": document.getElementById("eim.billingDate").value,
+            "paymentDate": document.getElementById("eim.paymentDate").value,
+            //bottom
+            "footNote": document.getElementById("eim.footNote").value,
         },
         success: function (data) {
             successReload();
@@ -119,4 +125,4 @@ function createInterventionAJAX() {
             toastr.error(data.responseText);
         }
     });
-} */
+}

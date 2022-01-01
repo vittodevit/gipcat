@@ -254,7 +254,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                     <span data-feather="x"></span>
                     Annulla
                 </button>
-                <button type="button" class="btn btn-success" onclick="editInstallationAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
+                <button type="button" class="btn btn-success" onclick="editInterventionAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
                     <span data-feather="save"></span>
                     Salva
                 </button>
