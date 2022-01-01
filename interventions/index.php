@@ -66,7 +66,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                             </div>
                             <div class="col">
                                 <label for="interventionState">Stato Intervento:</label>
-                                <select class="form-select" id="interventionType" required>
+                                <select class="form-select" id="interventionState" required>
                                     <option value="0" selected>Programmato</option>
                                     <option value="1">Eseguito</option>
                                     <option value="2">Annullato</option>
@@ -178,7 +178,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                             </div>
                             <div class="col">
                                 <label for="eim.interventionState">Stato Intervento:</label>
-                                <select class="form-select" id="eim.interventionType" required>
+                                <select class="form-select" id="eim.interventionState" required>
                                     <option value="0" selected>Programmato</option>
                                     <option value="1">Eseguito</option>
                                     <option value="2">Annullato</option>
@@ -438,23 +438,34 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
             $additionalQuery .= $con->real_escape_string($_GET["query"]);
             $additionalQuery .= "%\")";
         }
+
+        $IS = array(
+            array("Programmato", "orange"),
+            array("Eseguito", "green"),
+            array("Annullato", "red")
+        );
         
         $result = $con->query("SELECT idIntervention, interventionType, interventionState, assignedTo, interventionDate 
                                 FROM interventions 
                                 WHERE idInstallation = $idInstallationGET
-                                $additionalQuery");
+                                $additionalQuery ORDER BY interventionDate ASC");
         while ($row = $result->fetch_array()) {
         ?>
             <tr>
                 <td> <?php echo $row['idIntervention']; ?> </td>
                 <td> <?php echo $row['interventionType']; ?> </td>
-                <td> <?php echo $row['interventionState']; ?> </td>
+                <td> <b><span style="color:<?php echo $IS[$row['interventionState']][1] ?> ;"><?php echo $IS[$row['interventionState']][0] ?></span></b> </td>
                 <?php
                 $_un = $row['assignedTo'];
                 $_restec = $con->query("SELECT `legalName`, `legalSurname` FROM `users` WHERE `userName` = '$_un';");
                 $_tec = $_restec->fetch_array(MYSQLI_NUM);
+                if($_tec == null){
+                    $at = "Nessuno";
+                }else{
+                    $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
+                }
                 ?>
-                <td> <?php echo "[".$_un."] ".$_tec[0]." ".$_tec[1] ?> </td>
+                <td> <?php echo $at ?> </td>
                 <td> <?php echo $row['interventionDate']; ?> </td>
                 <td>
                     <div class="dropdown">
@@ -463,7 +474,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                             Operazioni
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInsterventionModal" data-bs-eimIid="<?php echo $row['idIntervention']; ?>">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionModal" data-bs-eimIid="<?php echo $row['idIntervention']; ?>">
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica
                                 </a></li>
@@ -484,4 +495,4 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
 </table>
 
 <?php
-closePage($level, $jsdeps);
+closePage($level, $jsdeps, "intervention.index.js");
