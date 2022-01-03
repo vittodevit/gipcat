@@ -18,7 +18,9 @@ $stmt = $con->prepare("
             (`idCustomer`,
             `installationAddress`,
             `installationCity`,
+            `heaterBrand`,
             `heater`,
+            `heaterSerialNumber`,
             `installationType`,
             `manteinanceContractName`,
             `toCall`,
@@ -30,18 +32,20 @@ $stmt = $con->prepare("
             `createdAt`,
             `updatedAt`)
         VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
             '1',
             Now(),
             Now());
         ");
 
 $stmt->bind_param(
-    "isssssiisss",
+    "isssssssiisss",
     $idCustomer,
     $installationAddress,
     $installationCity,
+    $heaterBrand,
     $heater,
+    $heaterSerialNumber,
     $installationType,
     $manteinanceContractName,
     $toCall,
@@ -68,8 +72,16 @@ $installationAddress = htmlspecialchars($_POST["installationAddress"]);
 $installationCity = htmlspecialchars($_POST["installationCity"]);
 $toCall = htmlspecialchars($_POST["toCall"]);
 
+$heaterBrand = (
+    isset($_POST["heaterBrand"]) && !empty($_POST["heaterBrand"]) ? htmlspecialchars($_POST["heaterBrand"]) : null
+);
+
 $heater = (
     isset($_POST["heater"]) && !empty($_POST["heater"]) ? htmlspecialchars($_POST["heater"]) : null
+);
+
+$heaterSerialNumber = (
+    isset($_POST["heaterSerialNumber"]) && !empty($_POST["heaterSerialNumber"]) ? htmlspecialchars($_POST["heaterSerialNumber"]) : null
 );
 
 $installationType = (

@@ -62,9 +62,19 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                             </div>
                         </div>
                         <br>
-                        <div class="mb-3">
-                            <label for="heater" class="form-label">Marca e modello apparecchio</label>
-                            <input type="text" class="form-control" id="heater">
+                        <div class="row mb-3">
+                            <div class="col col-md-4">
+                                <label for="heaterBrand" class="form-label">Marca apparecchio</label>
+                                <input type="text" class="form-control" id="heaterBrand">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="heater" class="form-label">Modello apparecchio</label>
+                                <input type="text" class="form-control" id="heater">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="heaterSerialNumber" class="form-label">Matricola</label>
+                                <input type="text" class="form-control" id="heaterSerialNumber">
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-8">
@@ -138,22 +148,32 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                     <form>
                         <div class="row">
                             <div class="col">
-                                <label for="installationAddress">Indirizzo</label>
+                                <label for="eim.installationAddress">Indirizzo</label>
                                 <input type="text" class="form-control" id="eim.installationAddress" required>
                             </div>
                             <div class="col">
-                                <label for="installationCity">Città</label>
+                                <label for="eim.installationCity">Città</label>
                                 <input type="text" class="form-control" id="eim.installationCity" required>
                             </div>
                         </div>
                         <br>
-                        <div class="mb-3">
-                            <label for="heater" class="form-label">Marca e modello apparecchio</label>
-                            <input type="text" class="form-control" id="eim.heater">
+                        <div class="row mb-3">
+                            <div class="col col-md-4">
+                                <label for="eim.heaterBrand" class="form-label">Marca apparecchio</label>
+                                <input type="text" class="form-control" id="eim.heaterBrand">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="eim.heater" class="form-label">Modello apparecchio</label>
+                                <input type="text" class="form-control" id="eim.heater">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="eim.heaterSerialNumber" class="form-label">Matricola</label>
+                                <input type="text" class="form-control" id="eim.heaterSerialNumber">
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-8">
-                                <label for="installationType" class="form-label">Tipo installazione</label>
+                                <label for="eim.installationType" class="form-label">Tipo installazione</label>
                                 <select class="form-select" id="eim.installationType">
                                     <option value="Caldaia" selected>Caldaia</option>
                                     <option value="Pompa di calore">Pompa di calore</option>
@@ -163,7 +183,7 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                                 </select>
                             </div>
                             <div class="col col-md-4">
-                                <label for="monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
+                                <label for="eim.monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-text">
                                         <input class="form-check-input mt-0" type="checkbox" required id="eim.toCall">
@@ -175,16 +195,16 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-8">
-                                <label for="manteinanceContractName" class="form-label">Contratto di manutenzione</label>
+                                <label for="eim.manteinanceContractName" class="form-label">Contratto di manutenzione</label>
                                 <input type="text" class="form-control" id="eim.manteinanceContractName">
                             </div>
                             <div class="col col-md-4">
-                                <label for="contractExpiryDate" class="form-label">Data di scadenza</label>
+                                <label for="eim.contractExpiryDate" class="form-label">Data di scadenza</label>
                                 <input type="date" class="form-control" id="eim.contractExpiryDate">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="footNote" class="form-label">Annotazioni</label>
+                            <label for="eim.footNote" class="form-label">Annotazioni</label>
                             <textarea class="form-control" id="eim.footNote" rows="3"></textarea>
                         </div>
                         <p>Creazione: <strong id="eim.createdAt">...</strong>  -  
@@ -299,8 +319,10 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
             <th class="col-md-1">N&ordm; Installazione</th>
             <th class="col-md-2">Indirizzo Installazione</th>
             <th class="col-md-2">Città Installazione</th>
-            <th class="col-md-2">Tipo Installazione</th>
-            <th class="col-md-2">Marca e mod. apparecchio</th>
+            <th class="col-md-1">Tipo Installazione</th>
+            <th class="col-md-1">Marca</th>
+            <th class="col-md-1">Modello</th>
+            <th class="col-md-2">Matricola</th>
             <th class="col-md-1">Operazioni</th>
         </tr>
     </thead>
@@ -321,13 +343,17 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                                         IFNULL(installationCity, ''),
                                         '',
                                         IFNULL(heater, '')
+                                        '',
+                                        IFNULL(heaterBrand, '')
+                                        '',
+                                        IFNULL(heaterSerialNumber, '')
                                     )
                                 ) LIKE LOWER(\"%";
             $additionalQuery .= $con->real_escape_string($_GET["query"]);
             $additionalQuery .= "%\")";
         }
         
-        $result = $con->query("SELECT idInstallation, installationType, installationAddress, installationCity, heater 
+        $result = $con->query("SELECT idInstallation, installationType, installationAddress, installationCity, heater, heaterBrand, heaterSerialNumber 
                                 FROM installations 
                                 WHERE idCustomer = $idCustomerGET
                                 $additionalQuery");
@@ -338,7 +364,9 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                 <td> <?php echo $row['installationAddress']; ?> </td>
                 <td> <?php echo $row['installationCity']; ?> </td>
                 <td> <?php echo $row['installationType']; ?> </td>
+                <td> <?php echo $row['heaterBrand']; ?> </td>
                 <td> <?php echo $row['heater']; ?> </td>
+                <td> <?php echo $row['heaterSerialNumber']; ?> </td>
                 <td>
                     <div class="dropdown">
                         <button class="btn btn-outline-dark dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">

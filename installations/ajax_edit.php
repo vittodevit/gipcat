@@ -36,7 +36,7 @@ if ($_POST['version'] != $arr['version']) {
     with the one stored on the server. Try refreshing your page.');
 }
 
-$fieldnames = array("installationAddress", "installationCity", "heater", "installationType", 
+$fieldnames = array("installationAddress", "installationCity", "heaterBrand", "heater", "heaterSerialNumber", "installationType", 
 "manteinanceContractName", "toCall", "monthlyCallInterval", "contractExpiryDate", "footNote");
                     
 $fields = "";

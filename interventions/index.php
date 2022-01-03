@@ -11,8 +11,8 @@ require_once '../lib/pagetools.php';
 
 openPage($pageid, $friendlyname, $level);
 $idInstallationGET = $con->real_escape_string(htmlspecialchars($_GET["idInstallation"]));
-$_R_installationExists = $con->query("SELECT `idCustomer`, `installationAddress`, `installationCity`, `heater`, 
-                                    `installationType`, `manteinanceContractName`, `toCall`, `monthlyCallInterval`
+$_R_installationExists = $con->query("SELECT `idCustomer`, `installationAddress`, `installationCity`, `heater`, `heaterBrand`,
+                                    `installationType`, `manteinanceContractName`, `toCall`, `monthlyCallInterval`, `heaterSerialNumber`
                                     FROM `installations` WHERE `idInstallation` = '$idInstallationGET'");
 $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
 ?>
@@ -281,7 +281,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                         </button>
                     </div>
                 </div>
-                <?php if (isset($_GET["idInstallation"]) && !empty($_GET["idInstallation"])) { ?>
+                <?php if (isset($_GET["idInstallation"]) && !empty($_GET["idInstallation"]) && $_installationExists != null) { ?>
                 <div class="col col-md-auto">
                     <div class="input-group">
                         <span class="input-group-text">
@@ -383,12 +383,12 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
     <div class="col col-md-2">
         <label for="preview.heater" class="form-label">Marca e mod. apparecchio:</label>
         <input type="text" class="form-control" id="preview.heater" disabled 
-        value="<?php echo $_installationExists['heater'] ?>">
+        value="<?php echo $_installationExists['heaterBrand']." ".$_installationExists['heater'] ?>">
     </div>
     <div class="col col-md-2">
-        <label for="preview.manteinanceContractName" class="form-label">Contratto di manutenzione:</label>
-        <input type="text" class="form-control" id="preview.manteinanceContractName" disabled 
-        value="<?php echo $_installationExists['manteinanceContractName'] ?>">
+        <label for="preview.sn" class="form-label">Matricola:</label>
+        <input type="text" class="form-control" id="preview.sn" disabled 
+        value="<?php echo $_installationExists['heaterSerialNumber'] ?>">
     </div>
     <div class="col col-md-2">
         <label for="preview.callinterval" class="form-label">Intervallo chiamate:</label>
