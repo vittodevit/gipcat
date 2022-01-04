@@ -21,6 +21,7 @@ $stmt = $con->prepare("
             `passwordHash`,
             `permissionType`,
             `idCustomer`,
+            `color`,
             `lastEditedBy`,
             `version`,
             `createdAt`,
@@ -33,13 +34,14 @@ $stmt = $con->prepare("
         ");
 
 $stmt->bind_param(
-    "sssssis",
+    "sssssiss",
     $userName,
     $legalName,
     $legalSurname,
     $passwordHash,
     $permissionType,
     $idCustomer,
+    $color,
     $lastEditedBy,
 );
 
@@ -96,6 +98,10 @@ $passwordHash = password_hash($_POST["password"], PASSWORD_BCRYPT);
 $permissionType = $_POST["permissionType"];
 
 $idCustomer = $_POST["permissionType"] != 1 ? null : $_POST["idCustomer"];
+
+$color = (
+    isset($_POST["color"]) && !empty($_POST["color"]) ? htmlspecialchars($_POST["color"]) : null
+);
 
 $lastEditedBy = $_SESSION["userName"];
 

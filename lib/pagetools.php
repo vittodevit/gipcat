@@ -488,9 +488,28 @@ function printInterventionsCard(
         array("Eseguito", "green"),
         array("Annullato", "red")
     );
+    $_un = $arr_intervention['assignedTo'];
+    $_restec = $con->query("SELECT `legalName`, `legalSurname`, `color` FROM `users` WHERE `userName` = '$_un';");
+    $_tec = $_restec->fetch_array(MYSQLI_NUM);
+    if($_tec == null){
+        $at = "Nessuno";
+    }else{
+        $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
+        if($_tec[2] != null){
+            $color = $_tec[2];
+            $at .= " <span style='color: $color;'>&#9632;</span>";
+        }
+   }
 ?>
 <div class="card mb-3 scrollbar-w">
-    <div class="card-header">
+    <div class="card-header"
+    <?php 
+        if($_tec[2] != null){
+            $color = $_tec[2];
+            echo "style=\"background-color: $color;\"";
+        }
+    ?>
+    >
         <div class="row">
             <div class="col col-md-10">
                 <span data-feather="clock"></span>
@@ -544,16 +563,6 @@ function printInterventionsCard(
         <b>Marca e modello:</b> <?php echo $arr_installation['heaterBrand']." ".$arr_installation['heater'] ?>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="check"></span>
-        <?php
-            $_un = $arr_intervention['assignedTo'];
-            $_restec = $con->query("SELECT `legalName`, `legalSurname` FROM `users` WHERE `userName` = '$_un';");
-            $_tec = $_restec->fetch_array(MYSQLI_NUM);
-            if($_tec == null){
-                $at = "Nessuno";
-            }else{
-                $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
-            }
-        ?>
         <b>Stato intervento: <span style="color:<?php echo $IS[$arr_intervention['interventionState']][1] ?> ;"><?php echo $IS[$arr_intervention['interventionState']][0] ?></span></b> 
         <br>
         <span data-feather="tool"></span>

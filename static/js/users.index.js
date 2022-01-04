@@ -5,10 +5,18 @@ document.getElementById("ucum.newPassword").addEventListener('input', (event) =>
 
 // add event listener for permissionType update
 document.getElementById("ucum.permissionType").addEventListener('input', () => {
-    if (document.getElementById("ucum.permissionType").value != 1) {
-        document.getElementById("ucum.idCustomer").disabled = true;
-    } else {
-        document.getElementById("ucum.idCustomer").disabled = false;
+    switch(document.getElementById("ucum.permissionType").value){
+        case '1':
+            document.getElementById("ucum.div.idCustomer").classList.remove("visually-hidden");
+            document.getElementById("ucum.div.color").classList.add("visually-hidden");
+            break;
+        case '2':
+            document.getElementById("ucum.div.color").classList.remove("visually-hidden");
+            document.getElementById("ucum.div.idCustomer").classList.add("visually-hidden");
+            break;
+        default:
+            document.getElementById("ucum.div.color").classList.add("visually-hidden");
+            document.getElementById("ucum.div.idCustomer").classList.add("visually-hidden");
     }
 });
 
@@ -36,7 +44,8 @@ function userCreateUnlockedAJAX() {
             "legalSurname": document.getElementById("ucum.legalSurname").value,
             "password": document.getElementById("ucum.newPassword").value,
             "permissionType": document.getElementById("ucum.permissionType").value,
-            "idCustomer": document.getElementById("ucum.idCustomer").value
+            "idCustomer": document.getElementById("ucum.idCustomer").value,
+            "color": document.getElementById("ucum.color").value
         },
         success: function (data) {
             successReload();
