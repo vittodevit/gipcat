@@ -102,3 +102,16 @@ body {
   .spinner-modal-container{
     margin-left: 15px;
   }
+
+  .h5t{
+    margin-top: 8px;
+  }
+
+  .scrollable-list {
+    height: 74vh;
+    overflow: auto;
+  }
+
+  .scrollbar-w{
+    width: 99%;
+  }

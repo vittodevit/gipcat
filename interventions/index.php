@@ -75,7 +75,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                         </div>
                         <br>
                         <div class="mb-3">
-                            <label for="assignedTo" class="form-label">Assegtnato a:</label>
+                            <label for="assignedTo" class="form-label">Assegnato a:</label>
                             <select class="form-select" id="assignedTo" required>
                                     <option value="" selected>Nessuno</option>
                                     <?php 
@@ -187,7 +187,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                         </div>
                         <br>
                         <div class="mb-3">
-                            <label for="eim.assignedTo" class="form-label">Assegtnato a:</label>
+                            <label for="eim.assignedTo" class="form-label">Assegnato a:</label>
                             <select class="form-select" id="eim.assignedTo" required>
                                     <option value="" selected>Nessuno</option>
                                     <?php 

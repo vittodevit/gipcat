@@ -464,3 +464,49 @@ function paginationButton($enabled, $link, $text, $query, $label = ""){
         <?php 
     }
 }
+
+function printInterventionsCard(){
+?>
+<div class="card mb-3 scrollbar-w">
+    <div class="card-header">
+        <div class="row">
+            <div class="col col-md-10">
+                <span data-feather="clock"></span>
+                <b>00:00</b>
+            </div>
+            <div class="col col-md-2 text-end">
+                <div class="dropdown">
+                    <a class="link-dark" href="#" role="button" id="drpd1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span data-feather="menu"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="drpd1">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <span data-feather="user"></span>
+        <b>Cliente:</b> Nessuno
+        <br>
+        <span data-feather="compass"></span>
+        <b>Indirizzo Installazione:</b> Nessuno
+        <br>
+        <span data-feather="home"></span>
+        <b>Tipo Installazione:</b> Nessuno
+        <br>
+        <span data-feather="box"></span>
+        <b>Marca e modello:</b> Nessuno
+        <hr style="margin-top: 8px; margin-bottom: 8px;">
+        <span data-feather="check"></span>
+        <b>Stato intervento:</b> Nessuno
+        <br>
+        <span data-feather="tool"></span>
+        <b>Assegnato a:</b> Nessuno
+    </div>
+</div>
+<?php
+}
