@@ -17,7 +17,7 @@ function openPage($pageid, $title, $level, $customcss = "")
     }
     session_start();
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-        header("Location: " . relativeToRoot($level) . "login/");
+        header("Location: " . npRelativeToRoot($level) . "login/");
         exit;
     }
 ?>
