@@ -465,24 +465,66 @@ function paginationButton($enabled, $link, $text, $query, $label = ""){
     }
 }
 
-function printInterventionsCard(){
+function printInterventionsCard(
+    $idIntervention
+){
+    global $con;
+    $res_intervention = $con->query("SELECT * FROM `interventions` WHERE `idIntervention` = '$idIntervention';");
+    $arr_intervention = $res_intervention->fetch_array();
+    /// INSTALLATION FETCH ///
+    $idInstallation = $arr_intervention['idInstallation'];
+    $res_installation = $con->query("SELECT * FROM `installations` WHERE `idInstallation` = '$idInstallation';");
+    $arr_installation = $res_installation->fetch_array();
+    /// CUSTOMER FETCH ///
+    $idCustomer = $arr_installation['idCustomer'];
+    $res_customer = $con->query("SELECT * FROM `customers` WHERE `idCustomer` = '$idCustomer';");
+    $arr_customer = $res_customer->fetch_array();
+    /// TIME FORMAT ///
+    $interventionUnixTime = strtotime($arr_intervention['interventionDate']);
+    // FORMAT: hh:mm
+    $interventionTime = gmdate("H:i", $interventionUnixTime);
+    $IS = array(
+        array("Programmato", "orange"),
+        array("Eseguito", "green"),
+        array("Annullato", "red")
+    );
 ?>
 <div class="card mb-3 scrollbar-w">
     <div class="card-header">
         <div class="row">
             <div class="col col-md-10">
                 <span data-feather="clock"></span>
-                <b>00:00</b>
+                <b><?php echo $interventionTime ?></b>
             </div>
             <div class="col col-md-2 text-end">
                 <div class="dropdown">
-                    <a class="link-dark" href="#" role="button" id="drpd1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="link-dark" role="button" id="drpd1" data-bs-toggle="dropdown" aria-expanded="false">
                         <span data-feather="menu"></span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="drpd1">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" 
+                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $idCustomer; ?>">
+                            <span data-feather="user"></span>
+                            Visualizza Scheda Cliente</a></li>
+                            
+                        <li><a class="dropdown-item">
+                            <span data-feather="box"></span>
+                            Visualizza Scheda Installazione</a></li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionModal" data-bs-eimIid="<?php echo $idIntervention ?>">
+                                    <span data-feather="edit"></span>
+                                    Visualizza o Modifica Intervento
+                                </a></li>
+                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $idIntervention ?>')">
+                                    <span data-feather="database"></span>
+                                    Visualizza Intervento in AMS
+                                </a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $idIntervention ?>">
+                                <span data-feather="delete"></span>
+                                    Elimina Intervento
+                                </a></li>
                     </ul>
                 </div>
             </div>
@@ -490,23 +532,181 @@ function printInterventionsCard(){
     </div>
     <div class="card-body">
         <span data-feather="user"></span>
-        <b>Cliente:</b> Nessuno
+        <b>Cliente:</b> <?php echo $arr_customer['businessName'] ?>
         <br>
         <span data-feather="compass"></span>
-        <b>Indirizzo Installazione:</b> Nessuno
+        <b>Indirizzo Installazione:</b> <?php echo $arr_installation['installationAddress']." - ".$arr_installation['installationCity'] ?>
         <br>
         <span data-feather="home"></span>
-        <b>Tipo Installazione:</b> Nessuno
+        <b>Tipo Installazione:</b> <?php echo $arr_installation['installationType'] ?>
         <br>
         <span data-feather="box"></span>
-        <b>Marca e modello:</b> Nessuno
+        <b>Marca e modello:</b> <?php echo $arr_installation['heaterBrand']." ".$arr_installation['heater'] ?>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="check"></span>
-        <b>Stato intervento:</b> Nessuno
+        <?php
+            $_un = $arr_intervention['assignedTo'];
+            $_restec = $con->query("SELECT `legalName`, `legalSurname` FROM `users` WHERE `userName` = '$_un';");
+            $_tec = $_restec->fetch_array(MYSQLI_NUM);
+            if($_tec == null){
+                $at = "Nessuno";
+            }else{
+                $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
+            }
+        ?>
+        <b>Stato intervento: <span style="color:<?php echo $IS[$arr_intervention['interventionState']][1] ?> ;"><?php echo $IS[$arr_intervention['interventionState']][0] ?></span></b> 
         <br>
         <span data-feather="tool"></span>
-        <b>Assegnato a:</b> Nessuno
+        <b>Assegnato a:</b> <?php echo $at ?>
     </div>
 </div>
+<?php
+}
+
+function printInterventionsModals(){ 
+    global $con;
+    ?>
+<!-- DELETE INTERVENTION MODAL -->
+<div class="modal fade" id="deleteInterventionModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminazione intervento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare l'intervento n&ordm; <strong id="dim.title"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-danger" onclick="deleteInterventionAJAX(document.getElementById('dim.title').textContent)">
+                    <span data-feather="trash"></span>
+                    Elimina
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- EDIT INTERVENTION MODAL -->
+<div class="modal fade" id="editInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica dell'intervento n&ordm; <u><span id="eim.title"></span></u> 
+                dell'installazione n&ordm; <u><span id="eim.idInstallation"></span></u></h5>
+                <div class="spinner-modal-container" id="eim.spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB2">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <label for="eim.interventionType">Tipo intervento:</label>
+                                <select class="form-select" id="eim.interventionType" required>
+                                    <option value="Manutenzione ordinaria" selected>Manutenzione ordinaria</option>
+                                    <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
+                                    <option value="Intervento Generico">Intervento Generico</option>
+                                    <option value="Prima Accensione">Prima Accensione</option>
+                                    <option value="Installazione">Installazione</option>
+                                    <option value="Altro">Altro (Vedi Note)</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="eim.interventionState">Stato Intervento:</label>
+                                <select class="form-select" id="eim.interventionState" required>
+                                    <option value="0" selected>Programmato</option>
+                                    <option value="1">Eseguito</option>
+                                    <option value="2">Annullato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="eim.assignedTo" class="form-label">Assegnato a:</label>
+                            <select class="form-select" id="eim.assignedTo" required>
+                                    <option value="" selected>Nessuno</option>
+                                    <?php 
+                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
+                                    while($tec = $restec->fetch_array()){
+                                        ?> <option value="<?php echo $tec['userName'] ?>">
+                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
+                                        </option> <?php
+                                    }
+                                    ?>
+                                </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="eim.interventionDate" class="form-label">Data ed ora intervento:</label>
+                                <input type="datetime-local" class="form-control" id="eim.interventionDate">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="eim.countInCallCycle" class="form-label">Ciclo chiamate:</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" required checked id="eim.countInCallCycle">
+                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="eim.shipmentDate" class="form-label">Data di spedizione:</label>
+                                <input type="date" class="form-control" id="eim.shipmentDate">
+                            </div>
+                            <div class="col">
+                                <label for="eim.protocolNumber" class="form-label">Numero di protocollo:</label>
+                                <input type="number" class="form-control" id="eim.protocolNumber">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="eim.billingDate" class="form-label">Data di fatturazione:</label>
+                                <input type="date" class="form-control" id="eim.billingDate">
+                            </div>
+                            <div class="col">
+                                <label for="eim.billingNumber" class="form-label">Numero di fattura:</label>
+                                <input type="number" class="form-control" id="eim.billingNumber">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                                <label for="eim.paymentDate" class="form-label">Data di pagamento:</label>
+                                <input type="date" class="form-control" id="eim.paymentDate">
+                            </div>
+                        <div class="mb-3">
+                            <label for="eim.footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="eim.footNote" rows="3"></textarea>
+                        </div>
+                        <p>Creazione: <strong id="eim.createdAt">...</strong>  -  
+                        Ultima modifica: <strong id="eim.updatedAt">...</strong> da <strong id="eim.lastEditedBy">...</strong>  -  
+                        Versione: <strong id="eim.version">...</strong></p>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="editInterventionAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 }

@@ -1,6 +1,6 @@
 // PASSWORD METER CODE //
 document.getElementById("uccm.newPassword").addEventListener('input', (event) => {
-    updatePasswordMeter("uccm.passMeter" ,event.target.value.length);
+    updatePasswordMeter("uccm.passMeter", event.target.value.length);
 });
 
 // MODAL DATA LOADING //
@@ -135,16 +135,16 @@ function editCustomerAjax(customerId, version) {
     });
 }
 
-function userCreateCustomerAJAX(idCustomer){
+function userCreateCustomerAJAX(idCustomer) {
     var newPassword = document.getElementById("uccm.newPassword");
     var confirmPassword = document.getElementById("uccm.confirmPassword");
 
-    if(newPassword.value.length < 8){
+    if (newPassword.value.length < 8) {
         toastr.error("Password troppo corta. Il minimo è di 8 caratteri.");
         return;
     }
 
-    if(newPassword.value != confirmPassword.value){
+    if (newPassword.value != confirmPassword.value) {
         toastr.error("Le due password non corrispondono!");
         return;
     }

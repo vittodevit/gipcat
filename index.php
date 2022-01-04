@@ -10,6 +10,7 @@ require_once './init.php';
 require_once './lib/pagetools.php';
 
 openPage($pageid, $friendlyname, $level);
+printInterventionsModals();
 $CL = 1;
 ?>
 

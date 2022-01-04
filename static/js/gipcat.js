@@ -3,31 +3,31 @@ feather.replace({ 'aria-hidden': 'true' })
 // Attachment Management System //
 var windowHasFocus;
 
-$(window).focus(function() {
-  windowHasFocus = true;
-}).blur(function() {
-  windowHasFocus = false;
+$(window).focus(function () {
+    windowHasFocus = true;
+}).blur(function () {
+    windowHasFocus = false;
 });
 
 function amsLaunch(amsid) {
-  window.location = "gipcat-ams://" + amsid;
-  setTimeout(function(){
-    if (windowHasFocus) {
-        toastr.error("La macchina non è configurata per l'uso di AMS.");
-    }
-  }, 100);
+    window.location = "gipcat-ams://" + amsid;
+    setTimeout(function () {
+        if (windowHasFocus) {
+            toastr.error("La macchina non è configurata per l'uso di AMS.");
+        }
+    }, 100);
 }
 
-function updatePasswordMeter(target, length){
+function updatePasswordMeter(target, length) {
     // calc values
     var pvalue = length < 16 ? length * 6 : 100;
     var pcolor = "";
-    if(length > 11){
+    if (length > 11) {
         pcolor = "success";
-    }else{
-        if(length > 7){
+    } else {
+        if (length > 7) {
             pcolor = "warning";
-        }else{
+        } else {
             pcolor = "danger";
         }
     }
@@ -46,7 +46,7 @@ function updatePasswordMeter(target, length){
 
 // add event listener for passwordMeter update
 document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
-    updatePasswordMeter("upcm.passMeter" ,event.target.value.length);
+    updatePasswordMeter("upcm.passMeter", event.target.value.length);
 });
 
 // password change data loading
@@ -57,10 +57,10 @@ userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
     var username = button.getAttribute('data-bs-username');
     var modalContent = document.getElementById('upcm.title');
     modalContent.textContent = username;
-    if(sessionUserName == username){
+    if (sessionUserName == username) {
         document.getElementById('upcm.isSelf').value = 'true';
         document.getElementById('upcm.oldPasswordContainer').classList.remove("visually-hidden");
-    }else{
+    } else {
         document.getElementById('upcm.isSelf').value = 'false';
         document.getElementById('upcm.oldPasswordContainer').classList.add("visually-hidden");
     }
@@ -89,8 +89,10 @@ viewCustomerModal.addEventListener('show.bs.modal', function (event) {
     var modalContent = document.getElementById('vcm.title');
     modalContent.textContent = customerId;
     var a;
-    if(relativeToRoot != ""){
+    if (relativeToRoot != "") {
         a = relativeToRoot + "customers/"
+    } else {
+        a = "./customers/"
     }
     $.ajax({
         type: "GET",
@@ -131,24 +133,24 @@ userDeleteModal.addEventListener('show.bs.modal', function (event) {
     modalContent.textContent = username;
 });
 
-function userChangePasswordAJAX(isSelf){
+function userChangePasswordAJAX(isSelf) {
     var oldPasswordTb = document.getElementById("upcm.oldPassword");
     var newPasswordTb = document.getElementById("upcm.newPassword");
     var confirmPasswordTb = document.getElementById("upcm.confirmPassword");
 
-    if(isSelf == "true"){
-        if(oldPasswordTb.value.length < 2){
+    if (isSelf == "true") {
+        if (oldPasswordTb.value.length < 2) {
             toastr.error("La vecchia password è obbligatoria per il cambiamento.");
             return;
         }
     }
 
-    if(newPasswordTb.value.length < 8){
+    if (newPasswordTb.value.length < 8) {
         toastr.error("Password troppo corta. Il minimo è di 8 caratteri.");
         return;
     }
 
-    if(newPasswordTb.value != confirmPasswordTb.value){
+    if (newPasswordTb.value != confirmPasswordTb.value) {
         toastr.error("Le due password non corrispondono!");
         return;
     }
@@ -172,7 +174,7 @@ function userChangePasswordAJAX(isSelf){
     });
 }
 
-function deleteUserAJAX(){
+function deleteUserAJAX() {
     $.ajax({
         type: "POST",
         url: relativeToRoot + 'lib/ajax_deluser.php',
@@ -189,9 +191,9 @@ function deleteUserAJAX(){
 }
 
 // set persistent success message
-function successReload(message){
+function successReload(message) {
     var msg;
-    if(message == undefined){
+    if (message == undefined) {
         msg = "Operazione completata con successo."
     }
     localStorage.setItem("toastr.showSuccessToast", "true");
@@ -200,7 +202,101 @@ function successReload(message){
 }
 
 // display persistent success message
-if(localStorage.getItem("toastr.showSuccessToast") == "true"){
+if (localStorage.getItem("toastr.showSuccessToast") == "true") {
     localStorage.setItem("toastr.showSuccessToast", "false");
     toastr.success(localStorage.getItem("toastr.message"));
+}
+
+var deleteInterventionModal = document.getElementById('deleteInterventionModal');
+deleteInterventionModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var idIntervention = button.getAttribute('data-bs-dimIid');
+    var modalContent = document.getElementById('dim.title');
+    modalContent.textContent = idIntervention;
+});
+
+var editInterventionModal = document.getElementById('editInterventionModal');
+editInterventionModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    var button = event.relatedTarget;
+    var idIntervention = button.getAttribute('data-bs-eimIid');
+    var modalContent = document.getElementById('eim.title');
+    modalContent.textContent = idIntervention;
+    $.ajax({
+        type: "GET",
+        url: relativeToRoot + 'lib/int/ajax_get.php',
+        data: { "idIntervention": idIntervention },
+        success: function (dataget) {
+            document.getElementById("eim.idInstallation").innerHTML = dataget['idInstallation'];
+            document.getElementById("eim.interventionType").value = !!dataget['interventionType'] ? dataget['interventionType'] : "";
+            document.getElementById("eim.interventionState").value = !!dataget['interventionState'] ? dataget['interventionState'] : "";
+            document.getElementById("eim.assignedTo").value = !!dataget['assignedTo'] ? dataget['assignedTo'] : "";
+            document.getElementById("eim.protocolNumber").value = !!dataget['protocolNumber'] ? dataget['protocolNumber'] : "";
+            document.getElementById("eim.billingNumber").value = !!dataget['billingNumber'] ? dataget['billingNumber'] : "";
+            // mapping db's 0 and 1 to true and false
+            document.getElementById("eim.countInCallCycle").checked = !!dataget['countInCallCycle'] && dataget['countInCallCycle'] == 1 ? true : false;
+            // DATES //
+            document.getElementById("eim.interventionDate").value = !!dataget['interventionDate'] ? dataget['interventionDate'] : "";
+            // substring to get only date not time
+            document.getElementById("eim.shipmentDate").value = !!dataget['shipmentDate'] ? dataget['shipmentDate'].substring(0, 10) : "";
+            document.getElementById("eim.billingDate").value = !!dataget['billingDate'] ? dataget['billingDate'].substring(0, 10) : "";
+            document.getElementById("eim.paymentDate").value = !!dataget['paymentDate'] ? dataget['paymentDate'].substring(0, 10) : "";
+            //bottom
+            document.getElementById("eim.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+            document.getElementById("eim.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("eim.version").innerHTML = dataget['version'];
+            document.getElementById("eim.spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+})
+
+function deleteInterventionAJAX(idIntervention) {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int/ajax_delete.php',
+        data: { "idIntervention": idIntervention },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+function editInterventionAjax(idIntervention, version) {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int/ajax_edit.php',
+        data: {
+            "idIntervention": idIntervention,
+            "version": version,
+            "interventionType": document.getElementById("eim.interventionType").value,
+            "interventionState": document.getElementById("eim.interventionState").value,
+            "assignedTo": document.getElementById("eim.assignedTo").value,
+            "protocolNumber": document.getElementById("eim.protocolNumber").value,
+            "billingNumber": document.getElementById("eim.billingNumber").value,
+            // mapping db's 0 and 1 to true and false
+            "countInCallCycle": document.getElementById("eim.countInCallCycle").checked ? 1 : 0,
+            // DATES //
+            "interventionDate": document.getElementById("eim.interventionDate").value,
+            // substring to get only date not time
+            "shipmentDate": document.getElementById("eim.shipmentDate").value,
+            "billingDate": document.getElementById("eim.billingDate").value,
+            "paymentDate": document.getElementById("eim.paymentDate").value,
+            //bottom
+            "footNote": document.getElementById("eim.footNote").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
 }

@@ -26,25 +26,25 @@ editInstallationModal.addEventListener('show.bs.modal', function (event) {
         url: './ajax_get.php',
         data: { "idInstallation": idInstallation },
         success: function (dataget) {
-                document.getElementById("eim.idCustomer").innerHTML = dataget['idCustomer'];
-                document.getElementById("eim.installationAddress").placeholder = !!dataget['installationAddress'] ? dataget['installationAddress'] : "";
-                document.getElementById("eim.installationCity").placeholder = !!dataget['installationCity'] ? dataget['installationCity'] : "";
-                document.getElementById("eim.heaterBrand").placeholder = !!dataget['heaterBrand'] ? dataget['heaterBrand'] : "";
-                document.getElementById("eim.heater").placeholder = !!dataget['heater'] ? dataget['heater'] : "";
-                document.getElementById("eim.heaterSerialNumber").placeholder = !!dataget['heaterSerialNumber'] ? dataget['heaterSerialNumber'] : "";
-                document.getElementById("eim.installationType").value = !!dataget['installationType'] ? dataget['installationType'] : "";
-                document.getElementById("eim.manteinanceContractName").placeholder = !!dataget['manteinanceContractName'] ? dataget['manteinanceContractName'] : "";
-                // mapping db's 0 and 1 to true and false
-                document.getElementById("eim.toCall").checked = !!dataget['toCall'] && dataget['toCall'] == 1 ? true : false;
-                document.getElementById("eim.monthlyCallInterval").placeholder = !!dataget['monthlyCallInterval'] ? dataget['monthlyCallInterval'] : "";
-                // substring to get only date not time
-                document.getElementById("eim.contractExpiryDate").value = !!dataget['contractExpiryDate'] ? dataget['contractExpiryDate'].substring(0, 10) : "";
-                document.getElementById("eim.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
-                document.getElementById("eim.createdAt").innerHTML = dataget['createdAt'];
-                document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
-                document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
-                document.getElementById("eim.version").innerHTML = dataget['version'];
-                document.getElementById("eim.spinner").classList.add("visually-hidden");
+            document.getElementById("eim.idCustomer").innerHTML = dataget['idCustomer'];
+            document.getElementById("eim.installationAddress").placeholder = !!dataget['installationAddress'] ? dataget['installationAddress'] : "";
+            document.getElementById("eim.installationCity").placeholder = !!dataget['installationCity'] ? dataget['installationCity'] : "";
+            document.getElementById("eim.heaterBrand").placeholder = !!dataget['heaterBrand'] ? dataget['heaterBrand'] : "";
+            document.getElementById("eim.heater").placeholder = !!dataget['heater'] ? dataget['heater'] : "";
+            document.getElementById("eim.heaterSerialNumber").placeholder = !!dataget['heaterSerialNumber'] ? dataget['heaterSerialNumber'] : "";
+            document.getElementById("eim.installationType").value = !!dataget['installationType'] ? dataget['installationType'] : "";
+            document.getElementById("eim.manteinanceContractName").placeholder = !!dataget['manteinanceContractName'] ? dataget['manteinanceContractName'] : "";
+            // mapping db's 0 and 1 to true and false
+            document.getElementById("eim.toCall").checked = !!dataget['toCall'] && dataget['toCall'] == 1 ? true : false;
+            document.getElementById("eim.monthlyCallInterval").placeholder = !!dataget['monthlyCallInterval'] ? dataget['monthlyCallInterval'] : "";
+            // substring to get only date not time
+            document.getElementById("eim.contractExpiryDate").value = !!dataget['contractExpiryDate'] ? dataget['contractExpiryDate'].substring(0, 10) : "";
+            document.getElementById("eim.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+            document.getElementById("eim.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("eim.version").innerHTML = dataget['version'];
+            document.getElementById("eim.spinner").classList.add("visually-hidden");
         },
         error: function (data) {
             toastr.error(data.responseText);

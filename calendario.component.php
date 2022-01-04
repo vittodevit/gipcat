@@ -2,6 +2,6 @@
 if (!isset($CL)) {
     die("Cannot load component in standalone.");
 }
-printInterventionsCard();
+printInterventionsCard(1);
 ?>
 
