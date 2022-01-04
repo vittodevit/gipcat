@@ -1,11 +1,5 @@
 <?php
 include 'miscfun.php';
-function printExtraUserManagementModals(){
-?>
-    
-    
-<?php
-}
 
 function openPage($pageid, $title, $level, $customcss = "")
 {
