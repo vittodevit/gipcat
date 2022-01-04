@@ -16,6 +16,23 @@ function relativeToRoot($level = 0)
     }
 }
 
+function npRelativeToRoot($level = 0)
+{
+    switch($level){
+        case 1:
+            return "../";
+            break;
+        case 2:
+            return "../../";
+            break;
+        case 3:
+            return "../../../";
+            break;
+        default:
+            return "";
+    }
+}
+
 function checkAriaCurr($id, $pageid)
 {
     echo 'class="nav-link';
