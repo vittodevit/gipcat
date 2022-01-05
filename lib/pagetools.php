@@ -649,13 +649,67 @@ function printInterventionsCard(
         <b>Tipo Installazione:</b> <?php echo $arr_installation['installationType'] ?>
         <br>
         <span data-feather="box"></span>
-        <b>Marca e modello:</b> <?php echo $arr_installation['heaterBrand']." ".$arr_installation['heater'] ?>
+        <b>Marca e Modello:</b> <?php echo $arr_installation['heaterBrand']." ".$arr_installation['heater'] ?>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="check"></span>
-        <b>Stato intervento: <span style="color:<?php echo $IS[$arr_intervention['interventionState']][1] ?> ;"><?php echo $IS[$arr_intervention['interventionState']][0] ?></span></b> 
+        <b>Stato Intervento: <span style="color:<?php echo $IS[$arr_intervention['interventionState']][1] ?> ;"><?php echo $IS[$arr_intervention['interventionState']][0] ?></span></b> 
         <br>
         <span data-feather="tool"></span>
         <b>Assegnato a:</b> <?php echo $at ?>
+    </div>
+</div>
+<?php
+}
+
+function printCallCard($data){ ?>
+<div class="card mb-3 scrollbar-w">
+    <div class="card-header">
+        <div class="row">
+            <div class="col col-md-10">
+                <span data-feather="phone-call"></span>
+                <b>Chiamata per </b> <?php echo $data['businessName'] ?>
+            </div>
+            <div class="col col-md-2 text-end">
+                <div class="dropdown">
+                    <a class="link-dark" role="button" id="drpd1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span data-feather="menu"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="drpd1">
+                        <li><a class="dropdown-item" 
+                            data-bs-toggle="modal" data-bs-target="#a" data-bs-vcmCid="<?php echo "" ?>">
+                            <span data-feather="user"></span>
+                            test</a></li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li><a class="dropdown-item" 
+                            data-bs-toggle="modal" data-bs-target="#a" data-bs-eimIid="<?php echo "" ?>">
+                            <span data-feather="edit"></span>
+                            test
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <span data-feather="file-text"></span>
+        <b>Contratto di Manutenzione:</b> <?php echo $data['manteinanceContractName'] ?>
+        <br>
+        <span data-feather="compass"></span>
+        <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
+        <br>
+        <span data-feather="home"></span>
+        <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
+        <br>
+        <span data-feather="box"></span>
+        <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+        <hr style="margin-top: 8px; margin-bottom: 8px;">
+        <span data-feather="calendar"></span>
+        <b>Ultimo Intervento: </b> <?php echo convertDate($data['interventionDate']) ?>
+        <br>
+        <span data-feather="tool"></span>
+        <b>Tipo Ultimo Intervento</b> <?php echo $data['interventionType'] ?>
     </div>
 </div>
 <?php
