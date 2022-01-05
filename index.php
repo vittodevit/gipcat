@@ -13,35 +13,31 @@ openPage($pageid, $friendlyname, $level);
 printInterventionsModals();
 ?>
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class='h2'>Home Page</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <form action="" method="get">
-            <div class="row g-3">
-                <div class="col">
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">SELEZIONA GIORNATA:</span>
-                        <input type="date" class="form-control" name="date" placeholder="ID Cliente" <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
-                            echo 'value="' . $_GET["date"] . '"';
-                        } else {
-                            echo 'value="' . date("Y-m-d") . '"';
-                        } ?> aria-label="Ricerca">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <span data-feather="calendar"></span>
-                            Conferma
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<table class="table table-bordered">
+<table class="table table-bordered mt-4">
     <thead>
         <tr>
-            <th class="col col-md-6 text-center">
-                <h5 class="h5t">Calendario del giorno</h5>
+            <th class="col col-md-6">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="h5t">Calendario del giorno</h5>
+                    </div>
+                    <div class="col">
+                        <form action="" method="GET" class="form-inline">
+                            <div class="input-group">
+                                <!-- <span class="input-group-text" id="basic-addon1">SELEZIONA GIORNATA:</span> -->
+                                <input type="date" class="form-control" name="date" placeholder="ID Cliente" <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                                    echo 'value="' . $_GET["date"] . '"';
+                                } else {
+                                    echo 'value="' . date("Y-m-d") . '"';
+                                } ?> aria-label="Ricerca">
+                                <button class="btn btn-outline-dark" type="submit">
+                                    <span data-feather="calendar"></span>
+                                    Conferma
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </th>
             <th class="col col-md-6 text-center">
                 <h5 class="h5t">Chiamate in sospeso</h5>
@@ -71,7 +67,7 @@ printInterventionsModals();
                 </div>
             </td>
             <td>
-                Work in progress
+                <br><center>Work in progress</center>
             </td>
         </tr>
     </tbody>

@@ -105,11 +105,13 @@ body {
 
   .h5t{
     margin-top: 8px;
+    margin-left: 5px;
   }
 
   .scrollable-list {
-    height: 74vh;
-    overflow: auto;
+    height: 81vh;
+    overflow: -moz-scrollbars-vertical; 
+    overflow-y: scroll;
   }
 
   .scrollbar-w{

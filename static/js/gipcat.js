@@ -125,6 +125,50 @@ viewCustomerModal.addEventListener('show.bs.modal', function (event) {
     });
 });
 
+var viewInstallationModal = document.getElementById('viewInstallationModal');
+viewInstallationModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById("vim.spinner").classList.remove("visually-hidden");
+    var button = event.relatedTarget;
+    var idInstallation = button.getAttribute('data-bs-vimIid');
+    var modalContent = document.getElementById('vim.title');
+    modalContent.textContent = idInstallation;
+    var a;
+    if (relativeToRoot != "") {
+        a = relativeToRoot + "installations/"
+    } else {
+        a = "./installations/"
+    }
+    $.ajax({
+        type: "GET",
+        url: a + 'ajax_get.php',
+        data: { "idInstallation": idInstallation },
+        success: function (dataget) {
+            document.getElementById("vim.idCustomer").innerHTML = dataget['idCustomer'];
+            document.getElementById("vim.installationAddress").value = !!dataget['installationAddress'] ? dataget['installationAddress'] : "";
+            document.getElementById("vim.installationCity").value = !!dataget['installationCity'] ? dataget['installationCity'] : "";
+            document.getElementById("vim.heaterBrand").value = !!dataget['heaterBrand'] ? dataget['heaterBrand'] : "";
+            document.getElementById("vim.heater").value = !!dataget['heater'] ? dataget['heater'] : "";
+            document.getElementById("vim.heaterSerialNumber").value = !!dataget['heaterSerialNumber'] ? dataget['heaterSerialNumber'] : "";
+            document.getElementById("vim.installationType").value = !!dataget['installationType'] ? dataget['installationType'] : "";
+            document.getElementById("vim.manteinanceContractName").value = !!dataget['manteinanceContractName'] ? dataget['manteinanceContractName'] : "";
+            // mapping db's 0 and 1 to true and false
+            document.getElementById("vim.toCall").checked = !!dataget['toCall'] && dataget['toCall'] == 1 ? true : false;
+            document.getElementById("vim.monthlyCallInterval").value = !!dataget['monthlyCallInterval'] ? dataget['monthlyCallInterval'] : "";
+            // substring to get only date not time
+            document.getElementById("vim.contractExpiryDate").value = !!dataget['contractExpiryDate'] ? dataget['contractExpiryDate'].substring(0, 10) : "";
+            document.getElementById("vim.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+            document.getElementById("vim.createdAt").innerHTML = dataget['createdAt'];
+            document.getElementById("vim.updatedAt").innerHTML = dataget['updatedAt'];
+            document.getElementById("vim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+            document.getElementById("vim.version").innerHTML = dataget['version'];
+            document.getElementById("vim.spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+})
+
 var userDeleteModal = document.getElementById('userDeleteModal');
 userDeleteModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
