@@ -104,13 +104,45 @@ printInterventionsModals();
                     }else{
                         $date = date("Y-m-d");
                     }
-                    $interventionsToday = $con->query("SELECT `idIntervention` FROM `interventions` WHERE `interventionDate` LIKE '%$date%'");
+                    $intq = 
+                    "SELECT
+                        interventions.idIntervention,
+                        interventions.idInstallation,
+                        installations.idCustomer,
+                        interventions.interventionType,
+                        DATE_FORMAT(interventions.interventionDate,'%H:%i') interventionTime,
+                        interventions.interventionState,
+                        installations.installationAddress,
+                        installations.installationCity,
+                        installations.heaterBrand,
+                        installations.heater,
+                        installations.installationType,
+                        customers.businessName,
+                        users.userName,
+                        users.legalName,
+                        users.legalSurname,
+                        users.color
+                    FROM
+                        interventions
+                    INNER JOIN installations ON(
+                            interventions.idInstallation = installations.idInstallation
+                        )
+                    INNER JOIN customers ON(
+                            installations.idCustomer = customers.idCustomer
+                        )
+                    LEFT JOIN users ON(
+                            interventions.assignedTo = users.userName
+                        )
+                    WHERE
+                        interventions.interventionDate LIKE '%$date%';
+                    ";
+                    $interventionsToday = $con->query($intq);
                     if($con->affected_rows < 1) {
                         ?> <br><br><br>
                         <center><h5>Nessun intervento<br>per la giornata selezionata</h5></center> <?php
                     } else {
-                        while ($intervention = $interventionsToday->fetch_array(MYSQLI_NUM)) {
-                            printInterventionsCard($intervention[0]);
+                        while ($intervention = $interventionsToday->fetch_assoc()) {
+                            printInterventionsCard($intervention);
                         }
                     }
                     ?>

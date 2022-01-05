@@ -553,38 +553,18 @@ function paginationButton($enabled, $link, $text, $query, $label = ""){
     }
 }
 
-function printInterventionsCard(
-    $idIntervention
-){
-    global $con;
-    $res_intervention = $con->query("SELECT * FROM `interventions` WHERE `idIntervention` = '$idIntervention';");
-    $arr_intervention = $res_intervention->fetch_array();
-    /// INSTALLATION FETCH ///
-    $idInstallation = $arr_intervention['idInstallation'];
-    $res_installation = $con->query("SELECT * FROM `installations` WHERE `idInstallation` = '$idInstallation';");
-    $arr_installation = $res_installation->fetch_array();
-    /// CUSTOMER FETCH ///
-    $idCustomer = $arr_installation['idCustomer'];
-    $res_customer = $con->query("SELECT * FROM `customers` WHERE `idCustomer` = '$idCustomer';");
-    $arr_customer = $res_customer->fetch_array();
-    /// TIME FORMAT ///
-    $interventionUnixTime = strtotime($arr_intervention['interventionDate']);
-    // FORMAT: hh:mm
-    $interventionTime = gmdate("H:i", $interventionUnixTime);
+function printInterventionsCard($data){
     $IS = array(
         array("Programmato", "orange"),
         array("Eseguito", "green"),
         array("Annullato", "red")
     );
-    $_un = $arr_intervention['assignedTo'];
-    $_restec = $con->query("SELECT `legalName`, `legalSurname`, `color` FROM `users` WHERE `userName` = '$_un';");
-    $_tec = $_restec->fetch_array(MYSQLI_NUM);
-    if($_tec == null){
+    if($data['userName'] == null){
         $at = "Nessuno";
     }else{
-        $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
-        if($_tec[2] != null){
-            $color = $_tec[2];
+        $at = "[".$data['userName']."] ".$data['legalName']." ".$data['legalSurname'];
+        if($data['color'] != null){
+            $color = $data['color'];
             $at .= " <span style='color: $color;'>&#9632;</span>";
         }
    }
@@ -592,16 +572,18 @@ function printInterventionsCard(
 <div class="card mb-3 scrollbar-w">
     <div class="card-header"
     <?php 
-        if($_tec[2] != null){
-            $color = $_tec[2];
-            echo "style=\"background-color: $color;\"";
+        if($data['userName'] != null){
+            $color = $data['color'];
+            if($color != null){
+                echo "style=\"background-color: $color;\"";
+            }
         }
     ?>
     >
         <div class="row">
             <div class="col col-md-10">
                 <span data-feather="clock"></span>
-                <b><?php echo $interventionTime ?> - <?php echo $arr_intervention['interventionType'] ?></b>
+                <b><?php echo $data['interventionTime'] ?> - <?php echo $data['interventionType'] ?></b>
             </div>
             <div class="col col-md-2 text-end">
                 <div class="dropdown">
@@ -610,26 +592,26 @@ function printInterventionsCard(
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="drpd1">
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $idCustomer; ?>">
+                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $data['idCustomer']; ?>">
                             <span data-feather="user"></span>
                             Visualizza Scheda Cliente</a></li>
                             
                         <li><a class="dropdown-item"
-                        data-bs-toggle="modal" data-bs-target="#viewInstallationModal" data-bs-vimIid="<?php echo $idInstallation; ?>">
+                        data-bs-toggle="modal" data-bs-target="#viewInstallationModal" data-bs-vimIid="<?php echo $data['idInstallation']; ?>">
                             <span data-feather="box"></span>
                             Visualizza Scheda Installazione</a></li>
 
                         <li><hr class="dropdown-divider"></li>
 
-                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionModal" data-bs-eimIid="<?php echo $idIntervention ?>">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionModal" data-bs-eimIid="<?php echo $data['idIntervention']; ?>">
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica Intervento
                                 </a></li>
-                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $idIntervention ?>')">
+                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
                                     <span data-feather="database"></span>
                                     Visualizza Intervento in AMS
                                 </a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $idIntervention ?>">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $data['idIntervention']; ?>">
                                 <span data-feather="delete"></span>
                                     Elimina Intervento
                                 </a></li>
@@ -640,19 +622,19 @@ function printInterventionsCard(
     </div>
     <div class="card-body">
         <span data-feather="user"></span>
-        <b>Cliente:</b> <?php echo $arr_customer['businessName'] ?>
+        <b>Cliente:</b> <?php echo $data['businessName'] ?>
         <br>
         <span data-feather="compass"></span>
-        <b>Indirizzo Installazione:</b> <?php echo $arr_installation['installationAddress']." - ".$arr_installation['installationCity'] ?>
+        <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
         <br>
         <span data-feather="home"></span>
-        <b>Tipo Installazione:</b> <?php echo $arr_installation['installationType'] ?>
+        <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
         <br>
         <span data-feather="box"></span>
-        <b>Marca e Modello:</b> <?php echo $arr_installation['heaterBrand']." ".$arr_installation['heater'] ?>
+        <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="check"></span>
-        <b>Stato Intervento: <span style="color:<?php echo $IS[$arr_intervention['interventionState']][1] ?> ;"><?php echo $IS[$arr_intervention['interventionState']][0] ?></span></b> 
+        <b>Stato Intervento: <span style="color:<?php echo $IS[$data['interventionState']][1] ?> ;"><?php echo $IS[$data['interventionState']][0] ?></span></b> 
         <br>
         <span data-feather="tool"></span>
         <b>Assegnato a:</b> <?php echo $at ?>
