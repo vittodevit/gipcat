@@ -11,10 +11,30 @@ require_once '../lib/pagetools.php';
 
 openPage($pageid, $friendlyname, $level);
 $idInstallationGET = $con->real_escape_string(htmlspecialchars($_GET["idInstallation"]));
-$_R_installationExists = $con->query("SELECT `idCustomer`, `installationAddress`, `installationCity`, `heater`, `heaterBrand`,
-                                    `installationType`, `manteinanceContractName`, `toCall`, `monthlyCallInterval`, `heaterSerialNumber`
-                                    FROM `installations` WHERE `idInstallation` = '$idInstallationGET'");
-$_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
+$_Q_installationExists =
+"SELECT
+    installations.idCustomer,
+    installations.installationAddress,
+    installations.installationCity,
+    installations.heater,
+    installations.heaterBrand,
+    installations.installationType,
+    installations.manteinanceContractName,
+    installations.toCall,
+    installations.monthlyCallInterval,
+    installations.heaterSerialNumber,
+    customers.businessName
+FROM
+    installations
+INNER JOIN customers ON
+(
+    installations.idCustomer = customers.idCustomer
+)
+WHERE
+    idInstallation = '$idInstallationGET';
+";
+$_R_installationExists = $con->query($_Q_installationExists);
+$_installationExists = $_R_installationExists->fetch_assoc();
 
 printInterventionsModals();
 ?>
@@ -148,22 +168,17 @@ printInterventionsModals();
                 <div class="col col-md-auto">
                     <div class="input-group">
                         <span class="input-group-text">
-                            <?php 
-                            $idcg = $_installationExists[0];
-                            $res = $con->query("SELECT businessName FROM customers WHERE idCustomer = $idcg");
-                            $fet = $res->fetch_array(MYSQLI_NUM);
-                            echo $fet[0];
-                            ?>
+                            <?php echo $_installationExists['businessName'] ?>
                         </span>
                         <button type="button" class="btn btn-outline-dark" 
-                        data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $_installationExists[0]; ?>">
+                        data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $_installationExists['idCustomer']; ?>">
                             <span data-feather="users"></span>
                             Visualizza scheda cliente
                         </button>
                     </div>
                 </div>
                 <div class="col col-md-auto">
-                    <button type="button" class="btn btn-outline-dark" onclick="location.href = '../installations/?idCustomer=<?php echo $_installationExists[0] ?>'">
+                    <button type="button" class="btn btn-outline-dark" onclick="location.href = '../installations/?idCustomer=<?php echo $_installationExists['idCustomer'] ?>'">
                         <span data-feather="box"></span>
                         Torna alle installazioni
                     </button>
@@ -307,11 +322,32 @@ printInterventionsModals();
             array("Eseguito", "green"),
             array("Annullato", "red")
         );
-        
-        $result = $con->query("SELECT idIntervention, interventionType, interventionState, assignedTo, interventionDate 
-                                FROM interventions 
-                                WHERE idInstallation = $idInstallationGET
-                                $additionalQuery ORDER BY interventionDate ASC");
+
+        $tq = 
+        "SELECT
+            interventions.idIntervention,
+            interventions.interventionType,
+            interventions.interventionState,
+            interventions.assignedTo,
+            interventions.interventionDate,
+            users.userName,
+            users.legalName,
+            users.legalSurname,
+            users.color
+        FROM
+            interventions
+        LEFT JOIN users ON
+            (
+                interventions.assignedTo = users.userName
+            )
+        WHERE
+            idInstallation = '$idInstallationGET ' 
+        $additionalQuery
+        ORDER BY
+            interventionDate ASC;
+        ";
+
+        $result = $con->query($tq);
         while ($row = $result->fetch_array()) {
         ?>
             <tr>
@@ -319,13 +355,14 @@ printInterventionsModals();
                 <td> <?php echo $row['interventionType']; ?> </td>
                 <td> <b><span style="color:<?php echo $IS[$row['interventionState']][1] ?> ;"><?php echo $IS[$row['interventionState']][0] ?></span></b> </td>
                 <?php
-                $_un = $row['assignedTo'];
-                $_restec = $con->query("SELECT `legalName`, `legalSurname` FROM `users` WHERE `userName` = '$_un';");
-                $_tec = $_restec->fetch_array(MYSQLI_NUM);
-                if($_tec == null){
+                if($row['userName'] == null){
                     $at = "Nessuno";
                 }else{
-                    $at = "[".$_un."] ".$_tec[0]." ".$_tec[1];
+                    $at = "[".$row['userName']."] ".$row['legalName']." ".$row['legalSurname'];
+                    if($row['color'] != null){
+                        $color = $row['color'];
+                        $at .= " <span style='color: $color;'>&#9632;</span>";
+                    }
                 }
                 ?>
                 <td> <?php echo $at ?> </td>

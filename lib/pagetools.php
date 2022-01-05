@@ -567,7 +567,7 @@ function printInterventionsCard($data){
             $color = $data['color'];
             $at .= " <span style='color: $color;'>&#9632;</span>";
         }
-   }
+    }
 ?>
 <div class="card mb-3 scrollbar-w">
     <div class="card-header"
