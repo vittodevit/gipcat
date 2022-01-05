@@ -17,7 +17,7 @@ $username = $con->real_escape_string($_GET['userName']);
 
 $res = $con->query(
     "SELECT 
-    `userName`, `legalName`, `legalSurname`, `permissionType`, `idCustomer`, `lastEditedBy`, `version`, `createdAt`, `updatedAt`  
+    `userName`, `legalName`, `legalSurname`, `permissionType`, `idCustomer`, `color`, `lastEditedBy`, `version`, `createdAt`, `updatedAt`  
     FROM `users` WHERE `userName` = '$username'
 ");
 

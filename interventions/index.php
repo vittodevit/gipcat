@@ -15,32 +15,9 @@ $_R_installationExists = $con->query("SELECT `idCustomer`, `installationAddress`
                                     `installationType`, `manteinanceContractName`, `toCall`, `monthlyCallInterval`, `heaterSerialNumber`
                                     FROM `installations` WHERE `idInstallation` = '$idInstallationGET'");
 $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
-?>
 
-<!-- DELETE INTERVENTION MODAL -->
-<div class="modal fade" id="deleteInterventionModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Eliminazione intervento</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Sei sicuro di voler eliminare l'intervento n&ordm; <strong id="dim.title"></strong>?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <span data-feather="x-octagon"></span>
-                    Annulla
-                </button>
-                <button type="button" class="btn btn-danger" onclick="deleteInterventionAJAX(document.getElementById('dim.title').textContent)">
-                    <span data-feather="trash"></span>
-                    Elimina
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+printInterventionsModals();
+?>
 
 <!-- CREATE INTERVENTION MODAL -->
 <div class="modal fade" id="createInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
@@ -61,6 +38,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                                     <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
                                     <option value="Intervento Generico">Intervento Generico</option>
                                     <option value="Prima Accensione">Prima Accensione</option>
+                                    <option value="Installazione">Installazione</option>
                                     <option value="Altro">Altro (Vedi Note)</option>
                                 </select>
                             </div>
@@ -75,7 +53,7 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                         </div>
                         <br>
                         <div class="mb-3">
-                            <label for="assignedTo" class="form-label">Assegtnato a:</label>
+                            <label for="assignedTo" class="form-label">Assegnato a:</label>
                             <select class="form-select" id="assignedTo" required>
                                     <option value="" selected>Nessuno</option>
                                     <?php 
@@ -140,121 +118,6 @@ $_installationExists = $_R_installationExists->fetch_array(MYSQLI_BOTH);
                     Annulla
                 </button>
                 <button type="button" class="btn btn-success" onclick="createInterventionAJAX()">
-                    <span data-feather="save"></span>
-                    Salva
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- EDIT INTERVENTION MODAL -->
-<div class="modal fade" id="editInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modifica dell'intervento n&ordm; <u><span id="eim.title"></span></u> 
-                dell'installazione n&ordm; <u><span id="eim.idInstallation"></span></u></h5>
-                <div class="spinner-modal-container" id="eim.spinner">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="nscB2">
-                    <form>
-                        <div class="row">
-                            <div class="col">
-                                <label for="eim.interventionType">Tipo intervento:</label>
-                                <select class="form-select" id="eim.interventionType" required>
-                                    <option value="Manutenzione ordinaria" selected>Manutenzione ordinaria</option>
-                                    <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
-                                    <option value="Intervento Generico">Intervento Generico</option>
-                                    <option value="Prima Accensione">Prima Accensione</option>
-                                    <option value="Altro">Altro (Vedi Note)</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="eim.interventionState">Stato Intervento:</label>
-                                <select class="form-select" id="eim.interventionState" required>
-                                    <option value="0" selected>Programmato</option>
-                                    <option value="1">Eseguito</option>
-                                    <option value="2">Annullato</option>
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="mb-3">
-                            <label for="eim.assignedTo" class="form-label">Assegtnato a:</label>
-                            <select class="form-select" id="eim.assignedTo" required>
-                                    <option value="" selected>Nessuno</option>
-                                    <?php 
-                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
-                                    while($tec = $restec->fetch_array()){
-                                        ?> <option value="<?php echo $tec['userName'] ?>">
-                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
-                                        </option> <?php
-                                    }
-                                    ?>
-                                </select>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col col-md-8">
-                                <label for="eim.interventionDate" class="form-label">Data ed ora intervento:</label>
-                                <input type="datetime-local" class="form-control" id="eim.interventionDate">
-                            </div>
-                            <div class="col col-md-4">
-                                <label for="eim.countInCallCycle" class="form-label">Ciclo chiamate:</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" required checked id="eim.countInCallCycle">
-                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
-                                    </div>
-                                </div>  
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="eim.shipmentDate" class="form-label">Data di spedizione:</label>
-                                <input type="date" class="form-control" id="eim.shipmentDate">
-                            </div>
-                            <div class="col">
-                                <label for="eim.protocolNumber" class="form-label">Numero di protocollo:</label>
-                                <input type="number" class="form-control" id="eim.protocolNumber">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="eim.billingDate" class="form-label">Data di fatturazione:</label>
-                                <input type="date" class="form-control" id="eim.billingDate">
-                            </div>
-                            <div class="col">
-                                <label for="eim.billingNumber" class="form-label">Numero di fattura:</label>
-                                <input type="number" class="form-control" id="eim.billingNumber">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                                <label for="eim.paymentDate" class="form-label">Data di pagamento:</label>
-                                <input type="date" class="form-control" id="eim.paymentDate">
-                            </div>
-                        <div class="mb-3">
-                            <label for="eim.footNote" class="form-label">Annotazioni</label>
-                            <textarea class="form-control" id="eim.footNote" rows="3"></textarea>
-                        </div>
-                        <p>Creazione: <strong id="eim.createdAt">...</strong>  -  
-                        Ultima modifica: <strong id="eim.updatedAt">...</strong> da <strong id="eim.lastEditedBy">...</strong>  -  
-                        Versione: <strong id="eim.version">...</strong></p>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <span data-feather="x"></span>
-                    Annulla
-                </button>
-                <button type="button" class="btn btn-success" onclick="editInterventionAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
                     <span data-feather="save"></span>
                     Salva
                 </button>

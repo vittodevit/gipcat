@@ -1,5 +1,5 @@
 <?php
-require_once '../init.php';
+require_once '../../init.php';
 
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {

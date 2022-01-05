@@ -74,9 +74,13 @@ openPage($pageid, $friendlyname, $level);
                                     <option value="3">4 &#8594; Superadmin</option>
                                 </select>
                             </div>
-                            <div class="col">
-                                <label for="legalSurname" class="form-label">ID Cliente collegato:</label>
-                                <input type="text" class="form-control" id="ucum.idCustomer" disabled>
+                            <div id="ucum.div.idCustomer" class="col visually-hidden">
+                                <label for="ucum.idCustomer" class="form-label">ID Cliente collegato:</label>
+                                <input type="text" class="form-control" id="ucum.idCustomer">
+                            </div>
+                            <div id="ucum.div.color" class="col visually-hidden">
+                                <label for="ucum.color" class="form-label">Colore Tecnico:</label>
+                                <input type="color" class="form-control" id="ucum.color">
                             </div>
                         </div>
                         
