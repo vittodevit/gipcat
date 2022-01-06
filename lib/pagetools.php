@@ -678,12 +678,12 @@ function printCallCard($data){ ?>
                             Non Chiamare Più</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#a" data-bs-hashmap="<?php echo "" ?>">
+                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
                             <span data-feather="skip-forward"></span>
                             Postponi Chiamata</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#a" data-bs-hashmap="<?php echo "" ?>">
+                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
                             <span data-feather="paperclip"></span>
                             Aggiungi Annotazione</a></li>
 
