@@ -27,7 +27,7 @@ $stmt = $con->prepare("
             `createdAt`,
             `updatedAt`)
         VALUES (
-            ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?,
             '1',
             Now(),
             Now());

@@ -252,18 +252,18 @@ if (localStorage.getItem("toastr.showSuccessToast") == "true") {
 }
 
 var deleteInterventionModal = document.getElementById('deleteInterventionModal');
-if(deleteInterventionModal != null){
+if (deleteInterventionModal != null) {
     deleteInterventionModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var idIntervention = button.getAttribute('data-bs-dimIid');
         var modalContent = document.getElementById('dim.title');
         modalContent.textContent = idIntervention;
-    });   
+    });
 }
 
 
 var editInterventionModal = document.getElementById('editInterventionModal');
-if(editInterventionModal != null){
+if (editInterventionModal != null) {
     editInterventionModal.addEventListener('show.bs.modal', function (event) {
         document.getElementById("eim.spinner").classList.remove("visually-hidden");
         var button = event.relatedTarget;
@@ -340,6 +340,43 @@ function editInterventionAjax(idIntervention, version) {
             "paymentDate": document.getElementById("eim.paymentDate").value,
             //bottom
             "footNote": document.getElementById("eim.footNote").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+var createInterventionModal = document.getElementById('createInterventionModal');
+if (createInterventionModal != null) {
+    createInterventionModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var idIntervention = button.getAttribute('data-bs-cimIid');
+        var modalContent = document.getElementById('cim.title');
+        modalContent.textContent = idIntervention;
+    });
+}
+
+function createInterventionAJAX() {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int/ajax_create.php',
+        data: {
+            "idInstallation": document.getElementById("cim.title").innerText,
+            "interventionType": document.getElementById("interventionType").value,
+            "interventionState": document.getElementById("interventionState").value,
+            "assignedTo": document.getElementById("assignedTo").value,
+            "countInCallCycle": document.getElementById("countInCallCycle").checked ? 1 : 0,
+            "interventionDate": document.getElementById("interventionDate").value,
+            "shipmentDate": document.getElementById("shipmentDate").value,
+            "protocolNumber": document.getElementById("protocolNumber").value,
+            "billingDate": document.getElementById("billingDate").value,
+            "billingNumber": document.getElementById("billingNumber").value,
+            "paymentDate": document.getElementById("paymentDate").value,
+            "footNote": document.getElementById("footNote").value,
         },
         success: function (data) {
             successReload();

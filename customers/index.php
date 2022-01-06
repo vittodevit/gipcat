@@ -384,10 +384,23 @@ openPage($pageid, $friendlyname, $level);
         $total_no_of_pages = ceil($total_records / $total_records_per_page);
         $second_last = $total_no_of_pages - 1; // total page minus 1
 
-        $result = $con->query("SELECT idCustomer, businessName, registeredOfficeAddress, registeredOfficeCity 
-                                FROM customers 
-                                $additionalQuery 
-                                LIMIT $offset, $total_records_per_page");
+        $query = 
+        "SELECT 
+            customers.idCustomer, 
+            customers.businessName, 
+            customers.registeredOfficeAddress, 
+            customers.registeredOfficeCity,
+            users.userName 
+        FROM 
+            customers 
+        LEFT JOIN users ON(
+            customers.idCustomer = users.idCustomer
+        )
+        $additionalQuery 
+        LIMIT $offset, $total_records_per_page
+        ";
+
+        $result = $con->query($query);
         while ($row = $result->fetch_array()) {
         ?>
             <tr>
@@ -432,25 +445,22 @@ openPage($pageid, $friendlyname, $level);
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userMenu">
                             <?php
-                            $id = $row['idCustomer'];
-                            $checkUser = $con->query("SELECT userName FROM users WHERE idCustomer = '$id'");
-                            if ($checkUser->num_rows > 0) {
-                                $ckUsRw = $checkUser->fetch_array(MYSQLI_NUM);
+                            if ($row['userName'] != null) {
                             ?>
                                 <li>
                                     <span class="dropdown-item">
                                         <span data-feather="user"></span>
-                                        <strong><?php echo $ckUsRw[0]; ?></strong>
+                                        <strong><?php echo $row['userName']; ?></strong>
                                     </span>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userPassChangeModal" data-bs-username="<?php echo $ckUsRw[0]; ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userPassChangeModal" data-bs-username="<?php echo $row['userName']; ?>">
                                         <span data-feather="user-check"></span>
                                         Cambia Password
                                     </a></li>
-                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userDeleteModal" data-bs-username="<?php echo $ckUsRw[0]; ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userDeleteModal" data-bs-username="<?php echo $row['userName']; ?>">
                                         <span data-feather="delete"></span>
                                         Elimina
                                 </a></li>
@@ -466,7 +476,7 @@ openPage($pageid, $friendlyname, $level);
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userCreateCustomerModal" data-bs-cid="<?php echo $id ?>">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#userCreateCustomerModal" data-bs-cid="<?php echo $row['idCustomer'] ?>">
                                         <span data-feather="user-plus"></span>
                                         Crea Utente
                                     </a></li>

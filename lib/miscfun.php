@@ -71,3 +71,7 @@ function pexcheck($username)
         }
     }
 }
+
+function convertDate($dbDate){
+    return date_format(new DateTime($dbDate), 'd/m/Y H:i');
+}
