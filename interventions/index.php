@@ -8,6 +8,7 @@ $jsdeps = array('bootstrap-bundle', 'feathericons', 'jquery', 'toastr');
 
 require_once '../init.php';
 require_once '../lib/pagetools.php';
+require_once '../lib/miscfun.php';
 
 openPage($pageid, $friendlyname, $level);
 $idInstallationGET = $con->real_escape_string(htmlspecialchars($_GET["idInstallation"]));
@@ -234,7 +235,7 @@ printInterventionsModals();
                 interventions.assignedTo = users.userName
             )
         WHERE
-            idInstallation = '$idInstallationGET ' 
+            idInstallation = '$idInstallationGET'
         $additionalQuery
         ORDER BY
             interventionDate ASC;
@@ -259,7 +260,7 @@ printInterventionsModals();
                 }
                 ?>
                 <td> <?php echo $at ?> </td>
-                <td> <?php echo $row['interventionDate']; ?> </td>
+                <td> <?php echo convertDate($row['interventionDate']); ?> </td>
                 <td>
                     <div class="dropdown">
                         <button class="btn btn-outline-dark dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
