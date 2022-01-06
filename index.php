@@ -13,6 +13,32 @@ openPage($pageid, $friendlyname, $level);
 printInterventionsModals();
 ?>
 
+<!-- DO NOT CALL ANYMORE MODAL -->
+<div class="modal fade" id="doNotCallModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Non chiamare più</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler disabilitare le chiamate per l'installazione n&ordm; <strong id="dnc.title"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-danger" onclick="editInstallationDNC_AJAX(document.getElementById('dnc.title').textContent)">
+                    <span data-feather="slash"></span>
+                    Disabilita
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <table class="table table-bordered mt-4">
     <thead>
         <tr>
@@ -63,12 +89,15 @@ printInterventionsModals();
                         installations.heater,
                         installations.installationType,
                         installations.manteinanceContractName,
+                        installations.monthlyCallInterval,
                         customers.businessName
                     FROM
                         interventions t1
                     LEFT OUTER JOIN interventions t2 ON
                         (
-                            t1.idInstallation = t2.idInstallation AND t1.interventionDate < t2.interventionDate
+                            t1.idInstallation = t2.idInstallation 
+                            AND t1.interventionDate < t2.interventionDate
+                            AND t2.countInCallCycle = 1
                         )
                     INNER JOIN installations ON(
                             t1.idInstallation = installations.idInstallation
@@ -78,7 +107,6 @@ printInterventionsModals();
                         )
                     WHERE
                         t2.idInstallation IS NULL
-                        AND t1.countInCallCycle = '1'
                         AND installations.toCall = '1'
                         AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH);
                     ";
@@ -134,7 +162,9 @@ printInterventionsModals();
                             interventions.assignedTo = users.userName
                         )
                     WHERE
-                        interventions.interventionDate LIKE '%$date%';
+                        interventions.interventionDate LIKE '%$date%'
+                    ORDER BY 
+                        interventions.interventionDate ASC;
                     ";
                     $interventionsToday = $con->query($intq);
                     if($con->affected_rows < 1) {
@@ -153,4 +183,4 @@ printInterventionsModals();
 </table>
 
 <?php
-closePage($level, $jsdeps);
+closePage($level, $jsdeps, "home.js");

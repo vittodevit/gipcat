@@ -601,20 +601,23 @@ function printInterventionsCard($data){
                             <span data-feather="box"></span>
                             Visualizza Scheda Installazione</a></li>
 
+                        <li><a class="dropdown-item" href="./interventions/?idInstallation=<?php echo $data['idInstallation']; ?>">
+                            <span data-feather="calendar"></span>
+                            Visualizza Storico Interventi</a></li>
+
                         <li><hr class="dropdown-divider"></li>
 
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionModal" data-bs-eimIid="<?php echo $data['idIntervention']; ?>">
-                                    <span data-feather="edit"></span>
-                                    Visualizza o Modifica Intervento
-                                </a></li>
-                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
-                                    <span data-feather="database"></span>
-                                    Visualizza Intervento in AMS
-                                </a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $data['idIntervention']; ?>">
-                                <span data-feather="delete"></span>
-                                    Elimina Intervento
-                                </a></li>
+                            <span data-feather="edit"></span>
+                            Visualizza o Modifica Intervento </a></li>
+
+                        <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
+                            <span data-feather="database"></span>
+                            Visualizza Intervento in AMS </a></li>
+
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $data['idIntervention']; ?>">
+                            <span data-feather="delete"></span>
+                            Elimina Intervento </a></li>
                     </ul>
                 </div>
             </div>
@@ -658,16 +661,38 @@ function printCallCard($data){ ?>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="drpd1">
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#a" data-bs-vcmCid="<?php echo "" ?>">
+                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $data['idCustomer']; ?>">
                             <span data-feather="user"></span>
-                            test</a></li>
+                            Visualizza Scheda Cliente</a></li>
+                            
+                        <li><a class="dropdown-item"
+                        data-bs-toggle="modal" data-bs-target="#viewInstallationModal" data-bs-vimIid="<?php echo $data['idInstallation']; ?>">
+                            <span data-feather="box"></span>
+                            Visualizza Scheda Installazione</a></li>
 
                         <li><hr class="dropdown-divider"></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#a" data-bs-eimIid="<?php echo "" ?>">
-                            <span data-feather="edit"></span>
-                            test
+                            data-bs-toggle="modal" data-bs-target="#doNotCallModal" data-bs-dncIid="<?php echo $data['idInstallation']; ?>">
+                            <span data-feather="slash"></span>
+                            Non Chiamare Più</a></li>
+
+                        <li><a class="dropdown-item" 
+                            data-bs-toggle="modal" data-bs-target="#a" data-bs-vcmCid="<?php echo "" ?>">
+                            <span data-feather="skip-forward"></span>
+                            Ricordami tra <b><?php echo $data['monthlyCallInterval'] ?></b> Mesi</a></li>
+
+                        <li><a class="dropdown-item" 
+                            data-bs-toggle="modal" data-bs-target="#a" data-bs-vcmCid="<?php echo "" ?>">
+                            <span data-feather="paperclip"></span>
+                            Aggiungi Annotazione</a></li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li><a class="dropdown-item" 
+                        data-bs-toggle="modal" data-bs-target="#createInterventionModal" data-bs-cimIid="<?php echo $data['idInstallation'] ?>">
+                            <span data-feather="calendar"></span>
+                            Programma Intervento
                         </a></li>
                     </ul>
                 </div>
@@ -725,6 +750,112 @@ function printInterventionsModals(){
     </div>
 </div>
 
+<!-- CREATE INTERVENTION MODAL -->
+<div class="modal fade" id="createInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuovo intervento per l'installazione n&ordm; <u><span id="cim.title"></span></u></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB1">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <label for="interventionType">Tipo intervento:</label>
+                                <select class="form-select" id="interventionType" required>
+                                    <option value="Manutenzione ordinaria" selected>Manutenzione ordinaria</option>
+                                    <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
+                                    <option value="Intervento Generico">Intervento Generico</option>
+                                    <option value="Prima Accensione">Prima Accensione</option>
+                                    <option value="Installazione">Installazione</option>
+                                    <option value="Altro">Altro (Vedi Note)</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="interventionState">Stato Intervento:</label>
+                                <select class="form-select" id="interventionState" required>
+                                    <option value="0" selected>Programmato</option>
+                                    <option value="1">Eseguito</option>
+                                    <option value="2">Annullato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="assignedTo" class="form-label">Assegnato a:</label>
+                            <select class="form-select" id="assignedTo" required>
+                                    <option value="" selected>Nessuno</option>
+                                    <?php 
+                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
+                                    while($tec = $restec->fetch_array()){
+                                        ?> <option value="<?php echo $tec['userName'] ?>">
+                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
+                                        </option> <?php
+                                    }
+                                    ?>
+                                </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col col-md-8">
+                                <label for="interventionDate" class="form-label">Data ed ora intervento:</label>
+                                <input type="datetime-local" class="form-control" id="interventionDate">
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="countInCallCycle" class="form-label">Ciclo chiamate:</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" required checked id="countInCallCycle">
+                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="shipmentDate" class="form-label">Data di spedizione:</label>
+                                <input type="date" class="form-control" id="shipmentDate">
+                            </div>
+                            <div class="col">
+                                <label for="protocolNumber" class="form-label">Numero di protocollo:</label>
+                                <input type="number" class="form-control" id="protocolNumber">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="billingDate" class="form-label">Data di fatturazione:</label>
+                                <input type="date" class="form-control" id="billingDate">
+                            </div>
+                            <div class="col">
+                                <label for="billingNumber" class="form-label">Numero di fattura:</label>
+                                <input type="number" class="form-control" id="billingNumber">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                                <label for="paymentDate" class="form-label">Data di pagamento:</label>
+                                <input type="date" class="form-control" id="paymentDate">
+                            </div>
+                        <div class="mb-3">
+                            <label for="footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="footNote" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="createInterventionAJAX()">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- EDIT INTERVENTION MODAL -->
 <div class="modal fade" id="editInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">

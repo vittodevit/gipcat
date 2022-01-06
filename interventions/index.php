@@ -39,113 +39,6 @@ $_installationExists = $_R_installationExists->fetch_assoc();
 printInterventionsModals();
 ?>
 
-<!-- CREATE INTERVENTION MODAL -->
-<div class="modal fade" id="createInterventionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nuovo intervento per l'installazione n&ordm; <u><span id="cim.title"></span></u></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="nscB1">
-                    <form>
-                        <div class="row">
-                            <div class="col">
-                                <label for="interventionType">Tipo intervento:</label>
-                                <select class="form-select" id="interventionType" required>
-                                    <option value="Manutenzione ordinaria" selected>Manutenzione ordinaria</option>
-                                    <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
-                                    <option value="Intervento Generico">Intervento Generico</option>
-                                    <option value="Prima Accensione">Prima Accensione</option>
-                                    <option value="Installazione">Installazione</option>
-                                    <option value="Altro">Altro (Vedi Note)</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="interventionState">Stato Intervento:</label>
-                                <select class="form-select" id="interventionState" required>
-                                    <option value="0" selected>Programmato</option>
-                                    <option value="1">Eseguito</option>
-                                    <option value="2">Annullato</option>
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="mb-3">
-                            <label for="assignedTo" class="form-label">Assegnato a:</label>
-                            <select class="form-select" id="assignedTo" required>
-                                    <option value="" selected>Nessuno</option>
-                                    <?php 
-                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
-                                    while($tec = $restec->fetch_array()){
-                                        ?> <option value="<?php echo $tec['userName'] ?>">
-                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
-                                        </option> <?php
-                                    }
-                                    ?>
-                                </select>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col col-md-8">
-                                <label for="interventionDate" class="form-label">Data ed ora intervento:</label>
-                                <input type="datetime-local" class="form-control" id="interventionDate">
-                            </div>
-                            <div class="col col-md-4">
-                                <label for="countInCallCycle" class="form-label">Ciclo chiamate:</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" required checked id="countInCallCycle">
-                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
-                                    </div>
-                                </div>  
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="shipmentDate" class="form-label">Data di spedizione:</label>
-                                <input type="date" class="form-control" id="shipmentDate">
-                            </div>
-                            <div class="col">
-                                <label for="protocolNumber" class="form-label">Numero di protocollo:</label>
-                                <input type="number" class="form-control" id="protocolNumber">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="billingDate" class="form-label">Data di fatturazione:</label>
-                                <input type="date" class="form-control" id="billingDate">
-                            </div>
-                            <div class="col">
-                                <label for="billingNumber" class="form-label">Numero di fattura:</label>
-                                <input type="number" class="form-control" id="billingNumber">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                                <label for="paymentDate" class="form-label">Data di pagamento:</label>
-                                <input type="date" class="form-control" id="paymentDate">
-                            </div>
-                        <div class="mb-3">
-                            <label for="footNote" class="form-label">Annotazioni</label>
-                            <textarea class="form-control" id="footNote" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <span data-feather="x"></span>
-                    Annulla
-                </button>
-                <button type="button" class="btn btn-success" onclick="createInterventionAJAX()">
-                    <span data-feather="save"></span>
-                    Salva
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class='h2'>Gestore Interventi</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -395,4 +288,4 @@ printInterventionsModals();
 </table>
 
 <?php
-closePage($level, $jsdeps, "intervention.index.js");
+closePage($level, $jsdeps);
