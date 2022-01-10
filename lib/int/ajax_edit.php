@@ -37,7 +37,7 @@ if ($_POST['version'] != $arr['version']) {
 }
 
 $fieldnames = array("interventionType", "interventionState", "assignedTo", "countInCallCycle", 
-"interventionDate", "shipmentDate", "protocolNumber", "billingDate", "billingNumber", "paymentDate", "footNote");
+"interventionDate", "interventionDuration", "shipmentDate", "protocolNumber", "billingDate", "billingNumber", "paymentDate", "footNote");
                     
 $fields = "";
 

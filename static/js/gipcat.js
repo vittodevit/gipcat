@@ -285,6 +285,10 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.countInCallCycle").checked = !!dataget['countInCallCycle'] && dataget['countInCallCycle'] == 1 ? true : false;
                 // DATES //
                 document.getElementById("eim.interventionDate").value = !!dataget['interventionDate'] ? dataget['interventionDate'] : "";
+                // TIME //
+                document.getElementById("eim.interventionTime").value = dataget['interventionTime'] + ":00";
+                // DATES //
+                document.getElementById("eim.interventionDuration").value = dataget['interventionDuration'];
                 // substring to get only date not time
                 document.getElementById("eim.shipmentDate").value = !!dataget['shipmentDate'] ? dataget['shipmentDate'].substring(0, 10) : "";
                 document.getElementById("eim.billingDate").value = !!dataget['billingDate'] ? dataget['billingDate'].substring(0, 10) : "";
@@ -333,8 +337,10 @@ function editInterventionAjax(idIntervention, version) {
             // mapping db's 0 and 1 to true and false
             "countInCallCycle": document.getElementById("eim.countInCallCycle").checked ? 1 : 0,
             // DATES //
-            "interventionDate": document.getElementById("eim.interventionDate").value,
-            // substring to get only date not time
+            "interventionDate": document.getElementById("eim.interventionDate").value + " " +
+                                document.getElementById("eim.interventionTime").value,
+            "interventionDuration": document.getElementById("eim.interventionDuration").value,
+            // other dates
             "shipmentDate": document.getElementById("eim.shipmentDate").value,
             "billingDate": document.getElementById("eim.billingDate").value,
             "paymentDate": document.getElementById("eim.paymentDate").value,
