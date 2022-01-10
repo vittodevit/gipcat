@@ -44,18 +44,31 @@ function updatePasswordMeter(target, length) {
     passwordMeter.setAttribute("aria-valuenow", pvalue);
 }
 
-function createTableRow(row){
-    var html = "<td>"
+function selectTechnician(obj, prefix){
+    document.getElementById(prefix + "assignedTo").value = obj.value;
+}
+
+function createTableRow(prefix, row){
+    var html = "";
+    if(row.isBusy == 1){
+        addon = "style=\"background-color: rgba(255, 0, 0, 0.1);\"";
+    }else{
+        addon = "style=\"background-color: rgba(0, 255, 0, 0.1);\"";
+    }
+    html += `<td ${addon}>`;
+    html += `<input type="radio" name="radioAssignedTo" value="${row.userName}" id="${prefix + "radio." + row.userName}" onChange="selectTechnician(this, '${prefix}')">`;
+    html += "</td>";
+    html += `<td ${addon}>`;
     html += `<span style='color: ${row.color};'>&#9632;</span> `;
     html += row.userName;
     html += "</td>";
-    html += `<td>`;
+    html += `<td ${addon}>`;
     html += row.legalName;
     html += "</td>";
-    html += `<td>`;
+    html += `<td ${addon}>`;
     html += row.legalSurname;
     html += "</td>";
-    html += `<td>`;
+    html += `<td ${addon}>`;
     if(row.isBusy == 1){
         html += "<span style='color: red;'>Occupato</span>";
     }else{
@@ -66,7 +79,7 @@ function createTableRow(row){
 }
 
 // callback function to retrieve and update DOM table for technichian overlaps in interventions
-function manageOverlapsAJAX(isUpdate) {
+function manageOverlapsAJAX(isUpdate, assignedTo) {
     var prefix = "";
     if(isUpdate){
         prefix = "eim.";
@@ -82,11 +95,29 @@ function manageOverlapsAJAX(isUpdate) {
         success: function (dataget) {
             var ot = document.getElementById(prefix + "overlapTable");
             ot.innerHTML = "";
+            document.getElementById(prefix + "assignedTo").value = "";
+            //nessuno
+            var nobody = "";
+            nobody += "<tr>";
+            nobody += "<td>";
+            nobody += `<input type="radio" name="radioAssignedTo" value="" id="${prefix + "radio."}" onChange="selectTechnician(this, '${prefix}')">`;
+            nobody += "</td>";
+            nobody += "<td colspan='4'>Nessuno</td>";
+            nobody += "</tr>";
+            ot.innerHTML += nobody;
+            //tecnici
             dataget.forEach(row => {
                 ot.innerHTML += "<tr>";
-                ot.innerHTML += createTableRow(row);
+                ot.innerHTML += createTableRow(prefix, row);
                 ot.innerHTML += "</tr>";
             });
+            if(isUpdate){
+                try{
+                    document.getElementById("eim.radio." + assignedTo).checked = true;
+                }catch{
+                    // lol
+                }
+            }
             document.getElementById(prefix+"spinner").classList.add("visually-hidden");
         },
         error: function (data) {
@@ -329,7 +360,6 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.idInstallation").innerHTML = dataget['idInstallation'];
                 document.getElementById("eim.interventionType").value = !!dataget['interventionType'] ? dataget['interventionType'] : "";
                 document.getElementById("eim.interventionState").value = !!dataget['interventionState'] ? dataget['interventionState'] : "";
-                document.getElementById("eim.assignedTo").value = !!dataget['assignedTo'] ? dataget['assignedTo'] : "";
                 document.getElementById("eim.protocolNumber").value = !!dataget['protocolNumber'] ? dataget['protocolNumber'] : "";
                 document.getElementById("eim.billingNumber").value = !!dataget['billingNumber'] ? dataget['billingNumber'] : "";
                 // mapping db's 0 and 1 to true and false
@@ -350,7 +380,7 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
                 document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
                 document.getElementById("eim.version").innerHTML = dataget['version'];
-                manageOverlapsAJAX(true);
+                manageOverlapsAJAX(true, dataget['assignedTo']);
                 document.getElementById("eim.spinner").classList.add("visually-hidden");
             },
             error: function (data) {

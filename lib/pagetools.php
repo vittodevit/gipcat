@@ -849,6 +849,9 @@ function printInterventionsModals(){
                                 <thead>
                                     <tr>
                                         <th>
+                                            #
+                                        </th>
+                                        <th>
                                             Nome Utente
                                         </th>
                                         <th>
@@ -867,20 +870,7 @@ function printInterventionsModals(){
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mb-3">
-                            <label for="assignedTo" class="form-label">Assegnato a:</label>
-                            <select class="form-select" id="assignedTo" required>
-                                    <option value="" selected>Nessuno</option>
-                                    <?php 
-                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
-                                    while($tec = $restec->fetch_array()){
-                                        ?> <option value="<?php echo $tec['userName'] ?>">
-                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
-                                        </option> <?php
-                                    }
-                                    ?>
-                                </select>
-                        </div>
+                        <input type="hidden" id="assignedTo" value="">
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="shipmentDate" class="form-label">Data di spedizione:</label>
@@ -1026,6 +1016,9 @@ function printInterventionsModals(){
                                 <thead>
                                     <tr>
                                         <th>
+                                            #
+                                        </th>
+                                        <th>
                                             Nome Utente
                                         </th>
                                         <th>
@@ -1040,24 +1033,10 @@ function printInterventionsModals(){
                                     </tr>
                                 </thead>
                                 <tbody id="eim.overlapTable">
-
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mb-3">
-                            <label for="eim.assignedTo" class="form-label">Assegnato a:</label>
-                            <select class="form-select" id="eim.assignedTo" required>
-                                    <option value="" selected>Nessuno</option>
-                                    <?php 
-                                    $restec = $con->query("SELECT * FROM `users` WHERE `permissionType` = '2';");
-                                    while($tec = $restec->fetch_array()){
-                                        ?> <option value="<?php echo $tec['userName'] ?>">
-                                        <?php echo "[".$tec['userName']."] ".$tec['legalName']." ".$tec['legalSurname'] ?>
-                                        </option> <?php
-                                    }
-                                    ?>
-                                </select>
-                        </div>
+                        <input type="hidden" id="eim.assignedTo" value="">
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="eim.shipmentDate" class="form-label">Data di spedizione:</label>

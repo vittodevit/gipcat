@@ -47,6 +47,8 @@ foreach ($fieldnames as $fn){
         if (isset($_POST[$fn])) {
             $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
         }
+    }elseif($fn == "assignedTo"){
+        $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
     }else{
         if (isset($_POST[$fn]) && !empty(strval($_POST[$fn]))) {
             $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
