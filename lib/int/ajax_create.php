@@ -18,6 +18,7 @@ $stmt = $con->prepare("
             (`idInstallation`,
             `interventionType`,
             `interventionState`,
+            `interventionDuration`,
             `assignedTo`,
             `countInCallCycle`,
             `interventionDate`,
@@ -32,17 +33,18 @@ $stmt = $con->prepare("
             `createdAt`,
             `updatedAt`)
         VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
             '1',
             Now(),
             Now());
         ");
 
 $stmt->bind_param(
-    "isisissisisss",
+    "isiisissisisss",
     $idInstallation,
     $interventionType,
     $interventionState,
+    $interventionDuration,
     $assignedTo,
     $countInCallCycle,
     $interventionDate,
@@ -73,6 +75,7 @@ $idInstallation = htmlspecialchars($_POST["idInstallation"]);
 $interventionType = htmlspecialchars($_POST["interventionType"]);
 $interventionState = htmlspecialchars($_POST["interventionState"]);
 $interventionDate = htmlspecialchars($_POST["interventionDate"]);
+$interventionDuration = htmlspecialchars($_POST["interventionDuration"]);
 $countInCallCycle = htmlspecialchars($_POST["countInCallCycle"]);
 
 $assignedTo = (
