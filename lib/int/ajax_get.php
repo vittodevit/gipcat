@@ -25,8 +25,10 @@ if($con->affected_rows != 1){
 $arr = $res->fetch_assoc();
 
 $interventionUnixTime = strtotime($arr['interventionDate']);
-// FORMAT: yyyy-MM-ddThh:mm
-$arr['interventionDate'] = gmdate("Y-m-d\TH:i", $interventionUnixTime);
+
+// formatting for gui
+$arr['interventionDate'] = gmdate("Y-m-d", $interventionUnixTime);
+$arr['interventionTime'] = gmdate("H:i", $interventionUnixTime);
 
 header("Content-Type: application/json");
 

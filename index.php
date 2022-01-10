@@ -83,6 +83,7 @@ printInterventionsModals();
                         installations.idCustomer,
                         t1.interventionType,
                         t1.interventionDate,
+                        t1.interventionDuration,
                         installations.installationAddress,
                         installations.installationCity,
                         installations.heaterBrand,
@@ -138,7 +139,11 @@ printInterventionsModals();
                         interventions.idInstallation,
                         installations.idCustomer,
                         interventions.interventionType,
-                        DATE_FORMAT(interventions.interventionDate,'%H:%i') interventionTime,
+                        DATE_FORMAT(interventions.interventionDate,'%H:%i') interventionTimeStart,
+                        DATE_FORMAT(
+                            interventions.interventionDate + INTERVAL interventions.interventionDuration MINUTE,
+                            '%H:%i'
+                        ) interventionTimeEnd,
                         interventions.interventionState,
                         installations.installationAddress,
                         installations.installationCity,

@@ -44,6 +44,88 @@ function updatePasswordMeter(target, length) {
     passwordMeter.setAttribute("aria-valuenow", pvalue);
 }
 
+function selectTechnician(obj, prefix){
+    document.getElementById(prefix + "assignedTo").value = obj.value;
+}
+
+function createTableRow(prefix, row){
+    var html = "";
+    if(row.isBusy == 1){
+        addon = "style=\"background-color: rgba(255, 0, 0, 0.1);\"";
+    }else{
+        addon = "style=\"background-color: rgba(0, 255, 0, 0.1);\"";
+    }
+    html += `<td ${addon}>`;
+    html += `<input type="radio" name="radioAssignedTo" value="${row.userName}" id="${prefix + "radio." + row.userName}" onChange="selectTechnician(this, '${prefix}')">`;
+    html += "</td>";
+    html += `<td ${addon}>`;
+    html += `<span style='color: ${row.color};'>&#9632;</span> `;
+    html += row.userName;
+    html += "</td>";
+    html += `<td ${addon}>`;
+    html += row.legalName;
+    html += "</td>";
+    html += `<td ${addon}>`;
+    html += row.legalSurname;
+    html += "</td>";
+    html += `<td ${addon}>`;
+    if(row.isBusy == 1){
+        html += "<span style='color: red;'>Occupato</span>";
+    }else{
+        html += "<span style='color: green;'>Libero</span>";
+    }
+    html += "</td>";
+    return html;
+}
+
+// callback function to retrieve and update DOM table for technichian overlaps in interventions
+function manageOverlapsAJAX(isUpdate, assignedTo) {
+    var prefix = "";
+    if(isUpdate){
+        prefix = "eim.";
+    }
+    $.ajax({
+        type: "GET",
+        url: relativeToRoot + 'lib/int/ajax_checkoverlap.php',
+        data: { 
+            "interventionDate": document.getElementById(prefix + "interventionDate").value + " " +
+                                document.getElementById(prefix + "interventionTime").value,
+            "interventionDuration": document.getElementById(prefix + "interventionDuration").value
+        },
+        success: function (dataget) {
+            var ot = document.getElementById(prefix + "overlapTable");
+            ot.innerHTML = "";
+            document.getElementById(prefix + "assignedTo").value = "";
+            //nessuno
+            var nobody = "";
+            nobody += "<tr>";
+            nobody += "<td>";
+            nobody += `<input type="radio" name="radioAssignedTo" value="" id="${prefix + "radio."}" onChange="selectTechnician(this, '${prefix}')">`;
+            nobody += "</td>";
+            nobody += "<td colspan='4'>Nessuno</td>";
+            nobody += "</tr>";
+            ot.innerHTML += nobody;
+            //tecnici
+            dataget.forEach(row => {
+                ot.innerHTML += "<tr>";
+                ot.innerHTML += createTableRow(prefix, row);
+                ot.innerHTML += "</tr>";
+            });
+            if(isUpdate){
+                try{
+                    document.getElementById("eim.radio." + assignedTo).checked = true;
+                }catch{
+                    // lol
+                }
+            }
+            document.getElementById(prefix+"spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
 // add event listener for passwordMeter update
 document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
     updatePasswordMeter("upcm.passMeter", event.target.value.length);
@@ -278,13 +360,16 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.idInstallation").innerHTML = dataget['idInstallation'];
                 document.getElementById("eim.interventionType").value = !!dataget['interventionType'] ? dataget['interventionType'] : "";
                 document.getElementById("eim.interventionState").value = !!dataget['interventionState'] ? dataget['interventionState'] : "";
-                document.getElementById("eim.assignedTo").value = !!dataget['assignedTo'] ? dataget['assignedTo'] : "";
                 document.getElementById("eim.protocolNumber").value = !!dataget['protocolNumber'] ? dataget['protocolNumber'] : "";
                 document.getElementById("eim.billingNumber").value = !!dataget['billingNumber'] ? dataget['billingNumber'] : "";
                 // mapping db's 0 and 1 to true and false
                 document.getElementById("eim.countInCallCycle").checked = !!dataget['countInCallCycle'] && dataget['countInCallCycle'] == 1 ? true : false;
                 // DATES //
                 document.getElementById("eim.interventionDate").value = !!dataget['interventionDate'] ? dataget['interventionDate'] : "";
+                // TIME //
+                document.getElementById("eim.interventionTime").value = dataget['interventionTime'] + ":00";
+                // DATES //
+                document.getElementById("eim.interventionDuration").value = dataget['interventionDuration'];
                 // substring to get only date not time
                 document.getElementById("eim.shipmentDate").value = !!dataget['shipmentDate'] ? dataget['shipmentDate'].substring(0, 10) : "";
                 document.getElementById("eim.billingDate").value = !!dataget['billingDate'] ? dataget['billingDate'].substring(0, 10) : "";
@@ -295,6 +380,7 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
                 document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
                 document.getElementById("eim.version").innerHTML = dataget['version'];
+                manageOverlapsAJAX(true, dataget['assignedTo']);
                 document.getElementById("eim.spinner").classList.add("visually-hidden");
             },
             error: function (data) {
@@ -333,8 +419,10 @@ function editInterventionAjax(idIntervention, version) {
             // mapping db's 0 and 1 to true and false
             "countInCallCycle": document.getElementById("eim.countInCallCycle").checked ? 1 : 0,
             // DATES //
-            "interventionDate": document.getElementById("eim.interventionDate").value,
-            // substring to get only date not time
+            "interventionDate": document.getElementById("eim.interventionDate").value + " " +
+                                document.getElementById("eim.interventionTime").value,
+            "interventionDuration": document.getElementById("eim.interventionDuration").value,
+            // other dates
             "shipmentDate": document.getElementById("eim.shipmentDate").value,
             "billingDate": document.getElementById("eim.billingDate").value,
             "paymentDate": document.getElementById("eim.paymentDate").value,
@@ -357,6 +445,7 @@ if (createInterventionModal != null) {
         var idIntervention = button.getAttribute('data-bs-cimIid');
         var modalContent = document.getElementById('cim.title');
         modalContent.textContent = idIntervention;
+        manageOverlapsAJAX(false);
     });
 }
 
@@ -370,7 +459,9 @@ function createInterventionAJAX() {
             "interventionState": document.getElementById("interventionState").value,
             "assignedTo": document.getElementById("assignedTo").value,
             "countInCallCycle": document.getElementById("countInCallCycle").checked ? 1 : 0,
-            "interventionDate": document.getElementById("interventionDate").value,
+            "interventionDate": document.getElementById("interventionDate").value + " " +
+                                document.getElementById("interventionTime").value,
+            "interventionDuration": document.getElementById("interventionDuration").value,
             "shipmentDate": document.getElementById("shipmentDate").value,
             "protocolNumber": document.getElementById("protocolNumber").value,
             "billingDate": document.getElementById("billingDate").value,
@@ -386,3 +477,35 @@ function createInterventionAJAX() {
         }
     });
 }
+
+/// add event listeners  for technician table update (create intervention) ///
+document.getElementById("interventionDate").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+document.getElementById("interventionTime").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+document.getElementById("interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+/// add event listeners  for technician table update (update intervention) ///
+document.getElementById("eim.interventionDate").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});
+
+document.getElementById("eim.interventionTime").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});
+
+document.getElementById("eim.interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});

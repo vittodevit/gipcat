@@ -37,7 +37,7 @@ if ($_POST['version'] != $arr['version']) {
 }
 
 $fieldnames = array("interventionType", "interventionState", "assignedTo", "countInCallCycle", 
-"interventionDate", "shipmentDate", "protocolNumber", "billingDate", "billingNumber", "paymentDate", "footNote");
+"interventionDate", "interventionDuration", "shipmentDate", "protocolNumber", "billingDate", "billingNumber", "paymentDate", "footNote");
                     
 $fields = "";
 
@@ -47,6 +47,8 @@ foreach ($fieldnames as $fn){
         if (isset($_POST[$fn])) {
             $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
         }
+    }elseif($fn == "assignedTo"){
+        $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
     }else{
         if (isset($_POST[$fn]) && !empty(strval($_POST[$fn]))) {
             $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
