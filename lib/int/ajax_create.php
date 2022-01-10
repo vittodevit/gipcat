@@ -60,6 +60,7 @@ if (
     !isset($_POST["interventionType"]) || empty($_POST["interventionType"]) ||
     !isset($_POST["interventionState"]) ||
     !isset($_POST["interventionDate"]) || empty($_POST["interventionDate"]) ||
+    !isset($_POST["interventionDuration"]) || empty($_POST["interventionDuration"]) ||
     !isset($_POST["countInCallCycle"])
 ) {
     http_response_code(400);

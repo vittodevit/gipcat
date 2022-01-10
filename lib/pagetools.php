@@ -583,7 +583,7 @@ function printInterventionsCard($data){
         <div class="row">
             <div class="col col-md-10">
                 <span data-feather="clock"></span>
-                <b><?php echo $data['interventionTime'] ?> - <?php echo $data['interventionType'] ?></b>
+                <b><?php echo $data['interventionTimeStart'] ?> &#8594; <?php echo $data['interventionTimeEnd'] ?> - <?php echo $data['interventionType'] ?></b>
             </div>
             <div class="col col-md-2 text-end">
                 <div class="dropdown">
@@ -661,14 +661,10 @@ function printCallCard($data){ ?>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="drpd1">
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $data['idCustomer']; ?>">
-                            <span data-feather="user"></span>
-                            Visualizza Scheda Cliente</a></li>
-                            
-                        <li><a class="dropdown-item"
-                        data-bs-toggle="modal" data-bs-target="#viewInstallationModal" data-bs-vimIid="<?php echo $data['idInstallation']; ?>">
-                            <span data-feather="box"></span>
-                            Visualizza Scheda Installazione</a></li>
+                            data-bs-toggle="modal" data-bs-target="#createInterventionModal" data-bs-cimIid="<?php echo $data['idInstallation'] ?>">
+                                <span data-feather="calendar"></span>
+                                Programma Intervento
+                            </a></li>
 
                         <li><hr class="dropdown-divider"></li>
 
@@ -687,13 +683,17 @@ function printCallCard($data){ ?>
                             <span data-feather="paperclip"></span>
                             Aggiungi Annotazione</a></li>
 
-                        <li><hr class="dropdown-divider"></li>
+                            <li><hr class="dropdown-divider"></li>
 
                         <li><a class="dropdown-item" 
-                        data-bs-toggle="modal" data-bs-target="#createInterventionModal" data-bs-cimIid="<?php echo $data['idInstallation'] ?>">
-                            <span data-feather="calendar"></span>
-                            Programma Intervento
-                        </a></li>
+                            data-bs-toggle="modal" data-bs-target="#viewCustomerModal" data-bs-vcmCid="<?php echo $data['idCustomer']; ?>">
+                            <span data-feather="user"></span>
+                            Visualizza Scheda Cliente</a></li>
+                            
+                        <li><a class="dropdown-item"
+                            data-bs-toggle="modal" data-bs-target="#viewInstallationModal" data-bs-vimIid="<?php echo $data['idInstallation']; ?>">
+                            <span data-feather="box"></span>
+                            Visualizza Scheda Installazione</a></li>
                     </ul>
                 </div>
             </div>
@@ -783,6 +783,61 @@ function printInterventionsModals(){
                             </div>
                         </div>
                         <br>
+                        <div class="row mb-3">
+                            <div class="col col-md-3">
+                                <label for="interventionDate" class="form-label">Data intervento:</label>
+                                <input type="date" class="form-control" id="interventionDate">
+                            </div>
+                            <div class="col col-md-2">
+                                <label for="interventionTime" class="form-label">Ora:</label>
+                                <select class="form-select" id="interventionTime" required>
+                                    <?php
+                                    for($h = 8; $h < 22; $h++){
+                                        for($m = 0; $m < 4; $m++){
+                                            $mr = "";
+                                            switch ($m) {
+                                                case 0:
+                                                    $mr = "00";
+                                                    break;
+                                                case 1:
+                                                    $mr = "15";
+                                                    break;
+                                                case 2:
+                                                    $mr = "30";
+                                                    break;
+                                                case 3:
+                                                    $mr = "45";
+                                                    break;
+                                            }
+                                            if($h < 10){
+                                                $hr = "0".$h;
+                                            }else{
+                                                $hr = $h;
+                                            }
+                                            echo "<option value=\"". $hr . ":" . $mr . ":00\">". $hr . ":" . $mr . "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col col-md-3">
+                                <label for="interventionDuration" class="form-label">Durata intervento:</label>
+                                <select class="form-select" id="interventionDuration" required>
+                                    <option value="30" selected>Mezz' ora</option>
+                                    <option value="60">Un ora</option>
+                                    <option value="120">Due ore</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="countInCallCycle" class="form-label">Ciclo chiamate:</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" required checked id="countInCallCycle">
+                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
                         <div class="mb-3">
                             <label for="assignedTo" class="form-label">Assegnato a:</label>
                             <select class="form-select" id="assignedTo" required>
@@ -796,21 +851,6 @@ function printInterventionsModals(){
                                     }
                                     ?>
                                 </select>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col col-md-8">
-                                <label for="interventionDate" class="form-label">Data ed ora intervento:</label>
-                                <input type="datetime-local" class="form-control" id="interventionDate">
-                            </div>
-                            <div class="col col-md-4">
-                                <label for="countInCallCycle" class="form-label">Ciclo chiamate:</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" required checked id="countInCallCycle">
-                                        <span style="margin-left: 10px;">Conta nel ciclo chiamate?</span>
-                                    </div>
-                                </div>  
-                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">

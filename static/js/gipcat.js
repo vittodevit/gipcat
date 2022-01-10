@@ -370,7 +370,9 @@ function createInterventionAJAX() {
             "interventionState": document.getElementById("interventionState").value,
             "assignedTo": document.getElementById("assignedTo").value,
             "countInCallCycle": document.getElementById("countInCallCycle").checked ? 1 : 0,
-            "interventionDate": document.getElementById("interventionDate").value,
+            "interventionDate": document.getElementById("interventionDate").value + " " +
+                                document.getElementById("interventionTime").value,
+            "interventionDuration": document.getElementById("interventionDuration").value,
             "shipmentDate": document.getElementById("shipmentDate").value,
             "protocolNumber": document.getElementById("protocolNumber").value,
             "billingDate": document.getElementById("billingDate").value,
