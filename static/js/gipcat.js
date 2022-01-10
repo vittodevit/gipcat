@@ -44,6 +44,57 @@ function updatePasswordMeter(target, length) {
     passwordMeter.setAttribute("aria-valuenow", pvalue);
 }
 
+function createTableRow(row){
+    var html = "<td>"
+    html += `<span style='color: ${row.color};'>&#9632;</span> `;
+    html += row.userName;
+    html += "</td>";
+    html += `<td>`;
+    html += row.legalName;
+    html += "</td>";
+    html += `<td>`;
+    html += row.legalSurname;
+    html += "</td>";
+    html += `<td>`;
+    if(row.isBusy == 1){
+        html += "<span style='color: red;'>Occupato</span>";
+    }else{
+        html += "<span style='color: green;'>Libero</span>";
+    }
+    html += "</td>";
+    return html;
+}
+
+// callback function to retrieve and update DOM table for technichian overlaps in interventions
+function manageOverlapsAJAX(isUpdate) {
+    var prefix = "";
+    if(isUpdate){
+        prefix = "eim.";
+    }
+    $.ajax({
+        type: "GET",
+        url: relativeToRoot + 'lib/int/ajax_checkoverlap.php',
+        data: { 
+            "interventionDate": document.getElementById(prefix + "interventionDate").value + " " +
+                                document.getElementById(prefix + "interventionTime").value,
+            "interventionDuration": document.getElementById(prefix + "interventionDuration").value
+        },
+        success: function (dataget) {
+            var ot = document.getElementById(prefix + "overlapTable");
+            ot.innerHTML = "";
+            dataget.forEach(row => {
+                ot.innerHTML += "<tr>";
+                ot.innerHTML += createTableRow(row);
+                ot.innerHTML += "</tr>";
+            });
+            document.getElementById(prefix+"spinner").classList.add("visually-hidden");
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
 // add event listener for passwordMeter update
 document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
     updatePasswordMeter("upcm.passMeter", event.target.value.length);
@@ -299,6 +350,7 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
                 document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
                 document.getElementById("eim.version").innerHTML = dataget['version'];
+                manageOverlapsAJAX(true);
                 document.getElementById("eim.spinner").classList.add("visually-hidden");
             },
             error: function (data) {
@@ -363,6 +415,7 @@ if (createInterventionModal != null) {
         var idIntervention = button.getAttribute('data-bs-cimIid');
         var modalContent = document.getElementById('cim.title');
         modalContent.textContent = idIntervention;
+        manageOverlapsAJAX(false);
     });
 }
 
@@ -394,3 +447,35 @@ function createInterventionAJAX() {
         }
     });
 }
+
+/// add event listeners  for technician table update (create intervention) ///
+document.getElementById("interventionDate").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+document.getElementById("interventionTime").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+document.getElementById("interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(false);
+});
+
+/// add event listeners  for technician table update (update intervention) ///
+document.getElementById("eim.interventionDate").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});
+
+document.getElementById("eim.interventionTime").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});
+
+document.getElementById("eim.interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX(true);
+});

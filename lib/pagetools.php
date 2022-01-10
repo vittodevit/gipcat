@@ -756,6 +756,11 @@ function printInterventionsModals(){
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nuovo intervento per l'installazione n&ordm; <u><span id="cim.title"></span></u></h5>
+                <div class="spinner-modal-container" id="spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -786,7 +791,7 @@ function printInterventionsModals(){
                         <div class="row mb-3">
                             <div class="col col-md-3">
                                 <label for="interventionDate" class="form-label">Data intervento:</label>
-                                <input type="date" class="form-control" id="interventionDate">
+                                <input type="date" class="form-control" id="interventionDate" value="<?php echo date("Y-m-d") ?>">
                             </div>
                             <div class="col col-md-2">
                                 <label for="interventionTime" class="form-label">Ora:</label>
@@ -837,6 +842,30 @@ function printInterventionsModals(){
                                     </div>
                                 </div>  
                             </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6>Per la data ed ora selezionata lo stato dei tecnici è:</h6>
+                            <table class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Nome Utente
+                                        </th>
+                                        <th>
+                                            Nome
+                                        </th>
+                                        <th>
+                                            Cognome
+                                        </th>
+                                        <th>
+                                            Impegnato
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overlapTable">
+
+                                </tbody>
+                            </table>
                         </div>
                         <div class="mb-3">
                             <label for="assignedTo" class="form-label">Assegnato a:</label>
@@ -990,6 +1019,30 @@ function printInterventionsModals(){
                                     </div>
                                 </div>  
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Per la data ed ora selezionata lo stato dei tecnici è:</h6>
+                            <table class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Nome Utente
+                                        </th>
+                                        <th>
+                                            Nome
+                                        </th>
+                                        <th>
+                                            Cognome
+                                        </th>
+                                        <th>
+                                            Impegnato
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eim.overlapTable">
+
+                                </tbody>
+                            </table>
                         </div>
                         <div class="mb-3">
                             <label for="eim.assignedTo" class="form-label">Assegnato a:</label>
