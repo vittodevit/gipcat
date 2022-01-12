@@ -38,6 +38,67 @@ printInterventionsModals();
     </div>
 </div>
 
+<!-- ANNOTATIONS MODAL -->
+<div class="modal fade" id="annotationsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Annotazioni per la chiamata</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input id=am.idIntervention" type="hidden" value="">
+                    <div class="mb-2 mt-2">
+                        <label for="am.associatedCallNote" class="form-label visually-hidden">Annotazioni</label>
+                        <textarea class="form-control" id="am.associatedCallNote" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="editInterventionCN_AJAX()">
+                    <span data-feather="save"></span>
+                    Salva 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POSTPONE CALL MODAL -->
+<div class="modal fade" id="postponeCallModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Posticipazione chiamata</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input id=pcm.idIntervention" type="hidden" value="">
+                    <div class="mb-2">
+                        <label for="pcm.associatedCallPosticipationDate" class="form-label">Posticipa a:</label>
+                        <input type="date" class="form-control" id="pcm.associatedCallPosticipationDate">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="editInterventionPCM_AJAX()">
+                    <span data-feather="save"></span>
+                    Salva 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <table class="table table-bordered mt-4">
     <thead>
@@ -84,6 +145,8 @@ printInterventionsModals();
                         t1.interventionType,
                         t1.interventionDate,
                         t1.interventionDuration,
+                        t1.associatedCallNote,
+                        t1.associatedCallPosticipationDate,
                         installations.installationAddress,
                         installations.installationCity,
                         installations.heaterBrand,
@@ -109,7 +172,8 @@ printInterventionsModals();
                     WHERE
                         t2.idInstallation IS NULL
                         AND installations.toCall = '1'
-                        AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH);
+                        AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH)
+                        AND (t1.associatedCallPosticipationDate IS NULL OR t1.associatedCallPosticipationDate < CURDATE());
                     ";
                     /// END QUERY ///
                     $callListProc = $con->query($callListProc_query);

@@ -674,12 +674,12 @@ function printCallCard($data){ ?>
                             Non Chiamare Più</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
+                            data-bs-toggle="modal" data-bs-target="#postponeCallModal" data-bs-pcmIid="<?php echo $data['idIntervention']; ?>">
                             <span data-feather="skip-forward"></span>
                             Postponi Chiamata</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
+                            data-bs-toggle="modal" data-bs-target="#annotationsModal" data-bs-amIid="<?php echo $data['idIntervention']; ?>">
                             <span data-feather="paperclip"></span>
                             Aggiungi Annotazione</a></li>
 
@@ -892,9 +892,9 @@ function printInterventionsModals(){
                             </div>
                         </div>
                         <div class="mb-3">
-                                <label for="paymentDate" class="form-label">Data di pagamento:</label>
-                                <input type="date" class="form-control" id="paymentDate">
-                            </div>
+                            <label for="paymentDate" class="form-label">Data di pagamento:</label>
+                            <input type="date" class="form-control" id="paymentDate">
+                        </div>
                         <div class="mb-3">
                             <label for="footNote" class="form-label">Annotazioni</label>
                             <textarea class="form-control" id="footNote" rows="3"></textarea>
