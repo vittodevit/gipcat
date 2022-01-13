@@ -37,13 +37,15 @@ if ($_POST['version'] != $arr['version']) {
 }
 
 $fieldnames = array("interventionType", "interventionState", "assignedTo", "countInCallCycle", 
-"interventionDate", "interventionDuration", "shipmentDate", "protocolNumber", "billingDate", "billingNumber", "paymentDate", "footNote");
+"interventionDate", "interventionDuration", "shipmentDate", "protocolNumber", "billingDate", 
+"billingNumber", "paymentDate", "footNote", "associatedCallNote", "associatedCallPosticipationDate");
                     
 $fields = "";
 
 foreach ($fieldnames as $fn){
     // super ugly bugfix, ill fix it when i can
-    if($fn == "interventionState" || $fn == "countInCallCycle" || $fn == "protocolNumber" || $fn == "billingNumber"){
+    if($fn == "interventionState" || $fn == "countInCallCycle" 
+    || $fn == "protocolNumber" || $fn == "billingNumber" || $fn == "associatedCallNote"){
         if (isset($_POST[$fn])) {
             $fields .= "`$fn` = '" . clean($_POST[$fn]) . "', ";
         }

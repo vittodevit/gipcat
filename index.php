@@ -48,7 +48,7 @@ printInterventionsModals();
             </div>
             <div class="modal-body">
                 <form>
-                    <input id=am.idIntervention" type="hidden" value="">
+                    <input id="am.idIntervention" type="hidden" value="">
                     <div class="mb-2 mt-2">
                         <label for="am.associatedCallNote" class="form-label visually-hidden">Annotazioni</label>
                         <textarea class="form-control" id="am.associatedCallNote" rows="5"></textarea>

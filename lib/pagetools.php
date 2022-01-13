@@ -700,17 +700,30 @@ function printCallCard($data){ ?>
         </div>
     </div>
     <div class="card-body">
-        <span data-feather="file-text"></span>
-        <b>Contratto di Manutenzione:</b> <?php echo $data['manteinanceContractName'] ?>
-        <br>
-        <span data-feather="compass"></span>
-        <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
-        <br>
-        <span data-feather="home"></span>
-        <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
-        <br>
-        <span data-feather="box"></span>
-        <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+        <div class="row">
+            <div class="col col-md-11">
+                <span data-feather="file-text"></span>
+                <b>Contratto di Manutenzione:</b> <?php echo $data['manteinanceContractName'] ?>
+                <br>
+                <span data-feather="compass"></span>
+                <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
+                <br>
+                <span data-feather="home"></span>
+                <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
+                <br>
+                <span data-feather="box"></span>
+                <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+            </div>
+            <div class="col col-md-1 text-end">
+                <?php if(!empty($data['associatedCallNote'])){ ?>
+                    <span data-feather="paperclip"></span>  
+                <?php } ?>
+                <br>
+                <?php if(!empty($data['associatedCallPosticipationDate'])){ ?>
+                    <span data-feather="skip-forward"></span>
+                <?php } ?>
+            </div>
+        </div>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="calendar"></span>
         <b>Ultimo Intervento: </b> <?php echo convertDate($data['interventionDate']) ?>
