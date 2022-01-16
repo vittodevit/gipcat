@@ -674,12 +674,12 @@ function printCallCard($data){ ?>
                             Non Chiamare Più</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
+                            data-bs-toggle="modal" data-bs-target="#postponeCallModal" data-bs-pcmIid="<?php echo $data['idIntervention']; ?>">
                             <span data-feather="skip-forward"></span>
                             Postponi Chiamata</a></li>
 
                         <li><a class="dropdown-item" 
-                            data-bs-toggle="modal" data-bs-target="#workInProgress" data-bs-hashmap="<?php echo "wip" ?>">
+                            data-bs-toggle="modal" data-bs-target="#annotationsModal" data-bs-amIid="<?php echo $data['idIntervention']; ?>">
                             <span data-feather="paperclip"></span>
                             Aggiungi Annotazione</a></li>
 
@@ -700,17 +700,36 @@ function printCallCard($data){ ?>
         </div>
     </div>
     <div class="card-body">
-        <span data-feather="file-text"></span>
-        <b>Contratto di Manutenzione:</b> <?php echo $data['manteinanceContractName'] ?>
-        <br>
-        <span data-feather="compass"></span>
-        <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
-        <br>
-        <span data-feather="home"></span>
-        <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
-        <br>
-        <span data-feather="box"></span>
-        <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+        <div class="row">
+            <div class="col col-md-11">
+                <span data-feather="file-text"></span>
+                <b>Contratto di Manutenzione:</b> <?php echo $data['manteinanceContractName'] ?>
+                <br>
+                <span data-feather="compass"></span>
+                <b>Indirizzo Installazione:</b> <?php echo $data['installationAddress']." - ".$data['installationCity'] ?>
+                <br>
+                <span data-feather="home"></span>
+                <b>Tipo Installazione:</b> <?php echo $data['installationType'] ?>
+                <br>
+                <span data-feather="box"></span>
+                <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+            </div>
+            <div class="col col-md-1 text-end">
+                <?php if(!empty($data['associatedCallNote'])){ ?>
+                    <span data-feather="paperclip" data-bs-toggle="tooltip" data-bs-placement="right" 
+                    title="Annotazioni presenti per questa chiamata.">
+                        Annotazioni presenti per questa chiamata.
+                    </span>  
+                <?php } ?>
+                <br>
+                <?php if(!empty($data['associatedCallPosticipationDate'])){ ?>
+                    <span data-feather="skip-forward" data-bs-toggle="tooltip" data-bs-placement="right" 
+                    title="Rimandata al <?php echo $data['associatedCallPosticipationDate'] ?>">
+                        Rimandata al <?php echo $data['associatedCallPosticipationDate'] ?>
+                    </span>
+                <?php } ?>
+            </div>
+        </div>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="calendar"></span>
         <b>Ultimo Intervento: </b> <?php echo convertDate($data['interventionDate']) ?>
@@ -892,9 +911,9 @@ function printInterventionsModals(){
                             </div>
                         </div>
                         <div class="mb-3">
-                                <label for="paymentDate" class="form-label">Data di pagamento:</label>
-                                <input type="date" class="form-control" id="paymentDate">
-                            </div>
+                            <label for="paymentDate" class="form-label">Data di pagamento:</label>
+                            <input type="date" class="form-control" id="paymentDate">
+                        </div>
                         <div class="mb-3">
                             <label for="footNote" class="form-label">Annotazioni</label>
                             <textarea class="form-control" id="footNote" rows="3"></textarea>
