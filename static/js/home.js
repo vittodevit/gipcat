@@ -1,5 +1,11 @@
 var version_ann;
+var version_pcm;
 var version;
+
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
 
 var doNotCallModal = document.getElementById('doNotCallModal');
 if (doNotCallModal != null) {
@@ -79,4 +85,49 @@ function editInterventionCN_AJAX(){
         }
     });
     version_ann = "";
+}
+
+var postponeCallModal = document.getElementById('postponeCallModal');
+if (postponeCallModal != null) {
+    postponeCallModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var idIntervention = button.getAttribute('data-bs-pcmIid');
+        $.ajax({
+            type: "GET",
+            url: './lib/int/ajax_get.php',
+            data: { "idIntervention": idIntervention },
+            success: function (dataget) {
+                version_pcm = dataget['version'];
+                document.getElementById('pcm.idIntervention').value = dataget['idIntervention'];
+                document.getElementById('pcm.associatedCallPosticipationDate').value = dataget['associatedCallPosticipationDate'];
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+    });
+}
+
+function editInterventionPCM_AJAX(){
+    if(document.getElementById('pcm.associatedCallPosticipationDate').value == ''){
+        toastr.error("Compila il campo");
+    }
+    else{
+        $.ajax({
+            type: "POST",
+            url: './lib/int/ajax_edit.php',
+            data: {
+                "idIntervention": document.getElementById('pcm.idIntervention').value,
+                "version": version_pcm,
+                "associatedCallPosticipationDate": document.getElementById('pcm.associatedCallPosticipationDate').value
+            },
+            success: function (data) {
+                successReload();
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+        version_pcm = "";
+    }
 }

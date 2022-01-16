@@ -716,11 +716,17 @@ function printCallCard($data){ ?>
             </div>
             <div class="col col-md-1 text-end">
                 <?php if(!empty($data['associatedCallNote'])){ ?>
-                    <span data-feather="paperclip"></span>  
+                    <span data-feather="paperclip" data-bs-toggle="tooltip" data-bs-placement="right" 
+                    title="Annotazioni presenti per questa chiamata.">
+                        Annotazioni presenti per questa chiamata.
+                    </span>  
                 <?php } ?>
                 <br>
                 <?php if(!empty($data['associatedCallPosticipationDate'])){ ?>
-                    <span data-feather="skip-forward"></span>
+                    <span data-feather="skip-forward" data-bs-toggle="tooltip" data-bs-placement="right" 
+                    title="Rimandata al <?php echo $data['associatedCallPosticipationDate'] ?>">
+                        Rimandata al <?php echo $data['associatedCallPosticipationDate'] ?>
+                    </span>
                 <?php } ?>
             </div>
         </div>

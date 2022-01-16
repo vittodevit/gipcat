@@ -79,7 +79,7 @@ printInterventionsModals();
             </div>
             <div class="modal-body">
                 <form>
-                    <input id=pcm.idIntervention" type="hidden" value="">
+                    <input id="pcm.idIntervention" type="hidden" value="">
                     <div class="mb-2">
                         <label for="pcm.associatedCallPosticipationDate" class="form-label">Posticipa a:</label>
                         <input type="date" class="form-control" id="pcm.associatedCallPosticipationDate">
