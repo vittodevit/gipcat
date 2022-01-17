@@ -10,7 +10,11 @@ function openPage($pageid, $title, $level, $customcss = "")
         $installationName = "Gestionale";
     }
     session_start();
-    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["permissionType"] < 3) {
+    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+        header("Location: " . npRelativeToRoot($level) . "login/");
+        exit;
+    }
+    if($_SESSION["permissionType"] < 3 && $pageid != 0){
         header("Location: " . npRelativeToRoot($level) . "login/");
         exit;
     }
@@ -58,6 +62,21 @@ function openPage($pageid, $title, $level, $customcss = "")
     </head>
 
     <body>
+
+        <?php if($_SESSION["permissionType"] < 3){ ?>
+            
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="nav-mobi" href="<?php relativeToRoot($level); ?>login/logout.php">
+                <span style="margin-right: 10px;"></span>
+                <img src="<?php echo relativeToRoot($level); ?>static/img/branding/favicon-32x32.png" alt="logo">
+                <span style="margin-right: 10px;"></span>
+                <span data-feather="user"></span>
+                <?php echo $_SESSION["legalName"] . " " . $_SESSION["legalSurname"] ?> -
+                Esci
+            </a>   
+        </header>
+             
+        <?php }else{ ?>
 
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="<?php relativeToRoot($level); ?>">
@@ -409,9 +428,13 @@ function openPage($pageid, $title, $level, $customcss = "")
                         </div>
                     </div>
                 </div>
-
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <?php
+                <?php } 
+                
+                if($_SESSION["permissionType"] < 3){ ?>
+                    <main style="margin: 10px;">
+                <?php }else{ ?>
+                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <?php }
                 }
 
 function closePage($level, $js_d, $customjs = "")
