@@ -205,33 +205,128 @@ function openPage($pageid, $title, $level, $customcss = "")
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- DELETE USER MODAL -->
-                <div class="modal fade" id="userDeleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Eliminazione utente piattaforma</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Sei sicuro di voler completamente eliminare l'utente <strong id="dum.title"></strong> dal gestionale?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <span data-feather="x-octagon"></span>
-                                    Annulla
-                                </button>
-                                <button type="button" class="btn btn-danger" onclick="deleteUserAJAX()">
-                                    <span data-feather="trash"></span>
-                                    Elimina
-                                </button>
+               
+                    <!-- DELETE USER MODAL -->
+                    <div class="modal fade" id="userDeleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Eliminazione utente piattaforma</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Sei sicuro di voler completamente eliminare l'utente <strong id="dum.title"></strong> dal gestionale?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <span data-feather="x-octagon"></span>
+                                        Annulla
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="deleteUserAJAX()">
+                                        <span data-feather="trash"></span>
+                                        Elimina
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            
+
+                <?php } ?>
+                
+                <!-- VIEW INSTALLATION MODAL -->
+                <div class="modal fade" id="viewInstallationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Installazione n&ordm; <u><span id="vim.title"></span></u> 
+                                del cliente n&ordm; <u><span id="vim.idCustomer"></span></u></h5>
+                                <div class="spinner-modal-container" id="vim.spinner">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="nscB3">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="vim.installationAddress">Indirizzo</label>
+                                                <input type="text" class="form-control" id="vim.installationAddress" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <label for="vim.installationCity">Città</label>
+                                                <input type="text" class="form-control" id="vim.installationCity" disabled>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row mb-3">
+                                            <div class="col col-md-4">
+                                                <label for="vim.heaterBrand" class="form-label">Marca apparecchio</label>
+                                                <input type="text" class="form-control" id="vim.heaterBrand" disabled>
+                                            </div>
+                                            <div class="col col-md-4">
+                                                <label for="vim.heater" class="form-label">Modello apparecchio</label>
+                                                <input type="text" class="form-control" id="vim.heater" disabled>
+                                            </div>
+                                            <div class="col col-md-4">
+                                                <label for="vim.heaterSerialNumber" class="form-label">Matricola</label>
+                                                <input type="text" class="form-control" id="vim.heaterSerialNumber" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col col-md-8">
+                                                <label for="vim.installationType" class="form-label">Tipo installazione</label>
+                                                <select class="form-select" id="vim.installationType" disabled>
+                                                    <option value="Caldaia" selected>Caldaia</option>
+                                                    <option value="Pompa di calore">Pompa di calore</option>
+                                                    <option value="Ibrido">Ibrido</option>
+                                                    <option value="Climatizzatore">Climatizzatore</option>
+                                                    <option value="Altro">Altro (Vedi Note)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col col-md-4">
+                                                <label for="vim.monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-text">
+                                                        <input class="form-check-input mt-0" type="checkbox" required id="vim.toCall" disabled>
+                                                        <span style="margin-left: 10px;">Da chiamare?</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" id="vim.monthlyCallInterval" disabled>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col col-md-8">
+                                                <label for="vim.manteinanceContractName" class="form-label">Contratto di manutenzione</label>
+                                                <input type="text" class="form-control" id="vim.manteinanceContractName" disabled>
+                                            </div>
+                                            <div class="col col-md-4">
+                                                <label for="vim.contractExpiryDate" class="form-label">Data di scadenza</label>
+                                                <input type="date" class="form-control" id="vim.contractExpiryDate" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="vim.footNote" class="form-label">Annotazioni</label>
+                                            <textarea class="form-control" id="vim.footNote" rows="3" disabled></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('installation'+document.getElementById('vim.title').innerText)">
+                                                <span data-feather="database"></span>
+                                                Visualizza allegati in AMS
+                                            </a>
+                                        </div>
+                                        <p>Creazione: <strong id="vim.createdAt">...</strong>  -  
+                                        Ultima modifica: <strong id="vim.updatedAt">...</strong> da <strong id="vim.lastEditedBy">...</strong>  -  
+                                        Versione: <strong id="vim.version">...</strong></p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
                 <!-- VIEW CUSTOMER MODAL -->
                 <div class="modal fade" id="viewCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -334,103 +429,8 @@ function openPage($pageid, $title, $level, $customcss = "")
                         </div>
                     </div>
                 </div>
-
-                <!-- VIEW INSTALLATION MODAL -->
-                <div class="modal fade" id="viewInstallationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Installazione n&ordm; <u><span id="vim.title"></span></u> 
-                                del cliente n&ordm; <u><span id="vim.idCustomer"></span></u></h5>
-                                <div class="spinner-modal-container" id="vim.spinner">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="nscB3">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="vim.installationAddress">Indirizzo</label>
-                                                <input type="text" class="form-control" id="vim.installationAddress" disabled>
-                                            </div>
-                                            <div class="col">
-                                                <label for="vim.installationCity">Città</label>
-                                                <input type="text" class="form-control" id="vim.installationCity" disabled>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="row mb-3">
-                                            <div class="col col-md-4">
-                                                <label for="vim.heaterBrand" class="form-label">Marca apparecchio</label>
-                                                <input type="text" class="form-control" id="vim.heaterBrand" disabled>
-                                            </div>
-                                            <div class="col col-md-4">
-                                                <label for="vim.heater" class="form-label">Modello apparecchio</label>
-                                                <input type="text" class="form-control" id="vim.heater" disabled>
-                                            </div>
-                                            <div class="col col-md-4">
-                                                <label for="vim.heaterSerialNumber" class="form-label">Matricola</label>
-                                                <input type="text" class="form-control" id="vim.heaterSerialNumber" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col col-md-8">
-                                                <label for="vim.installationType" class="form-label">Tipo installazione</label>
-                                                <select class="form-select" id="vim.installationType" disabled>
-                                                    <option value="Caldaia" selected>Caldaia</option>
-                                                    <option value="Pompa di calore">Pompa di calore</option>
-                                                    <option value="Ibrido">Ibrido</option>
-                                                    <option value="Climatizzatore">Climatizzatore</option>
-                                                    <option value="Altro">Altro (Vedi Note)</option>
-                                                </select>
-                                            </div>
-                                            <div class="col col-md-4">
-                                                <label for="vim.monthlyCallInterval" class="form-label">Intervallo mensile chiamate</label>
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-text">
-                                                        <input class="form-check-input mt-0" type="checkbox" required id="vim.toCall" disabled>
-                                                        <span style="margin-left: 10px;">Da chiamare?</span>
-                                                    </div>
-                                                    <input type="number" class="form-control" id="vim.monthlyCallInterval" disabled>
-                                                </div>  
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col col-md-8">
-                                                <label for="vim.manteinanceContractName" class="form-label">Contratto di manutenzione</label>
-                                                <input type="text" class="form-control" id="vim.manteinanceContractName" disabled>
-                                            </div>
-                                            <div class="col col-md-4">
-                                                <label for="vim.contractExpiryDate" class="form-label">Data di scadenza</label>
-                                                <input type="date" class="form-control" id="vim.contractExpiryDate" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="vim.footNote" class="form-label">Annotazioni</label>
-                                            <textarea class="form-control" id="vim.footNote" rows="3" disabled></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('installation'+document.getElementById('vim.title').innerText)">
-                                                <span data-feather="database"></span>
-                                                Visualizza allegati in AMS
-                                            </a>
-                                        </div>
-                                        <p>Creazione: <strong id="vim.createdAt">...</strong>  -  
-                                        Ultima modifica: <strong id="vim.updatedAt">...</strong> da <strong id="vim.lastEditedBy">...</strong>  -  
-                                        Versione: <strong id="vim.version">...</strong></p>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php } 
                 
-                if($_SESSION["permissionType"] < 3){ ?>
+                <?php if($_SESSION["permissionType"] < 3){ ?>
                     <main style="margin: 10px;">
                 <?php }else{ ?>
                     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

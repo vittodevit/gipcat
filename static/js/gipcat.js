@@ -127,41 +127,45 @@ function manageOverlapsAJAX(isUpdate, assignedTo) {
 }
 
 // add event listener for passwordMeter update
-document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
-    updatePasswordMeter("upcm.passMeter", event.target.value.length);
-});
+if(document.getElementById("upcm.newPassword") != null){
+    document.getElementById("upcm.newPassword").addEventListener('input', (event) => {
+        updatePasswordMeter("upcm.passMeter", event.target.value.length);
+    });
+}
 
 // password change data loading
 var userPasswordChangeModal = document.getElementById('userPassChangeModal');
-userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
-    document.getElementById("upcm.spinner").classList.remove("visually-hidden");
-    var button = event.relatedTarget;
-    var username = button.getAttribute('data-bs-username');
-    var modalContent = document.getElementById('upcm.title');
-    modalContent.textContent = username;
-    if (sessionUserName == username) {
-        document.getElementById('upcm.isSelf').value = 'true';
-        document.getElementById('upcm.oldPasswordContainer').classList.remove("visually-hidden");
-    } else {
-        document.getElementById('upcm.isSelf').value = 'false';
-        document.getElementById('upcm.oldPasswordContainer').classList.add("visually-hidden");
-    }
-    $.ajax({
-        type: "GET",
-        url: relativeToRoot + 'lib/ajax_readusermeta.php',
-        data: { "userName": username },
-        success: function (dataget) {
-            document.getElementById("upcm.createdAt").innerHTML = dataget['createdAt'];
-            document.getElementById("upcm.updatedAt").innerHTML = dataget['updatedAt'];
-            document.getElementById("upcm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
-            document.getElementById("upcm.version").innerHTML = dataget['version'];
-            document.getElementById("upcm.spinner").classList.add("visually-hidden");
-        },
-        error: function (data) {
-            toastr.error(data.responseText);
+if(userPasswordChangeModal != null){
+    userPasswordChangeModal.addEventListener('show.bs.modal', function (event) {
+        document.getElementById("upcm.spinner").classList.remove("visually-hidden");
+        var button = event.relatedTarget;
+        var username = button.getAttribute('data-bs-username');
+        var modalContent = document.getElementById('upcm.title');
+        modalContent.textContent = username;
+        if (sessionUserName == username) {
+            document.getElementById('upcm.isSelf').value = 'true';
+            document.getElementById('upcm.oldPasswordContainer').classList.remove("visually-hidden");
+        } else {
+            document.getElementById('upcm.isSelf').value = 'false';
+            document.getElementById('upcm.oldPasswordContainer').classList.add("visually-hidden");
         }
+        $.ajax({
+            type: "GET",
+            url: relativeToRoot + 'lib/ajax_readusermeta.php',
+            data: { "userName": username },
+            success: function (dataget) {
+                document.getElementById("upcm.createdAt").innerHTML = dataget['createdAt'];
+                document.getElementById("upcm.updatedAt").innerHTML = dataget['updatedAt'];
+                document.getElementById("upcm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+                document.getElementById("upcm.version").innerHTML = dataget['version'];
+                document.getElementById("upcm.spinner").classList.add("visually-hidden");
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
     });
-});
+}
 
 var viewCustomerModal = document.getElementById('viewCustomerModal');
 viewCustomerModal.addEventListener('show.bs.modal', function (event) {
@@ -252,12 +256,14 @@ viewInstallationModal.addEventListener('show.bs.modal', function (event) {
 })
 
 var userDeleteModal = document.getElementById('userDeleteModal');
-userDeleteModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget;
-    var username = button.getAttribute('data-bs-username');
-    var modalContent = document.getElementById('dum.title');
-    modalContent.textContent = username;
-});
+if(userDeleteModal != null){
+    userDeleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var username = button.getAttribute('data-bs-username');
+        var modalContent = document.getElementById('dum.title');
+        modalContent.textContent = username;
+    });
+}
 
 function userChangePasswordAJAX(isSelf) {
     var oldPasswordTb = document.getElementById("upcm.oldPassword");
