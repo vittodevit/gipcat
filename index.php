@@ -111,20 +111,30 @@ printInterventionsModals();
                 </th>
             <?php } ?>
             <th class="col col-md-6">
-                <div class="row">
-                    <div class="col col-md-9">
-                        <h5 class="h5t">Calendario del giorno</h5>
+                <?php if($_SESSION["permissionType"] > 2){ ?>
+                    <div class="row">
+                        <div class="col col-md-9">
+                            <h5 class="h5t">Calendario del giorno</h5>
+                        </div>
+                        <div class="col col-md-3">
+                            <input type="date" class="form-control" id="calendar_date" 
+                                <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                                    echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
+                                } else {
+                                    echo 'value="' . date("Y-m-d") . '"';
+                                } ?> 
+                            aria-label="Ricerca">
+                        </div>
                     </div>
-                    <div class="col col-md-3">
-                        <input type="date" class="form-control" id="calendar_date" 
-                            <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
-                                echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
-                            } else {
-                                echo 'value="' . date("Y-m-d") . '"';
-                            } ?> 
-                        aria-label="Ricerca">
-                    </div>
-                </div>
+                <?php } else { ?>
+                    <input type="date" class="form-control" id="calendar_date" 
+                        <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                            echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
+                        } else {
+                            echo 'value="' . date("Y-m-d") . '"';
+                        } ?> 
+                    aria-label="Ricerca">
+                <?php } ?>
             </th>
         </tr>
     </thead>

@@ -66,10 +66,9 @@ function openPage($pageid, $title, $level, $customcss = "")
         <?php if($_SESSION["permissionType"] < 3){ ?>
             
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="nav-mobi" href="<?php relativeToRoot($level); ?>login/logout.php">
-                <span style="margin-right: 10px;"></span>
-                <img src="<?php echo relativeToRoot($level); ?>static/img/branding/favicon-32x32.png" alt="logo">
-                <span style="margin-right: 10px;"></span>
+            <img src="<?php echo relativeToRoot($level); ?>static/img/branding/favicon-32x32.png" alt="logo" style="margin-left: 10px;">
+            <span style="margin-right: 10px;"></span>
+            <a class="nav-mobi link-light text-end" href="<?php relativeToRoot($level); ?>login/logout.php">
                 <span data-feather="user"></span>
                 <?php echo $_SESSION["legalName"] . " " . $_SESSION["legalSurname"] ?> -
                 Esci
@@ -205,6 +204,7 @@ function openPage($pageid, $title, $level, $customcss = "")
                             </div>
                         </div>
                     </div>
+                </div>
                
                     <!-- DELETE USER MODAL -->
                     <div class="modal fade" id="userDeleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
@@ -311,12 +311,14 @@ function openPage($pageid, $title, $level, $customcss = "")
                                             <label for="vim.footNote" class="form-label">Annotazioni</label>
                                             <textarea class="form-control" id="vim.footNote" rows="3" disabled></textarea>
                                         </div>
-                                        <div class="mb-3">
-                                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('installation'+document.getElementById('vim.title').innerText)">
-                                                <span data-feather="database"></span>
-                                                Visualizza allegati in AMS
-                                            </a>
-                                        </div>
+                                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                                            <div class="mb-3">
+                                                <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('installation'+document.getElementById('vim.title').innerText)">
+                                                    <span data-feather="database"></span>
+                                                    Visualizza allegati in AMS
+                                                </a>
+                                            </div>
+                                        <?php } ?>
                                         <p>Creazione: <strong id="vim.createdAt">...</strong>  -  
                                         Ultima modifica: <strong id="vim.updatedAt">...</strong> da <strong id="vim.lastEditedBy">...</strong>  -  
                                         Versione: <strong id="vim.version">...</strong></p>
@@ -414,12 +416,14 @@ function openPage($pageid, $title, $level, $customcss = "")
                                             <label for="footNote" class="form-label">Annotazioni</label>
                                             <textarea class="form-control" id="vcm.footNote" rows="3" disabled></textarea>
                                         </div>
-                                        <div class="mb-3">
-                                            <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('customer'+document.getElementById('vcm.title').innerText)">
-                                                <span data-feather="database"></span>
-                                                Visualizza allegati in AMS
-                                            </a>
-                                        </div>
+                                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                                            <div class="mb-3">
+                                                <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('customer'+document.getElementById('vcm.title').innerText)">
+                                                    <span data-feather="database"></span>
+                                                    Visualizza allegati in AMS
+                                                </a>
+                                            </div>
+                                        <?php } ?>
                                         <p>Creazione: <strong id="vcm.createdAt">...</strong>  -  
                                         Ultima modifica: <strong id="vcm.updatedAt">...</strong> da <strong id="vcm.lastEditedBy">...</strong>  -  
                                         Versione: <strong id="vcm.version">...</strong></p>
@@ -624,9 +628,11 @@ function printInterventionsCard($data){
                             <span data-feather="box"></span>
                             Visualizza Scheda Installazione</a></li>
 
-                        <li><a class="dropdown-item" href="./interventions/?idInstallation=<?php echo $data['idInstallation']; ?>">
+                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                            <li><a class="dropdown-item" href="./interventions/?idInstallation=<?php echo $data['idInstallation']; ?>">
                             <span data-feather="calendar"></span>
                             Visualizza Storico Interventi</a></li>
+                        <?php } ?>
 
                         <li><hr class="dropdown-divider"></li>
 
@@ -634,9 +640,11 @@ function printInterventionsCard($data){
                             <span data-feather="edit"></span>
                             Visualizza o Modifica Intervento </a></li>
 
-                        <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
+                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
                             <span data-feather="database"></span>
                             Visualizza Intervento in AMS </a></li>
+                        <?php } ?>
 
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $data['idIntervention']; ?>">
                             <span data-feather="delete"></span>

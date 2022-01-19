@@ -109,7 +109,7 @@ body {
   }
 
   .scrollable-list {
-    height: 78vh;
+    height: 81vh;
     overflow: -moz-scrollbars-vertical; 
     overflow-y: scroll;
   }
