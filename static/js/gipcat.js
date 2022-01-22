@@ -239,7 +239,7 @@ viewInstallationModal.addEventListener('show.bs.modal', function (event) {
             document.getElementById("vim.manteinanceContractName").value = !!dataget['manteinanceContractName'] ? dataget['manteinanceContractName'] : "";
             // mapping db's 0 and 1 to true and false
             document.getElementById("vim.toCall").checked = !!dataget['toCall'] && dataget['toCall'] == 1 ? true : false;
-            document.getElementById("vim.monthlyCallInterval").value = !!dataget['monthlyCallInterval'] ? dataget['monthlyCallInterval'] : "";
+            document.getElementById("vim.monthlyCallInterval").value = !!dataget['monthlyCallInterval'] ? dataget['monthlyCallInterval'] + " MESI" : "";
             // substring to get only date not time
             document.getElementById("vim.contractExpiryDate").value = !!dataget['contractExpiryDate'] ? dataget['contractExpiryDate'].substring(0, 10) : "";
             document.getElementById("vim.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";

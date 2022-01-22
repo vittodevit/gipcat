@@ -263,11 +263,11 @@ function openPage($pageid, $title, $level, $customcss = "")
                                         <br>
                                         <div class="row mb-3">
                                             <div class="col col-md-4">
-                                                <label for="vim.heaterBrand" class="form-label">Marca apparecchio</label>
+                                                <label for="vim.heaterBrand" class="form-label">Marca</label>
                                                 <input type="text" class="form-control" id="vim.heaterBrand" disabled>
                                             </div>
                                             <div class="col col-md-4">
-                                                <label for="vim.heater" class="form-label">Modello apparecchio</label>
+                                                <label for="vim.heater" class="form-label">Modello</label>
                                                 <input type="text" class="form-control" id="vim.heater" disabled>
                                             </div>
                                             <div class="col col-md-4">
@@ -291,15 +291,17 @@ function openPage($pageid, $title, $level, $customcss = "")
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-text">
                                                         <input class="form-check-input mt-0" type="checkbox" required id="vim.toCall" disabled>
-                                                        <span style="margin-left: 10px;">Da chiamare?</span>
+                                                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                                                            <span style="margin-left: 10px;">Da chiamare?</span>
+                                                        <?php } ?>
                                                     </div>
-                                                    <input type="number" class="form-control" id="vim.monthlyCallInterval" disabled>
+                                                    <input type="text" class="form-control" id="vim.monthlyCallInterval" disabled>
                                                 </div>  
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col col-md-8">
-                                                <label for="vim.manteinanceContractName" class="form-label">Contratto di manutenzione</label>
+                                                <label for="vim.manteinanceContractName" class="form-label">Contr. Manut.</label>
                                                 <input type="text" class="form-control" id="vim.manteinanceContractName" disabled>
                                             </div>
                                             <div class="col col-md-4">
@@ -876,7 +878,7 @@ function printInterventionsModals(){
                                 </select>
                             </div>
                             <div class="col col-md-3">
-                                <label for="interventionDuration" class="form-label">Durata intervento:</label>
+                                <label for="interventionDuration" class="form-label">Durata:</label>
                                 <select class="form-select" id="interventionDuration" required>
                                     <option value="30" selected>Mezz' ora</option>
                                     <option value="60">Un ora</option>
@@ -1043,7 +1045,7 @@ function printInterventionsModals(){
                                 </select>
                             </div>
                             <div class="col col-md-3">
-                                <label for="eim.interventionDuration" class="form-label">Durata intervento:</label>
+                                <label for="eim.interventionDuration" class="form-label">Durata:</label>
                                 <select class="form-select" id="eim.interventionDuration" required>
                                     <option value="30" selected>Mezz' ora</option>
                                     <option value="60">Un ora</option>
@@ -1061,7 +1063,7 @@ function printInterventionsModals(){
                             </div>
                         </div>
                         <div class="mb-3">
-                            <h6>Per la data ed ora selezionata lo stato dei tecnici è:</h6>
+                            <h6>Stato dei tecnici per data ed ora selezionati:</h6>
                             <table class="table table-bordered" >
                                 <thead>
                                     <tr>
