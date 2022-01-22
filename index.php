@@ -13,6 +13,7 @@ openPage($pageid, $friendlyname, $level);
 printInterventionsModals();
 ?>
 
+<?php if($_SESSION["permissionType"] < 3){ ?>
 <!-- DO NOT CALL ANYMORE MODAL -->
 <div class="modal fade" id="doNotCallModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog">
@@ -99,89 +100,104 @@ printInterventionsModals();
         </div>
     </div>
 </div>
+<?php } ?>
 
 <table class="table table-bordered mt-4">
     <thead>
         <tr>
+            <?php if($_SESSION["permissionType"] > 2){ ?>
+                <th class="col col-md-6">
+                    <h5 class="h5t">Chiamate in sospeso</h5>
+                </th>
+            <?php } ?>
             <th class="col col-md-6">
-                <h5 class="h5t">Chiamate in sospeso</h5>
-            </th>
-            <th class="col col-md-6">
-                <div class="row">
-                    <div class="col col-md-9">
-                        <h5 class="h5t">Calendario del giorno</h5>
+                <?php if($_SESSION["permissionType"] > 2){ ?>
+                    <div class="row">
+                        <div class="col col-md-9">
+                            <h5 class="h5t">Calendario del giorno</h5>
+                        </div>
+                        <div class="col col-md-3">
+                            <input type="date" class="form-control" id="calendar_date" 
+                                <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                                    echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
+                                } else {
+                                    echo 'value="' . date("Y-m-d") . '"';
+                                } ?> 
+                            aria-label="Ricerca">
+                        </div>
                     </div>
-                    <div class="col col-md-3">
-                        <input type="date" class="form-control" id="calendar_date" 
-                            <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
-                                echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
-                            } else {
-                                echo 'value="' . date("Y-m-d") . '"';
-                            } ?> 
-                        aria-label="Ricerca">
-                    </div>
-                </div>
+                <?php } else { ?>
+                    <input type="date" class="form-control" id="calendar_date" 
+                        <?php if (isset($_GET["date"]) && !empty($_GET["date"])) {
+                            echo 'value="' . htmlspecialchars($_GET["date"], ENT_QUOTES) . '"';
+                        } else {
+                            echo 'value="' . date("Y-m-d") . '"';
+                        } ?> 
+                    aria-label="Ricerca">
+                <?php } ?>
             </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>
-                <div class="scrollable-list">
-                <?php 
-                    /// START QUERY ///
-                    $callListProc_query = 
-                    "SELECT
-                        t1.idIntervention,
-                        t1.idInstallation,
-                        installations.idCustomer,
-                        t1.interventionType,
-                        t1.interventionDate,
-                        t1.interventionDuration,
-                        t1.associatedCallNote,
-                        t1.associatedCallPosticipationDate,
-                        installations.installationAddress,
-                        installations.installationCity,
-                        installations.heaterBrand,
-                        installations.heater,
-                        installations.installationType,
-                        installations.manteinanceContractName,
-                        installations.monthlyCallInterval,
-                        customers.businessName
-                    FROM
-                        interventions t1
-                    LEFT OUTER JOIN interventions t2 ON
-                        (
-                            t1.idInstallation = t2.idInstallation 
-                            AND t1.interventionDate < t2.interventionDate
-                            AND t2.countInCallCycle = 1
-                        )
-                    INNER JOIN installations ON(
-                            t1.idInstallation = installations.idInstallation
-                        )
-                    INNER JOIN customers ON(
-                            installations.idCustomer = customers.idCustomer
-                        )
-                    WHERE
-                        t2.idInstallation IS NULL
-                        AND installations.toCall = '1'
-                        AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH)
-                        AND (t1.associatedCallPosticipationDate IS NULL OR t1.associatedCallPosticipationDate < CURDATE());
-                    ";
-                    /// END QUERY ///
-                    $callListProc = $con->query($callListProc_query);
-                    
-                    if($con->affected_rows < 1) {
-                        ?> <br><br><br>
-                        <center><h5>Nessuna chiamata<br>per la giornata di oggi:</h5></center> <?php
-                    } else {
-                        while ($call = $callListProc->fetch_assoc()) {
-                            printCallCard($call);
+            <?php if($_SESSION["permissionType"] > 2){ ?>
+                <td>
+                    <div class="scrollable-list">
+                    <?php 
+                        /// START QUERY ///
+                        $callListProc_query = 
+                        "SELECT
+                            t1.idIntervention,
+                            t1.idInstallation,
+                            installations.idCustomer,
+                            t1.interventionType,
+                            t1.interventionDate,
+                            t1.interventionDuration,
+                            t1.associatedCallNote,
+                            t1.associatedCallPosticipationDate,
+                            installations.installationAddress,
+                            installations.installationCity,
+                            installations.heaterBrand,
+                            installations.heater,
+                            installations.installationType,
+                            installations.manteinanceContractName,
+                            installations.monthlyCallInterval,
+                            customers.businessName
+                        FROM
+                            interventions t1
+                        LEFT OUTER JOIN interventions t2 ON
+                            (
+                                t1.idInstallation = t2.idInstallation 
+                                AND t1.interventionDate < t2.interventionDate
+                                AND t2.countInCallCycle = 1
+                            )
+                        INNER JOIN installations ON(
+                                t1.idInstallation = installations.idInstallation
+                            )
+                        INNER JOIN customers ON(
+                                installations.idCustomer = customers.idCustomer
+                            )
+                        WHERE
+                            t2.idInstallation IS NULL
+                            AND installations.toCall = '1'
+                            AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH)
+                            AND (t1.associatedCallPosticipationDate IS NULL OR t1.associatedCallPosticipationDate < CURDATE());
+                        ";
+                        /// END QUERY ///
+                        $callListProc = $con->query($callListProc_query);
+                        
+                        if($con->affected_rows < 1) {
+                            ?> <br><br><br>
+                            <center><h5>Nessuna chiamata<br>per la giornata di oggi:</h5></center> <?php
+                        } else {
+                            while ($call = $callListProc->fetch_assoc()) {
+                                printCallCard($call);
+                            }
                         }
-                    }
-                ?>
-                </div>
-            </td>
+                    ?>
+                    </div>
+                </td>
+            <?php } ?>
             <td>
                 <div class="scrollable-list">
                     <?php 
