@@ -353,13 +353,13 @@ openPage($pageid, $friendlyname, $level);
 
             $additionalQuery = "WHERE LOWER(
                                     CONCAT(
-                                        IFNULL(idCustomer, ''),
+                                        IFNULL(customers.idCustomer, ''),
                                         '',
-                                        IFNULL(businessName, ''),
+                                        IFNULL(customers.businessName, ''),
                                         '',
-                                        IFNULL(registeredOfficeAddress, ''),
+                                        IFNULL(customers.registeredOfficeAddress, ''),
                                         '',
-                                        IFNULL(registeredOfficeCity, '')
+                                        IFNULL(customers.registeredOfficeCity, '')
                                     )
                                 ) LIKE LOWER(\"%";
             $additionalQuery .= $con->real_escape_string($_GET["query"]);
@@ -509,7 +509,7 @@ openPage($pageid, $friendlyname, $level);
                     paginationButton(($counter != $page_no), $counter, $counter, $_GET["query"], "Vai a pagina $counter");
                 }
                 paginationButton(false, "", "...", $_GET["query"], "Altre pagine");
-                paginationButton(true, $second_last, $second_lasts, $_GET["query"], "Vai a pagina $second_lasts");
+                paginationButton(true, $second_last, $second_last, $_GET["query"], "Vai a pagina $second_last");
                 paginationButton(true, $total_no_of_pages, $total_no_of_pages, $_GET["query"], "Vai a pagina $total_no_of_pages");
             } elseif ($page_no > 4 && $page_no < $total_no_of_pages - 4) {
                 paginationButton(true, "1", "1", $_GET["query"], "Vai a pagina 1");
@@ -519,7 +519,7 @@ openPage($pageid, $friendlyname, $level);
                     paginationButton(($counter != $page_no), $counter, $counter, $_GET["query"], "Vai a pagina $counter");
                 }
                 paginationButton(false, "", "...", $_GET["query"], "Altre pagine");
-                paginationButton(true, $second_last, $second_lasts, $_GET["query"], "Vai a pagina $second_lasts");
+                paginationButton(true, $second_last, $second_last, $_GET["query"], "Vai a pagina $second_last");
                 paginationButton(true, $total_no_of_pages, $total_no_of_pages, $_GET["query"], "Vai a pagina $total_no_of_pages");
             } else {
                 paginationButton(true, "1", "1", $_GET["query"], "Vai a pagina 1");

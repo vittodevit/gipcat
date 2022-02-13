@@ -13,7 +13,7 @@ openPage($pageid, $friendlyname, $level);
 printInterventionsModals();
 ?>
 
-<?php if($_SESSION["permissionType"] < 3){ ?>
+<?php //if($_SESSION["permissionType"] < 3){ ?>
 <!-- DO NOT CALL ANYMORE MODAL -->
 <div class="modal fade" id="doNotCallModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog">
@@ -100,7 +100,7 @@ printInterventionsModals();
         </div>
     </div>
 </div>
-<?php } ?>
+<?php //} ?>
 
 <table class="table table-bordered mt-4">
     <thead>

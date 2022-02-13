@@ -990,7 +990,7 @@ function printInterventionsModals(){
                                 <label for="eim.interventionType">Tipo intervento:</label>
                                 <select class="form-select" id="eim.interventionType" required>
                                     <option value="Manutenzione ordinaria" selected>Manutenzione ordinaria</option>
-                                    <option value="Manutenzione + Analisi Fumi">Manutenzione + Analisi Fumi</option>
+                                    <option value="Manutenzione ordinaria + fumi">Manutenzione + Analisi Fumi</option>
                                     <option value="Intervento Generico">Intervento Generico</option>
                                     <option value="Prima Accensione">Prima Accensione</option>
                                     <option value="Installazione">Installazione</option>
@@ -1015,6 +1015,7 @@ function printInterventionsModals(){
                             <div class="col col-md-2">
                                 <label for="eim.interventionTime" class="form-label">Ora:</label>
                                 <select class="form-select" id="eim.interventionTime" required>
+                                    <option value="00:00:00">Non specificato</option>
                                     <?php
                                     for($h = 8; $h < 22; $h++){
                                         for($m = 0; $m < 4; $m++){
