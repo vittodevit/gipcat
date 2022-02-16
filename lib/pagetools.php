@@ -314,12 +314,12 @@ function openPage($pageid, $title, $level, $customcss = "")
                                             <textarea class="form-control" id="vim.footNote" rows="3" disabled></textarea>
                                         </div>
                                         <?php if($_SESSION["permissionType"] > 2){ ?>
-                                            <div class="mb-3">
+                                            <!-- <div class="mb-3">
                                                 <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('installation'+document.getElementById('vim.title').innerText)">
                                                     <span data-feather="database"></span>
                                                     Visualizza allegati in AMS
                                                 </a>
-                                            </div>
+                                            </div> -->
                                         <?php } ?>
                                         <p>Creazione: <strong id="vim.createdAt">...</strong>  -  
                                         Ultima modifica: <strong id="vim.updatedAt">...</strong> da <strong id="vim.lastEditedBy">...</strong>  -  
@@ -419,12 +419,12 @@ function openPage($pageid, $title, $level, $customcss = "")
                                             <textarea class="form-control" id="vcm.footNote" rows="3" disabled></textarea>
                                         </div>
                                         <?php if($_SESSION["permissionType"] > 2){ ?>
-                                            <div class="mb-3">
+                                            <!-- <div class="mb-3">
                                                 <a class="btn btn-sm btn-outline-dark" onclick="amsLaunch('customer'+document.getElementById('vcm.title').innerText)">
                                                     <span data-feather="database"></span>
                                                     Visualizza allegati in AMS
                                                 </a>
-                                            </div>
+                                            </div> -->
                                         <?php } ?>
                                         <p>Creazione: <strong id="vcm.createdAt">...</strong>  -  
                                         Ultima modifica: <strong id="vcm.updatedAt">...</strong> da <strong id="vcm.lastEditedBy">...</strong>  -  
@@ -643,9 +643,9 @@ function printInterventionsCard($data){
                             Visualizza o Modifica Intervento </a></li>
 
                         <?php if($_SESSION["permissionType"] > 2){ ?>
-                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
+                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
                             <span data-feather="database"></span>
-                            Visualizza Intervento in AMS </a></li>
+                            Visualizza Intervento in AMS </a></li> -->
                         <?php } ?>
 
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $data['idIntervention']; ?>">

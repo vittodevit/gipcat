@@ -272,10 +272,10 @@ printInterventionsModals();
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica
                                 </a></li>
-                            <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $row['idIntervention']; ?>')">
+                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $row['idIntervention']; ?>')">
                                     <span data-feather="database"></span>
                                     Visualizza in AMS
-                                </a></li>
+                                </a></li> -->
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionModal" data-bs-dimIid="<?php echo $row['idIntervention']; ?>">
                                 <span data-feather="delete"></span>
                                     Elimina

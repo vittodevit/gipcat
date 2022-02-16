@@ -387,10 +387,10 @@ $_customerExists = $_R_customerExists->fetch_array(MYSQLI_NUM);
                                     <span data-feather="edit"></span>
                                     Visualizza o Modifica
                                 </a></li>
-                            <li><a class="dropdown-item" onclick="amsLaunch('installation<?php echo $row['idInstallation']; ?>')">
+                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('installation<?php echo $row['idInstallation']; ?>')">
                                     <span data-feather="database"></span>
                                     Visualizza in AMS
-                                </a></li>
+                                </a></li> -->
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInstallationModal" data-bs-dimIid="<?php echo $row['idInstallation']; ?>">
                                 <span data-feather="delete"></span>
                                     Elimina
