@@ -2,11 +2,6 @@ var version_ann;
 var version_pcm;
 var version;
 
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
-});
-
 document.getElementById("calendar_date").addEventListener('input', (event) => {
     if(document.getElementById("calendar_date").value == new Date().toISOString().substring(0, 10)){
         // remove query string
@@ -139,4 +134,33 @@ function editInterventionPCM_AJAX(){
         });
         version_pcm = "";
     }
+}
+
+function caricaChiamateAJAX(){
+    document.getElementById("callScrollListContainer").innerHTML =
+    `<br><br><br>
+    <center>
+    <h5>Caricamento chiamate<br>in corso...</h5>
+    <br>
+    <div class="spinner-border text-dark" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </center>`;
+    // caricamento chiamate AJAX
+    $.ajax({
+        type: "GET",
+        url: './lib/ajax_htmlchiamate.php',
+        success: function (dataget) {
+            // caricamento
+            document.getElementById("callScrollListContainer").innerHTML = dataget;
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            feather.replace({ 'aria-hidden': 'true' })
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
 }
