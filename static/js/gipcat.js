@@ -50,7 +50,7 @@ function selectTechnician(obj, prefix){
 
 function createTableRow(prefix, row){
     var html = "";
-    if(row.isBusy == 1){
+    if(row.isBusy == 1 || row.isBusyNB == 1){
         addon = "style=\"background-color: rgba(255, 0, 0, 0.1);\"";
     }else{
         addon = "style=\"background-color: rgba(0, 255, 0, 0.1);\"";
@@ -69,7 +69,7 @@ function createTableRow(prefix, row){
     html += row.legalSurname;
     html += "</td>";
     html += `<td ${addon}>`;
-    if(row.isBusy == 1){
+    if(row.isBusy == 1 || row.isBusyNB == 1){
         html += "<span style='color: red;'>Occupato</span>";
     }else{
         html += "<span style='color: green;'>Libero</span>";

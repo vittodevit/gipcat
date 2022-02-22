@@ -45,7 +45,20 @@ $query =
                 interventions.interventionDate BETWEEN \"{$start}\" AND \"{$end}\"
                 OR interventions.interventionDate + INTERVAL interventions.interventionDuration MINUTE BETWEEN \"{$start}\" AND \"{$end}\"
             )
-    ) AS isBusy
+    ) AS isBusy,
+    (
+        SELECT
+            COUNT(0)
+        FROM
+            interventions_nb
+        WHERE
+            interventions_nb.assignedTo = users.userName
+            AND 
+            ( 
+                interventions_nb.interventionDate BETWEEN \"{$start}\" AND \"{$end}\"
+                OR interventions_nb.interventionDate + INTERVAL interventions_nb.interventionDuration MINUTE BETWEEN \"{$start}\" AND \"{$end}\"
+            )
+    ) AS isBusyNB
 FROM
     users
 WHERE
