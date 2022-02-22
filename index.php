@@ -11,6 +11,7 @@ require_once './lib/pagetools.php';
 
 openPage($pageid, $friendlyname, $level);
 printInterventionsModals();
+printInterventionsNBModals();
 ?>
 
 <?php //if($_SESSION["permissionType"] < 3){ ?>
@@ -113,8 +114,13 @@ printInterventionsModals();
             <th class="col col-md-6">
                 <?php if($_SESSION["permissionType"] > 2){ ?>
                     <div class="row">
-                        <div class="col col-md-9">
+                        <div class="col col-md-8">
                             <h5 class="h5t">Calendario del giorno</h5>
+                        </div>
+                        <div class="col col-md-1">
+                            <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#createInterventionNBModal">
+                                <span data-feather="plus"></span>
+                            </button>
                         </div>
                         <div class="col col-md-3">
                             <input type="date" class="form-control" id="calendar_date" 
@@ -153,6 +159,11 @@ printInterventionsModals();
             <?php } ?>
             <td>
                 <div class="scrollable-list">
+                    <div class="callListSep">
+                        <hr>
+                            <center>interventi con anagrafica</center>
+                        <hr>
+                    </div>
                     <?php 
                     if (isset($_GET["date"]) && !empty($_GET["date"])){
                         $date = $con->real_escape_string($_GET["date"]);
@@ -199,14 +210,64 @@ printInterventionsModals();
                     ";
                     $interventionsToday = $con->query($intq);
                     if($con->affected_rows < 1) {
-                        ?> <br><br><br>
-                        <center><h5>Nessun intervento<br>per la giornata selezionata</h5></center> <?php
+                        ?><br>
+                        <center><h5>Nessun intervento<br>per la giornata selezionata</h5></center>
+                        <br> <?php
                     } else {
                         while ($intervention = $interventionsToday->fetch_assoc()) {
                             printInterventionsCard($intervention);
                         }
                     }
                     ?>
+
+                    <div class="callListSep">
+                        <hr>
+                            <center>interventi generici</center>
+                        <hr>
+                    </div>
+
+                    <?php 
+                    if (isset($_GET["date"]) && !empty($_GET["date"])){
+                        $date = $con->real_escape_string($_GET["date"]);
+                    }else{
+                        $date = date("Y-m-d");
+                    }
+                    $intqNB = 
+                    "SELECT
+                        interventions_nb.idIntervention,
+                        DATE_FORMAT(interventions_nb.interventionDate,'%H:%i') interventionTimeStart,
+                        DATE_FORMAT(
+                            interventions_nb.interventionDate + INTERVAL interventions_nb.interventionDuration MINUTE,
+                            '%H:%i'
+                        ) interventionTimeEnd,
+                        interventions_nb.interventionState,
+                        interventions_nb.footNote,
+                        users.userName,
+                        users.legalName,
+                        users.legalSurname,
+                        users.color
+                    FROM
+                        interventions_nb
+                    LEFT JOIN users ON(
+                            interventions_nb.assignedTo = users.userName
+                        )
+                    WHERE
+                        interventions_nb.interventionDate LIKE '%$date%'
+                    ORDER BY 
+                        interventions_nb.interventionDate ASC;
+                    ";
+                    $interventionsNBToday = $con->query($intqNB);
+                    if($con->affected_rows < 1) {
+                        ?><br>
+                        <center><h5>Nessun intervento generico<br>per la giornata selezionata</h5></center>
+                        <br> <?php
+                    } else {
+                        while ($interventionNB = $interventionsNBToday->fetch_assoc()) {
+                            printInterventionsNBCard($interventionNB);
+                        }
+                    }
+                    ?>
+
                 </div>
             </td>
         </tr>
