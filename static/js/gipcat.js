@@ -86,7 +86,7 @@ function manageOverlapsAJAX(isUpdate, assignedTo) {
     }
     $.ajax({
         type: "GET",
-        url: relativeToRoot + 'lib/int/ajax_checkoverlap.php',
+        url: relativeToRoot + 'lib/ajax_checkoverlap.php',
         data: { 
             "interventionDate": document.getElementById(prefix + "interventionDate").value + " " +
                                 document.getElementById(prefix + "interventionTime").value,
