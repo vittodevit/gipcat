@@ -115,6 +115,7 @@ function manageOverlapsAJAX(prefix, assignedTo) {
                 }
             }
             document.getElementById(prefix+"spinner").classList.add("visually-hidden");
+            document.getElementById(prefix + "assignedTo").value = assignedTo;
         },
         error: function (data) {
             toastr.error(data.responseText);
@@ -548,14 +549,14 @@ function editInterventionNBAjax(idIntervention, version) {
         data: {
             "idIntervention": idIntervention,
             "version": version,
-            "interventionState": document.getElementById("eim.interventionState").value,
-            "assignedTo": document.getElementById("eim.assignedTo").value,
+            "interventionState": document.getElementById("einbm.interventionState").value,
+            "assignedTo": document.getElementById("einbm.assignedTo").value,
             // DATES //
-            "interventionDate": document.getElementById("eim.interventionDate").value + " " +
-                                document.getElementById("eim.interventionTime").value,
-            "interventionDuration": document.getElementById("eim.interventionDuration").value,
+            "interventionDate": document.getElementById("einbm.interventionDate").value + " " +
+                                document.getElementById("einbm.interventionTime").value,
+            "interventionDuration": document.getElementById("einbm.interventionDuration").value,
             //bottom
-            "footNote": document.getElementById("eim.footNote").value,
+            "footNote": document.getElementById("einbm.footNote").value,
         },
         success: function (data) {
             successReload();

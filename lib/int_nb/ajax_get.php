@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] != "GET"){
 
 $id = $con->real_escape_string($_GET['idIntervention']);
 
-$res = $con->query("SELECT * FROM `interventions_np` WHERE `idIntervention` = '$id'");
+$res = $con->query("SELECT * FROM `interventions_nb` WHERE `idIntervention` = '$id'");
 
 if($con->affected_rows != 1){
     http_response_code(404);

@@ -64,7 +64,7 @@ if(empty($fields)){
 $newversion = clean($_POST["version"]) + 1;
 $username = $_SESSION["userName"];
 
-$query = "UPDATE `interventions` SET $fields `lastEditedBy` = '$username', `version` = '$newversion', `updatedAt` = now() WHERE `idIntervention` = '$id';";
+$query = "UPDATE `interventions_nb` SET $fields `lastEditedBy` = '$username', `version` = '$newversion', `updatedAt` = now() WHERE `idIntervention` = '$id';";
 $con->query($query);
 
 if ($con->affected_rows > 0) {

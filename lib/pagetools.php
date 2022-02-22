@@ -1373,18 +1373,8 @@ function printInterventionsNBModals(){
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="nscB2">
+                <div id="nscB4">
                     <form>
-                        <div class="row">
-                            <div class="col">
-                                <label for="einbm.interventionState">Stato Intervento:</label>
-                                <select class="form-select" id="einbm.interventionState" required>
-                                    <option value="0" selected>Programmato</option>
-                                    <option value="1">Eseguito</option>
-                                    <option value="2">Annullato</option>
-                                </select>
-                            </div>
-                        </div>
                         <br>
                         <div class="row mb-3">
                             <div class="col col-md-3">
@@ -1430,6 +1420,14 @@ function printInterventionsNBModals(){
                                     <option value="30" selected>Mezz' ora</option>
                                     <option value="60">Un ora</option>
                                     <option value="120">Due ore</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="einbm.interventionState" class="form-label">Stato Intervento:</label>
+                                <select class="form-select" id="einbm.interventionState" required>
+                                    <option value="0" selected>Programmato</option>
+                                    <option value="1">Eseguito</option>
+                                    <option value="2">Annullato</option>
                                 </select>
                             </div>
                         </div>
