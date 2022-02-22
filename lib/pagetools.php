@@ -643,7 +643,7 @@ function printInterventionsCard($data){
                             Visualizza o Modifica Intervento </a></li>
 
                         <?php if($_SESSION["permissionType"] > 2){ ?>
-                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php echo $data['idIntervention']; ?>')">
+                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php //echo $data['idIntervention']; ?>')">
                             <span data-feather="database"></span>
                             Visualizza Intervento in AMS </a></li> -->
                         <?php } ?>
@@ -668,6 +668,77 @@ function printInterventionsCard($data){
         <br>
         <span data-feather="box"></span>
         <b>Marca e Modello:</b> <?php echo $data['heaterBrand']." ".$data['heater'] ?>
+        <hr style="margin-top: 8px; margin-bottom: 8px;">
+        <span data-feather="check"></span>
+        <b>Stato Intervento: <span style="color:<?php echo $IS[$data['interventionState']][1] ?> ;"><?php echo $IS[$data['interventionState']][0] ?></span></b> 
+        <br>
+        <span data-feather="tool"></span>
+        <b>Assegnato a:</b> <?php echo $at ?>
+    </div>
+</div>
+<?php
+}
+
+function printInterventionsNBCard($data){
+    $IS = array(
+        array("Programmato", "orange"),
+        array("Eseguito", "green"),
+        array("Annullato", "red")
+    );
+    if($data['userName'] == null){
+        $at = "Nessuno";
+    }else{
+        $at = "[".$data['userName']."] ".$data['legalName']." ".$data['legalSurname'];
+        if($data['color'] != null){
+            $color = $data['color'];
+            $at .= " <span style='color: $color;'>&#9632;</span>";
+        }
+    }
+?>
+<div class="card mb-3 scrollbar-w">
+    <div class="card-header"
+    <?php 
+        if($data['userName'] != null){
+            $color = $data['color'];
+            if($color != null){
+                echo "style=\"background-color: $color;\"";
+            }
+        }
+    ?>
+    >
+        <div class="row">
+            <div class="col col-md-10">
+                <span data-feather="clock"></span>
+                <b><?php echo $data['interventionTimeStart'] ?> &#8594; <?php echo $data['interventionTimeEnd'] ?></b>
+            </div>
+            <div class="col col-md-2 text-end">
+                <div class="dropdown">
+                    <a class="link-dark" role="button" id="drpd1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span data-feather="menu"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="drpd1">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInterventionNBModal" data-bs-einbmIid="<?php echo $data['idIntervention']; ?>">
+                            <span data-feather="edit"></span>
+                            Visualizza o Modifica Intervento </a></li>
+
+                        <?php if($_SESSION["permissionType"] > 2){ ?>
+                            <!-- <li><a class="dropdown-item" onclick="amsLaunch('intervention<?php //echo $data['idIntervention']; ?>')">
+                            <span data-feather="database"></span>
+                            Visualizza Intervento in AMS </a></li> -->
+                        <?php } ?>
+
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteInterventionNBModal" data-bs-dinbmIid="<?php echo $data['idIntervention']; ?>">
+                            <span data-feather="delete"></span>
+                            Elimina Intervento </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>
+            <?php echo $data['footNote'] ?>
+        </p>
         <hr style="margin-top: 8px; margin-bottom: 8px;">
         <span data-feather="check"></span>
         <b>Stato Intervento: <span style="color:<?php echo $IS[$data['interventionState']][1] ?> ;"><?php echo $IS[$data['interventionState']][0] ?></span></b> 
@@ -1130,6 +1201,281 @@ function printInterventionsModals(){
                     Annulla
                 </button>
                 <button type="button" class="btn btn-success" onclick="editInterventionAjax(document.getElementById('eim.title').innerText, document.getElementById('eim.version').innerText)">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+}
+
+function printInterventionsNBModals(){ 
+    global $con;
+    ?>
+<!-- DELETE INTERVENTION NB MODAL -->
+<div class="modal fade" id="deleteInterventionNBModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminazione intervento generico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare l'intervento generico n&ordm; <strong id="dinbm.title"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x-octagon"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-danger" onclick="deleteInterventionNBAJAX(document.getElementById('dinbm.title').textContent)">
+                    <span data-feather="trash"></span>
+                    Elimina
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE INTERVENTION NB MODAL -->
+<div class="modal fade" id="createInterventionNBModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuovo intervento generico</span></u></h5>
+                <div class="spinner-modal-container" id="cinbm.spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB3">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col col-md-3">
+                                <label for="cinbm.interventionDate" class="form-label">Data intervento:</label>
+                                <input type="date" class="form-control" id="cinbm.interventionDate" value="<?php echo date("Y-m-d") ?>">
+                            </div>
+                            <div class="col col-md-2">
+                                <label for="cinbm.interventionTime" class="form-label">Ora:</label>
+                                <select class="form-select" id="cinbm.interventionTime" required>
+                                    <?php
+                                    for($h = 8; $h < 22; $h++){
+                                        for($m = 0; $m < 4; $m++){
+                                            $mr = "";
+                                            switch ($m) {
+                                                case 0:
+                                                    $mr = "00";
+                                                    break;
+                                                case 1:
+                                                    $mr = "15";
+                                                    break;
+                                                case 2:
+                                                    $mr = "30";
+                                                    break;
+                                                case 3:
+                                                    $mr = "45";
+                                                    break;
+                                            }
+                                            if($h < 10){
+                                                $hr = "0".$h;
+                                            }else{
+                                                $hr = $h;
+                                            }
+                                            echo "<option value=\"". $hr . ":" . $mr . ":00\">". $hr . ":" . $mr . "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col col-md-3">
+                                <label for="cinbm.interventionDuration" class="form-label">Durata:</label>
+                                <select class="form-select" id="cinbm.interventionDuration" required>
+                                    <option value="30" selected>Mezz' ora</option>
+                                    <option value="60">Un ora</option>
+                                    <option value="120">Due ore</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-4">
+                                <label for="cinbm.interventionState" class="form-label">Stato Intervento:</label>
+                                <select class="form-select" id="cinbm.interventionState" required>
+                                    <option value="0" selected>Programmato</option>
+                                    <option value="1">Eseguito</option>
+                                    <option value="2">Annullato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6>Per la data ed ora selezionata lo stato dei tecnici è:</h6>
+                            <table class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            Nome Utente
+                                        </th>
+                                        <th>
+                                            Nome
+                                        </th>
+                                        <th>
+                                            Cognome
+                                        </th>
+                                        <th>
+                                            Impegnato
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cinbm.overlapTable">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="hidden" id="cinbm.assignedTo" value="">
+                        <div class="mb-3">
+                            <label for="footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="cinbm.footNote" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="createInterventionNBAJAX()">
+                    <span data-feather="save"></span>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT INTERVENTION NB MODAL -->
+<div class="modal fade" id="editInterventionNBModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica dell'intervento generico n&ordm; <u><span id="einbm.title"></span></u> </h5>
+                <div class="spinner-modal-container" id="einbm.spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="nscB2">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <label for="einbm.interventionState">Stato Intervento:</label>
+                                <select class="form-select" id="einbm.interventionState" required>
+                                    <option value="0" selected>Programmato</option>
+                                    <option value="1">Eseguito</option>
+                                    <option value="2">Annullato</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mb-3">
+                            <div class="col col-md-3">
+                                <label for="einbm.interventionDate" class="form-label">Data intervento:</label>
+                                <input type="date" class="form-control" id="einbm.interventionDate">
+                            </div>
+                            <div class="col col-md-2">
+                                <label for="einbm.interventionTime" class="form-label">Ora:</label>
+                                <select class="form-select" id="einbm.interventionTime" required>
+                                    <option value="00:00:00">Non specificato</option>
+                                    <?php
+                                    for($h = 8; $h < 22; $h++){
+                                        for($m = 0; $m < 4; $m++){
+                                            $mr = "";
+                                            switch ($m) {
+                                                case 0:
+                                                    $mr = "00";
+                                                    break;
+                                                case 1:
+                                                    $mr = "15";
+                                                    break;
+                                                case 2:
+                                                    $mr = "30";
+                                                    break;
+                                                case 3:
+                                                    $mr = "45";
+                                                    break;
+                                            }
+                                            if($h < 10){
+                                                $hr = "0".$h;
+                                            }else{
+                                                $hr = $h;
+                                            }
+                                            echo "<option value=\"". $hr . ":" . $mr . ":00\">". $hr . ":" . $mr . "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col col-md-3">
+                                <label for="einbm.interventionDuration" class="form-label">Durata:</label>
+                                <select class="form-select" id="einbm.interventionDuration" required>
+                                    <option value="30" selected>Mezz' ora</option>
+                                    <option value="60">Un ora</option>
+                                    <option value="120">Due ore</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Stato dei tecnici per data ed ora selezionati:</h6>
+                            <table class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            Nome Utente
+                                        </th>
+                                        <th>
+                                            Nome
+                                        </th>
+                                        <th>
+                                            Cognome
+                                        </th>
+                                        <th>
+                                            Impegnato
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="einbm.overlapTable">
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="hidden" id="einbm.assignedTo" value="">
+                        <div class="mb-3">
+                            <label for="einbm.footNote" class="form-label">Annotazioni</label>
+                            <textarea class="form-control" id="einbm.footNote" rows="3"></textarea>
+                        </div>
+                        <p>Creazione: <strong id="einbm.createdAt">...</strong>  -  
+                        Ultima modifica: <strong id="einbm.updatedAt">...</strong> da <strong id="einbm.lastEditedBy">...</strong>  -  
+                        Versione: <strong id="einbm.version">...</strong></p>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span data-feather="x"></span>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-success" onclick="editInterventionNBAjax(document.getElementById('einbm.title').innerText, document.getElementById('einbm.version').innerText)">
                     <span data-feather="save"></span>
                     Salva
                 </button>

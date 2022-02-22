@@ -126,3 +126,14 @@ body {
     font-size: 1rem; 
     margin-right: 1rem;
   }
+
+  .callListSep hr{
+    margin: 5px 10px 5px 0px;
+    color:#333;
+  }
+
+  .callListSep center{
+    text-align: center;
+    color: #333;
+    text-transform: uppercase;
+  }

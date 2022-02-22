@@ -79,11 +79,7 @@ function createTableRow(prefix, row){
 }
 
 // callback function to retrieve and update DOM table for technichian overlaps in interventions
-function manageOverlapsAJAX(isUpdate, assignedTo) {
-    var prefix = "";
-    if(isUpdate){
-        prefix = "eim.";
-    }
+function manageOverlapsAJAX(prefix, assignedTo) {
     $.ajax({
         type: "GET",
         url: relativeToRoot + 'lib/ajax_checkoverlap.php',
@@ -111,9 +107,9 @@ function manageOverlapsAJAX(isUpdate, assignedTo) {
                 ot.innerHTML += createTableRow(prefix, row);
                 ot.innerHTML += "</tr>";
             });
-            if(isUpdate){
+            if(prefix != ""){
                 try{
-                    document.getElementById("eim.radio." + assignedTo).checked = true;
+                    document.getElementById(prefix + "radio." + assignedTo).checked = true;
                 }catch{
                     // lol
                 }
@@ -386,7 +382,7 @@ if (editInterventionModal != null) {
                 document.getElementById("eim.updatedAt").innerHTML = dataget['updatedAt'];
                 document.getElementById("eim.lastEditedBy").innerHTML = dataget['lastEditedBy'];
                 document.getElementById("eim.version").innerHTML = dataget['version'];
-                manageOverlapsAJAX(true, dataget['assignedTo']);
+                manageOverlapsAJAX("eim.", dataget['assignedTo']);
                 document.getElementById("eim.spinner").classList.add("visually-hidden");
             },
             error: function (data) {
@@ -451,7 +447,7 @@ if (createInterventionModal != null) {
         var idIntervention = button.getAttribute('data-bs-cimIid');
         var modalContent = document.getElementById('cim.title');
         modalContent.textContent = idIntervention;
-        manageOverlapsAJAX(false);
+        manageOverlapsAJAX("");
     });
 }
 
@@ -484,34 +480,180 @@ function createInterventionAJAX() {
     });
 }
 
+// not bound interventions (generics) //
+
+var deleteInterventionNBModal = document.getElementById('deleteInterventionNBModal');
+if (deleteInterventionNBModal != null) {
+    deleteInterventionNBModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var idIntervention = button.getAttribute('data-bs-dinbmIid');
+        var modalContent = document.getElementById('dinbm.title');
+        modalContent.textContent = idIntervention;
+    });
+}
+
+var editInterventionNBModal = document.getElementById('editInterventionNBModal');
+if (editInterventionNBModal != null) {
+    editInterventionNBModal.addEventListener('show.bs.modal', function (event) {
+        document.getElementById("einbm.spinner").classList.remove("visually-hidden");
+        var button = event.relatedTarget;
+        var idIntervention = button.getAttribute('data-bs-einbmIid');
+        var modalContent = document.getElementById('einbm.title');
+        modalContent.textContent = idIntervention;
+        $.ajax({
+            type: "GET",
+            url: relativeToRoot + 'lib/int_nb/ajax_get.php',
+            data: { "idIntervention": idIntervention },
+            success: function (dataget) {
+                document.getElementById("einbm.interventionState").value = !!dataget['interventionState'] ? dataget['interventionState'] : "";
+                document.getElementById("einbm.interventionDate").value = !!dataget['interventionDate'] ? dataget['interventionDate'] : "";
+                // TIME //
+                document.getElementById("einbm.interventionTime").value = dataget['interventionTime'] + ":00";
+                // DATES //
+                document.getElementById("einbm.interventionDuration").value = dataget['interventionDuration'];
+                //bottom
+                document.getElementById("einbm.footNote").value = !!dataget['footNote'] ? dataget['footNote'] : "";
+                document.getElementById("einbm.createdAt").innerHTML = dataget['createdAt'];
+                document.getElementById("einbm.updatedAt").innerHTML = dataget['updatedAt'];
+                document.getElementById("einbm.lastEditedBy").innerHTML = dataget['lastEditedBy'];
+                document.getElementById("einbm.version").innerHTML = dataget['version'];
+                manageOverlapsAJAX("einbm.", dataget['assignedTo']);
+                document.getElementById("einbm.spinner").classList.add("visually-hidden");
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+    })
+}
+
+function deleteInterventionNBAJAX(idIntervention) {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int_nb/ajax_delete.php',
+        data: { "idIntervention": idIntervention },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+function editInterventionNBAjax(idIntervention, version) {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int_nb/ajax_edit.php',
+        data: {
+            "idIntervention": idIntervention,
+            "version": version,
+            "interventionState": document.getElementById("eim.interventionState").value,
+            "assignedTo": document.getElementById("eim.assignedTo").value,
+            // DATES //
+            "interventionDate": document.getElementById("eim.interventionDate").value + " " +
+                                document.getElementById("eim.interventionTime").value,
+            "interventionDuration": document.getElementById("eim.interventionDuration").value,
+            //bottom
+            "footNote": document.getElementById("eim.footNote").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
+var createInterventionNBModal = document.getElementById('createInterventionNBModal');
+if (createInterventionNBModal != null) {
+    createInterventionNBModal.addEventListener('show.bs.modal', function (event) {
+        manageOverlapsAJAX("cinbm.");
+    });
+}
+
+function createInterventionNBAJAX() {
+    $.ajax({
+        type: "POST",
+        url: relativeToRoot + 'lib/int_nb/ajax_create.php',
+        data: {
+            "interventionState": document.getElementById("cinbm.interventionState").value,
+            "assignedTo": document.getElementById("cinbm.assignedTo").value,
+            "interventionDate": document.getElementById("cinbm.interventionDate").value + " " +
+                                document.getElementById("cinbm.interventionTime").value,
+            "interventionDuration": document.getElementById("cinbm.interventionDuration").value,
+            "footNote": document.getElementById("cinbm.footNote").value,
+        },
+        success: function (data) {
+            successReload();
+        },
+        error: function (data) {
+            toastr.error(data.responseText);
+        }
+    });
+}
+
 /// add event listeners  for technician table update (create intervention) ///
 document.getElementById("interventionDate").addEventListener('input', (event) => {
     document.getElementById("spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(false);
+    manageOverlapsAJAX("");
 });
 
 document.getElementById("interventionTime").addEventListener('input', (event) => {
     document.getElementById("spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(false);
+    manageOverlapsAJAX("");
 });
 
 document.getElementById("interventionDuration").addEventListener('input', (event) => {
     document.getElementById("spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(false);
+    manageOverlapsAJAX("");
 });
 
 /// add event listeners  for technician table update (update intervention) ///
 document.getElementById("eim.interventionDate").addEventListener('input', (event) => {
     document.getElementById("eim.spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(true);
+    manageOverlapsAJAX("eim.");
 });
 
 document.getElementById("eim.interventionTime").addEventListener('input', (event) => {
     document.getElementById("eim.spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(true);
+    manageOverlapsAJAX("eim.");
 });
 
 document.getElementById("eim.interventionDuration").addEventListener('input', (event) => {
     document.getElementById("eim.spinner").classList.remove("visually-hidden");
-    manageOverlapsAJAX(true);
+    manageOverlapsAJAX("eim.");
+});
+
+/// add event listeners  for technician table update (create intervention NB) ///
+document.getElementById("interventionDate").addEventListener('input', (event) => {
+    document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("cinbm.");
+});
+
+document.getElementById("interventionTime").addEventListener('input', (event) => {
+    document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("cinbm.");
+});
+
+document.getElementById("interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("cinbm.");
+});
+
+/// add event listeners  for technician table update (edit intervention NB) ///
+document.getElementById("einbm.interventionDate").addEventListener('input', (event) => {
+    document.getElementById("einbm.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("einbm.");
+});
+
+document.getElementById("einbm.interventionTime").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("einbm.");
+});
+
+document.getElementById("einbm.interventionDuration").addEventListener('input', (event) => {
+    document.getElementById("eim.spinner").classList.remove("visually-hidden");
+    manageOverlapsAJAX("einbm.");
 });
