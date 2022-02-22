@@ -628,17 +628,17 @@ document.getElementById("eim.interventionDuration").addEventListener('input', (e
 });
 
 /// add event listeners  for technician table update (create intervention NB) ///
-document.getElementById("interventionDate").addEventListener('input', (event) => {
+document.getElementById("cinbm.interventionDate").addEventListener('input', (event) => {
     document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
     manageOverlapsAJAX("cinbm.");
 });
 
-document.getElementById("interventionTime").addEventListener('input', (event) => {
+document.getElementById("cinbm.interventionTime").addEventListener('input', (event) => {
     document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
     manageOverlapsAJAX("cinbm.");
 });
 
-document.getElementById("interventionDuration").addEventListener('input', (event) => {
+document.getElementById("cinbm.interventionDuration").addEventListener('input', (event) => {
     document.getElementById("cinbm.spinner").classList.remove("visually-hidden");
     manageOverlapsAJAX("cinbm.");
 });
