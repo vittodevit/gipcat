@@ -137,7 +137,23 @@ function ajax_lista(){
             "end": end,
         },
         success: function (dataget) {
-            console.log(dataget)
+            callcount = dataget.length;
+            editCardBody(`
+            <h5 class="card-title">Pronto all'esportazione</h5>
+            <p class="card-text">
+            Sono state trovate <b>${callcount}</b> chiamate.
+            </p>
+            <div class="width-100 text-end">
+                <button class="btn btn-secondary" onclick="window.location.reload()" style="margin-right: 6px;">
+                    Ripeti
+                    <span data-feather="refresh-cw"></span>
+                </button>
+                <button class="btn btn-primary" onclick="ajax_lista()">
+                    Esporta
+                    <span data-feather="arrow-right"></span>
+                </button>
+            </div>
+            `);
         },
         error: function (data) {
             editCardBody(`
