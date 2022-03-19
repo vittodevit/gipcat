@@ -78,7 +78,8 @@ elseif($_GET["action"] == "getcalls")
         t1.interventionDate,
         installations.heaterBrand,
         installations.heater,
-        installations.manteinanceContractName,
+        installations.installationAddress,
+        installations.installationCity,
         customers.businessName,
         customers.homePhoneNumber,
         customers.officePhoneNumber,
@@ -120,12 +121,17 @@ elseif($_GET["action"] == "getcalls")
     $calls = array();
     $callsList = $con->query($calls_query);
 
+    $prev = array();
+
     if ($con->affected_rows < 1) {
         http_response_code(404);
         die('AJAX: No intervals found.'); 
     } else {
         while ($call = $callsList->fetch_array(MYSQLI_ASSOC)) {
-            array_push($calls, $call);
+            if($prev != $call){
+                array_push($calls, $call);
+            }
+            $prev = $call;
         }
     }  
     

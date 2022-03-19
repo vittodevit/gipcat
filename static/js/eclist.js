@@ -199,11 +199,10 @@ function modulo(obj){
         </td>
         <td>${obj.businessName}</td>
         <td>${opzContatto.join(", ")}</td>
-        <td>${obj.manteinanceContractName ? obj.manteinanceContractName : "Nessuno"}</td>
         <td>${obj.heaterBrand + " " + obj.heater}</td>
         <td>${ultimoIntervento}</td>
-        <td>${obj.idCustomer}</td>
-        <td>${obj.idInstallation}</td>
+        <td>${obj.installationAddress}</td>
+        <td>${obj.installationCity}</td>
     </tr>
     `;
 }
@@ -238,11 +237,10 @@ function esporta(){
                 <td></td>
                 <td>Nome e Cognome</td>
                 <td>Contatti</td>
-                <td>Contratto</td>
                 <td>Caldaia</td>
                 <td>Ultimo Intervento</td>
-                <td>Cliente</td>
-                <td>Installazione</td>
+                <td>Indirizzo</td>
+                <td>Città</td>
             </tr>
         </thead>
         <tbody>    
