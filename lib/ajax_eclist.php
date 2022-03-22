@@ -73,22 +73,17 @@ elseif($_GET["action"] == "getcalls")
 
     $calls_query =
     "SELECT
-        t1.idIntervention,
         t1.idInstallation,
         installations.idCustomer,
-        t1.interventionType,
         t1.interventionDate,
-        t1.interventionDuration,
-        t1.associatedCallNote,
-        t1.associatedCallPosticipationDate,
-        installations.installationAddress,
-        installations.installationCity,
         installations.heaterBrand,
         installations.heater,
-        installations.installationType,
         installations.manteinanceContractName,
-        installations.monthlyCallInterval,
-        customers.businessName
+        customers.businessName,
+        customers.homePhoneNumber,
+        customers.officePhoneNumber,
+        customers.privateMobilePhoneNumber,
+        customers.companyMobilePhoneNumber
     FROM
         interventions t1
     LEFT OUTER JOIN interventions t2 ON
@@ -144,45 +139,3 @@ else
     http_response_code(405);
     die('AJAX: This method is not allowed!'); 
 }
-
-$query_chiamate = 
-"SELECT
-    t1.idIntervention,
-    t1.idInstallation,
-    installations.idCustomer,
-    t1.interventionType,
-    t1.interventionDate,
-    t1.interventionDuration,
-    t1.associatedCallNote,
-    t1.associatedCallPosticipationDate,
-    installations.installationAddress,
-    installations.installationCity,
-    installations.heaterBrand,
-    installations.heater,
-    installations.installationType,
-    installations.manteinanceContractName,
-    installations.monthlyCallInterval,
-    customers.businessName
-FROM
-    interventions t1
-LEFT OUTER JOIN interventions t2 ON
-    (
-        t1.idInstallation = t2.idInstallation 
-        AND t1.interventionDate < t2.interventionDate
-        AND t2.countInCallCycle = 1
-    )
-INNER JOIN installations ON 
-    (
-        t1.idInstallation = installations.idInstallation
-    )
-INNER JOIN customers ON 
-    (
-    installations.idCustomer = customers.idCustomer
-    )
-WHERE
-    t2.idInstallation IS NULL
-    AND installations.toCall = '1'
-    AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH)
-    AND (t1.associatedCallPosticipationDate IS NULL OR t1.associatedCallPosticipationDate < CURDATE());
-";
-

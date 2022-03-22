@@ -173,84 +173,39 @@ function ajax_lista(){
 }
 
 function modulo(obj){
-    html = `
-    <div class="card mb-3 scrollbar-w">
-    <div class="card-header">
-        <div class="row">
-        <div class="col col-md-6">
-            <span data-feather="phone-call"></span>
-            <b>Chiamata per </b>
-            ${obj.businessName}
-
-            <span data-feather="user" class="it"></span>
-            <b>C. CLI. </b>
-            ${obj.idCustomer}
-
-            <span data-feather="box" class="it"></span>
-            <b>C. INST. </b>
-            ${obj.idInstallation}
-        </div>
-    `
-    // check rimando
-    if(obj.associatedCallPosticipationDate){
-        html += `
-        <div class="col col-md-6 text-end">
-        <a>
-        <span data-feather="skip-forward"> </span>
-        Rimandata al ${obj.associatedCallPosticipationDate}
-        </a>
-        </div>
-        `
+    // parse data
+    var options = {year: 'numeric', month: 'long', day: 'numeric' };
+    ui = new Date(obj.interventionDate)
+    ultimoIntervento = ui.toLocaleDateString("it-IT", options);
+    // contatti
+    opzContatto = []
+    if(obj.companyMobilePhoneNumber){
+        opzContatto.push(obj.companyMobilePhoneNumber)
     }
-    
-    html += `</div>
-    </div>
-    <div class="card-body">
-        <div class="row">
-        <div class="col col-md-11">
-            <span data-feather="file-text"></span>
-            <b>Contratto di Manutenzione:</b>
-            ${obj.manteinanceContractName}
-            <br />
-            <span data-feather="compass"></span>
-            <b>Indirizzo Installazione:</b>
-            ${obj.installationAddress} ${obj.installationCity}
-            <br />
-            <span data-feather="home"></span>
-            <b>Tipo Installazione:</b>
-            ${obj.installationType}
-            <br />
-            <span data-feather="box"></span>
-            <b>Marca e Modello:</b>
-            ${obj.heaterBrand} ${obj.heater}
-        </div>
-        </div>
-        <hr style="margin-top: 8px; margin-bottom: 8px" />
-        <span data-feather="calendar"></span>
-        <b>Ultimo Intervento: </b>
-        ${obj.interventionDate}
-        <br />
-        <span data-feather="tool"></span>
-        <b>Tipo Ultimo Intervento</b>
-        ${obj.interventionType}
-    `
-        // controllo note
-
-        if(obj.associatedCallNote){
-            html += `
-            <hr style="margin-top: 8px; margin-bottom: 8px" />
-            <span data-feather="paperclip"></span>
-            <b>Note: </b>
-            <br>
-            ${obj.associatedCallNote}
-            `
-        }
-    
-    html +=`
-    </div>
-    </div>
-    `
-    return html;
+    if(obj.homePhoneNumber){
+        opzContatto.push(obj.homePhoneNumber)
+    }
+    if(obj.officePhoneNumber){
+        opzContatto.push(obj.officePhoneNumber)
+    }
+    if(obj.privateMobilePhoneNumber){
+        opzContatto.push(obj.privateMobilePhoneNumber)
+    }
+    // html
+    return `
+    <tr>
+        <td>
+            <input type="checkbox">
+        </td>
+        <td>${obj.businessName}</td>
+        <td>${opzContatto.join(", ")}</td>
+        <td>${obj.manteinanceContractName ? obj.manteinanceContractName : "Nessuno"}</td>
+        <td>${obj.heaterBrand + " " + obj.heater}</td>
+        <td>${ultimoIntervento}</td>
+        <td>${obj.idCustomer}</td>
+        <td>${obj.idInstallation}</td>
+    </tr>
+    `;
 }
 
 function esporta(){
@@ -259,19 +214,15 @@ function esporta(){
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Stampa Elenco Chiamate</title>
-        <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-        crossorigin="anonymous"
-        />
+        <title>Stampa Elenco Chiamate</title> 
         <style>
         body {
             padding: 20px 20px 20px 20px;
         }
-        .it{
-            margin-left: 10px;
+        table, th, td {
+            border: 1px solid black;
+            padding: 3px;
+            border-collapse: collapse;
         }
         </style>
     </head>
@@ -281,6 +232,20 @@ function esporta(){
         <li><b>Esportato da: </b> ${sessionUserName}</li>
         <li><b>Intervallo: </b> DAL <u>${gstart}</u> AL <u>${gend}</u></li>
         </ul>
+        <table>
+        <thead>
+            <tr>
+                <td></td>
+                <td>Nome e Cognome</td>
+                <td>Contatti</td>
+                <td>Contratto</td>
+                <td>Caldaia</td>
+                <td>Ultimo Intervento</td>
+                <td>Cliente</td>
+                <td>Installazione</td>
+            </tr>
+        </thead>
+        <tbody>    
     `
     // stampa moduli
     gxp.forEach(obj => {
@@ -288,25 +253,10 @@ function esporta(){
     });
 
     html += `
+        </tbody>
+    </table>
     </body>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-      crossorigin="anonymous"
-    ></script>
     <script>
-      var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
-      feather.replace({ "aria-hidden": "true" });
       window.print();
     </script>
     </html>
