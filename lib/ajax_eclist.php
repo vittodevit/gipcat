@@ -13,10 +13,22 @@ if ($_SERVER['REQUEST_METHOD'] != "GET") {
     die('AJAX: This method is not allowed!');
 }
 
+if (
+    isset($_GET["dayoffset"]) && 
+    is_numeric($_GET["dayoffset"]) && 
+    $_GET["dayoffset"] > 0
+){
+    $dayOffset = $con->real_escape_string($_GET["dayoffset"]);
+} else {
+    $dayOffset = 0;
+}
+
 if($_GET["action"] == "getintervals")
 {
     $intervals_query =
-    "SELECT DISTINCT
+    "SELECT @offset := DATE_ADD(CURDATE(), INTERVAL +$dayOffset DAY);
+    
+    SELECT DISTINCT
         DATE_FORMAT(t1.interventionDate, '%Y-%m') `normalized`,
         DATE_FORMAT(t1.interventionDate, '%Y') `year`,
         DATE_FORMAT(t1.interventionDate, '%m') `month`
@@ -35,7 +47,7 @@ if($_GET["action"] == "getintervals")
     WHERE
         t2.idInstallation IS NULL 
         AND installations.toCall = '1' 
-        AND t1.interventionDate < DATE_ADD(CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH) 
+        AND t1.interventionDate < DATE_ADD(@offset, INTERVAL - installations.monthlyCallInterval MONTH) 
         AND
         (
             t1.associatedCallPosticipationDate IS NULL OR t1.associatedCallPosticipationDate < CURDATE()
@@ -46,7 +58,16 @@ if($_GET["action"] == "getintervals")
 
     // load intervals
     $intervals = array();
-    $intervalsList = $con->query($intervals_query);
+    
+    if ($con->multi_query($intervals_query)) {
+        $intervalsList = $con->store_result();
+        $con->next_result();
+        $intervalsList = $con->store_result();
+        $con->next_result();
+    } else {
+        http_response_code(500);
+        die('AJAX: Internal server error.'); 
+    }
 
     if ($con->affected_rows < 1) {
         http_response_code(404);
@@ -72,7 +93,9 @@ elseif($_GET["action"] == "getcalls")
     $end = $con->real_escape_string($_GET["end"]);
 
     $calls_query =
-    "SELECT
+    "SELECT @offset := DATE_ADD(CURDATE(), INTERVAL +$dayOffset DAY);
+    
+    SELECT
         t1.idInstallation,
         installations.idCustomer,
         t1.interventionDate,
@@ -105,7 +128,7 @@ elseif($_GET["action"] == "getcalls")
         t2.idInstallation IS NULL
         AND installations.toCall = '1'
         AND t1.interventionDate < DATE_ADD(
-            CURDATE(), INTERVAL - installations.monthlyCallInterval MONTH
+            @offset, INTERVAL - installations.monthlyCallInterval MONTH
         )
         AND (
             t1.associatedCallPosticipationDate IS NULL 
@@ -119,7 +142,16 @@ elseif($_GET["action"] == "getcalls")
 
     // load calls
     $calls = array();
-    $callsList = $con->query($calls_query);
+
+    if ($con->multi_query($calls_query)) {
+        $callsList = $con->store_result();
+        $con->next_result();
+        $callsList = $con->store_result();
+        $con->next_result();
+    } else {
+        http_response_code(500);
+        die('AJAX: Internal server error.'); 
+    }
 
     $prev = array();
 

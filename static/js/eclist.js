@@ -1,6 +1,7 @@
 let gxp = undefined;
 let gstart = undefined;
 let gend = undefined;
+let dayoffset = localStorage.getItem('dayOffset');
 
 function editCardBody(body){
     document.getElementById("cardbody").innerHTML = body;
@@ -63,7 +64,7 @@ editCardBody(`
 $.ajax({
     type: "GET",
     url: '../lib/ajax_eclist.php',
-    data: { "action": "getintervals" },
+    data: { "action": "getintervals" , "dayoffset" : dayoffset},
     success: function (dataget) {
         // caricamento
         body = `
@@ -139,6 +140,7 @@ function ajax_lista(){
             "action": "getcalls",
             "start": gstart,
             "end": gend,
+            "dayoffset" : dayoffset
         },
         success: function (dataget) {
             callcount = dataget.length;
