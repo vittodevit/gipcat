@@ -1,2 +1,3 @@
 # gipcat-fe-php
-Frontend temporaneo in PHP, non installare da solo, dipende dal progetto principale.
+È un WIP gigantesco ma è funzionante.
+Potete contattarmi alla mail indicata qui su github per l'installazione.
